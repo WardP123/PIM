@@ -1,2 +1,0 @@
-# PIM
-Project Interactive Multimedia
