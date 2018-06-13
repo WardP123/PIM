@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style>
-        .second, .third {
-            display: none;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="login.css" rel="stylesheet" type="text/css">
     <script>
+        window.getCookie = function(name) {
+          var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+          if (match) return match[2];
+        }
+
         function showUsername() {
-				var x = document.getElementById("username");
-            	var y = document.getElementById("groupButton");
-            	x.style.display = "block";
-            	y.style.display = "none";
-			}
+            var x = document.getElementById("username");
+            var y = document.getElementById("groupButton");
+            var z = document.getElementById("group");
+            var a = document.getElementById("welcome");
+            x.style.display = "block";
+            y.style.display = "none";
+            z.disabled = "true";
+            a.innerHTML = "Please enter a username: ";
+        }
 
         function check_gameid() {
         	var gameid = document.getElementById("group").value;
             $.ajax({
-                url: "http://localhost:8081/check_gameid",
+                url: "http://84.28.82.98:8081/check_gameid",
                 type: 'POST',
 				data: JSON.stringify({ gameid: gameid}),
 				contentType: "application/json; charset=utf-8",
@@ -39,13 +44,13 @@
         			}
              });
 		};
-		function check_username() {
+
+        function check_username() {
 			var gameid_local = document.getElementById("group").value;
 			var username_local = document.getElementById("usernameintext").value;
-			alert(username_local)
             $.ajax({
-				
-                url: "http://localhost:8081/check_username",
+
+                url: "http://84.28.82.98:8081/check_username",
                 type: 'POST',
 				data: JSON.stringify({"gameid": gameid_local, "username": username_local}),
 				contentType: "application/json; charset=utf-8",
@@ -54,7 +59,7 @@
                 success: function(result) {
 					if (result.gamenumber_exists == "no" ){
 						alert("Gamenumber does not exist!");
-						
+
 					}else{
 						if (result.username_exists == "no"){
 							showPassword();
@@ -67,56 +72,65 @@
 					alert("foutje")
         			}
              });
-		function create_account() {
+
+        }
+
+        function create_account() {
 			var gameid_local = document.getElementById("group").value;
 			var username_local = document.getElementById("usernameintext").value;
 			var pin_local = document.getElementById("pinintext").value;
             $.ajax({
-                url: "http://localhost:8081/login",
+                url: "http://84.28.82.98:8081/login",
                 type: 'POST',
 				data: JSON.stringify({"gameid": gameid_local, "username": username_local, "pin": pin_local}),
 				contentType: "application/json; charset=utf-8",
 				dataType: "json",
                 async: true,
                 success: function(result) {
-//					link hier
-					alert("nice")
-				}
+					document.cookie = ("account="+result);
+					window.location.href = "rules.html";
+				},
         		error: function(data) {
 					alert("foutje")
         			}
              });
         }
+
         function showPassword() {
             var x = document.getElementById("password");
             var y = document.getElementById("userButton");
+            var z = document.getElementById("user");
+            var a = document.getElementById("welcome");
             x.style.display = "block";
             y.style.display = "none";
+            z.disabled = "true";
+            a.innerHTML = "Please enter a password:"
         }
 
     </script>
 </head>
 <body>
-    <p>
-        Welecome please enter your group number
-    </p>
-    <form>
-        Group Number <br>
-        <input type="text" id="group"> <br>
-        <input type="button" id="groupButton" value="Submit" onclick="check_gameid()">
-    </form>
-    <form class="second" id="username">
-        Username: <br>
-        <input type="text" id="usernameintext"> <br>
-        <input type="button" id="userButton" value="Submit" onclick="check_username()">
-    </form>
-    <form class="third" id="password">
-        PIN: <br>
-        <input type="password" id="pinintext"> <br>
-        <input type="button" value="Submit" onclick="create_account()">
-    </form>
+    <div class="center" id="content"> </div>
+    <div class="login_internal">
+        <img src="logo.png" alt="KlasseTour logo" id="logo">
+        <div class="Title">Login </div>
+        <form>
+            Group Number <br>
+            <input type="text" id="group"> <br>
+            <input type="button" id="groupButton" value="Submit" onclick="check_gameid()">
+        </form>
+        <form class="second" id="username">
+            Username: <br>
+            <input type="text" id="usernameintext"> <br>
+            <input type="button" id="userButton" value="Submit" onclick="check_username()">
+        </form>
+        <form class="third" id="password">
+            PIN: <br>
+            <input type="password" id="pinintext"> <br>
+            <input type="button" value="Submit" onclick="create_account()">
+        </form>
+    </div>
 </body>
 <!-- gameid - username - pin  -->
 <!-- post  -->
-
 </html>
