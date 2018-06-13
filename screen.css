@@ -1,0 +1,126 @@
+body {
+    font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0;
+}
+
+.background {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: block;
+    background-image: url("https://images.arcadis.com/media/6/6/8/%7B66844D25-A8FF-46FB-BBF6-E5855A6087E3%7DRijksmuseumAmsterdam-main.jpg?width=1920&height=0&mode=crop&anchor=top");
+    background-repeat: no-repeat;
+    height: 100%;
+    width: auto;
+    background-size: cover;
+    -webkit-filter: blur(1px);
+    -moz-filter: blur(1px);
+    -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+}
+
+.content {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    margin-left: 30%;
+    margin-right: 20px;
+    margin-top: 15%;
+}
+
+form, p {
+    background-color: white;
+    text-align: center;
+    width: 40%;
+    padding: 20px 0;
+    margin: 0 0;
+}
+
+img {
+    width: 50%;
+    height: auto;
+    display: block;
+    background-color: white;
+}
+
+input[type=button] {
+    background-color: rgb(51, 225, 153);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+#login {
+    display: inline-block;
+    float: left;
+    background: rgb(51, 225, 153);
+    width: 20%;
+    text: white;
+    padding: 20px 0;
+    border: none;
+    text-align: center;
+}
+
+#create {
+    display: inline-block;
+    float: left;
+    background: white;
+    width: 20%;
+    padding: 20px 0;
+    border: none;
+    text-align: center;
+}
+
+#login a {
+     color: white;
+     font-weight: bold;
+     text-decoration: none;
+}
+
+#create a {
+     color: rgb(51, 225, 153);
+     font-weight: bold;
+     text-decoration: none;
+}
+
+#load {
+    color: rgba(0,0,0,0.4); text-align: center; font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+    .content {
+        margin-left: 20%;
+    }
+
+    img, form, p {
+        width: 60%;
+    }
+
+    #login, #create {
+        width: 30%;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        background-size: auto 100%;
+    }
+
+    .content {
+        margin: 0 0;
+    }
+
+    img, form, p {
+        width: 100%;
+    }
+
+    #login, #create{
+        width: 100%;
+    }
+}
+}
