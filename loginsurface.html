@@ -47,7 +47,7 @@
 			var gameid_local = document.getElementById("group").value;
 			var username_local = document.getElementById("usernameintext").value;
             $.ajax({
-
+				
                 url: "http://84.28.82.98:8081/check_username",
                 type: 'POST',
 				data: JSON.stringify({"gameid": gameid_local, "username": username_local}),
@@ -57,7 +57,7 @@
                 success: function(result) {
 					if (result.gamenumber_exists == "no" ){
 						alert("Gamenumber does not exist!");
-
+						
 					}else{
 						if (result.username_exists == "no"){
 							showPassword();
@@ -102,10 +102,6 @@
     </script>
 </head>
 <body>
-	<h1> Login </h1>
-	<h1> Test </h1>
-	<h2> Test2 </h2>
-	<h3> Test3 </h3>
     <p>
         Welecome please enter your group number
     </p>
