@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Naamloos document</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="announcementscss.css" rel="stylesheet" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script>	
+			
+	window.getCookie = function(name) {
+	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+	  if (match) return match[2];
+	}
+//	
+	var authkey_local = getCookie("account");
+//	var authkey_local = "271743223681190786073801387463456770291"
+	$( document ).ready(function() {
+		$.ajax({
+			url: "http://84.28.82.98:8081/announcements",
+			type: 'POST',
+			data: JSON.stringify({ authkey: authkey_local}),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(result) {
+				var list = '';
+				$.each(result, function(i, item){
+					list += '<div class="announcement">';
+					list += '<div class="time">' + '1h geleden' + '</div>';
+					list += '<div class="title">' + item.announcementtitle + '</div>';
+					list += '<div class="description">' + item.announcementdecription + '</div>';
+					list += '</div>';
+				});
+			$(".allevents").append(list);
+			},
+			error: function(data) {
+				alert("foutje")
+				alert(data)
+				}
+             });
+		$.ajax({
+                url: "http://84.28.82.98:8081/getuserdata",
+                type: 'POST',
+				data: JSON.stringify({ authkey: authkey_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					var list = '';
+					$.each(result, function(i, item){
+						gameid = item.gameid;
+						username = item.username;
+					});
+					($(".code")).append(gameid);
+					($(".username")).append(username);
+					},
+        		error: function(data) {
+					alert("foutje")
+        			alert(data)
+        			}
+		});
+	})
+</script>
+</head>
+<body>
+	<div class="header">
+		<a href="home.html"><i class="leftarrow"></i></a>
+		<img src="klassetourzwart.png">
+	</div>
+	<div class="allevents">
+	<div class="announcement">
+		<div class="new"></div>
+		<div class="time">1h geleden</div>
+		<div class="title">
+			Vergeet niet te doen!
+		</div>
+		<div class="description">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula quis urna sed efficitur. Praesent ac justo erat. Pellentesque et nunc id metus finibus pretium. Duis id malesuada neque. Cras vestibulum augue luctus dolor imperdiet consectetur. Mauris vel lorem at arcu blandit vulputate. Sed ac mauris sagittis, elementum eros id, porta mauris. 
+			
+		</div>
+	</div>
+		<div class="announcement">
+		<div class="new"></div>
+		<div class="time">1h geleden</div>
+		<div class="title">
+			Vergeet niet te doen!
+		</div>
+		<div class="description">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula 
+			</div>
+			</div>
+			<div class="announcement">
+		<div class="new"></div>
+		<div class="time">1h geleden</div>
+		<div class="title">
+			Vergeet niet te doen!
+		</div>
+		<div class="description">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. 
+		</div>
+		</div>
+		<div class="announcement">
+		<div class="new"></div>
+		<div class="time">1h geleden</div>
+		<div class="title">
+			Vergeet niet te doen!
+		</div>
+		<div class="description">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula quis urna sed efficitur. Praesent ac justo erat. Pellentesque et nunc id metus finibus pretium. Duis id malesuada neque. Cras vestibulum augue luctus dolor imperdiet consectetur. Mauris vel lorem at arcu blandit vulputate. Sed ac mauris sagittis, elementum eros id, porta mauris. 
+			
+		</div>
+	</div>
+	</div>
+	<div class="footer">
+		<div class="gamenumber">
+			PIN: <span class="code"></span>
+		</div>
+		<div class="username">
+		</div>
+	</div>
+</body>
+</html>

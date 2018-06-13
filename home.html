@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Naamloos document</title>
+<link href="homecss.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<script>
+		
+	window.getCookie = function(name) {
+	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+	  if (match) return match[2];
+	}
+	var authkey_local = getCookie("account");
+//	var authkey_local = "271743223681190786073801387463456770291"	
+	$( document ).ready(function() {
+		$.ajax({
+			url: "http://84.28.82.98:8081/home",
+			type: 'POST',
+			data: JSON.stringify({ authkey: authkey_local}),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(result) {
+				var list = '';
+				$.each(result, function(i, item){
+					if (item.type == "appointment"){
+						list += '<a href="appointment.html?id=' + item.id + '">';
+						list += '<div class="appointment">';
+						list += '<div class="time">' + item.times + '</div>';
+						list += '<div class="title">' + item.title + '</div>';
+						var description = item.description;
+						var short_description = description.substring(0, 30);
+						if (short_description == description) {
+							list += '<div class="description">' + short_description + '</div>';
+						} else {
+							list += '<div class="description">' + short_description + '...' + '</div>';
+						};
+						list += '</div>';
+						list += '</a>';
+					};
+					if (item.type == "quiz"){
+						list += '<div class="quiz">';
+						list += '<div class="time">' + item.times + '</div>';
+						list += '<div class="title">' + item.title + '</div>';
+						list += '</div>';
+					};
+				});
+			$(".allevents").append(list);
+			},
+			error: function(data) {
+				alert("foutje")
+				alert(data)
+				}
+             });
+		$.ajax({
+                url: "http://84.28.82.98:8081/getuserdata",
+                type: 'POST',
+				data: JSON.stringify({ authkey: authkey_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					var list = '';
+					$.each(result, function(i, item){
+						gameid = item.gameid;
+						username = item.username;
+						unreadannouncements = item.unreadannouncements;
+					});
+					($(".code")).append(gameid);
+					($(".username")).append(username);
+					if (unreadannouncements == 0){
+						announcementdiv = '<a href="announcements.html"><div class="announcementsnonew"><img src="announcement.png" width="50px" alt="announcement horn"><div id="title"> Announcements</div></div></a>'
+					} else {
+						announcementdiv = '<a href="announcements.html"><div class="announcements"><img src="announcement.png" width="50px" alt="announcement horn"><div id="title"> Announcements</div><div class="unreadannouncements"> Er zijn ' + unreadannouncements + ' ongelezen announcements!</div></div></a>'
+					}
+					($(".announcementscontainer")).append(announcementdiv);
+					},
+        		error: function(data) {
+					alert("foutje")
+        			alert(data)
+        			}
+		});
+	})
+						
+             
+
+</script>
+</head>
+
+<body>
+	<div id="container"> 
+	<div class="staticheader">
+	<div id="header">
+		<img src="klassetourzwart.png"></div>
+		<div class="announcementscontainer">
+		</div>
+	</div>
+	<div class="allevents">
+	<div class="appointment">
+		<div class="time">
+			9:00
+		</div>
+		<div class="title">
+			Vertrek bus
+		</div><br>
+		<div class="description">
+			Hoorn busstation
+		</div>
+	</div>
+	<div class="appointment">
+		<div class="time">
+			10:30
+		</div>
+		<div class="title">
+			Versamelen
+		</div>
+		<div class="description">
+			Gadarobe is waar we afspr
+		</div>
+		</div>
+	<div class="appointment">
+		<div class="time">
+			11:00
+		</div>
+		<div class="title">
+			Start rondleiding
+		</div>
+		<div class="description">
+			rijksmuseum
+		</div>
+	</div>
+	<div class="quiz">
+		<div class="time">
+			13:00
+		</div>
+		<div class="title">
+			Quiz 1
+		</div>
+	</div>
+	<div class="appointment">
+		<div class="time">
+			14:00
+		</div>
+		<div class="title">
+			Lunch
+		</div>
+		<div class="description">
+			Openbare kantine bij aula
+		</div>
+	</div>
+	<div class="quiz">
+		<div class="time">
+			15:00
+		</div>
+		<div class="title">
+			Quiz 2
+		</div>
+	</div>
+	<div class="quiz">
+		<div class="time">
+			16:00
+		</div>
+		<div class="title">
+			Quiz 3
+		</div>
+	</div>
+	<div class="appointment">
+		<div class="time">
+			14:00
+		</div>
+		<div class="title">
+			Vertrek
+		</div>
+		<div class="description">
+			Openbare kantine bij aula
+		</div>
+	</div>
+		</div>
+		<br><br>
+	<div class="footer">
+		<div class="gamenumber">
+			PIN: <span class="code"> </span>
+		</div>
+		<div class="username">
+		</div>
+	</div>
+	</div>
+</body>
+</html>

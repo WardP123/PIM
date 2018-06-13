@@ -1,0 +1,86 @@
+@charset "utf-8";
+body {
+	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+	margin:0px;
+}
+.allevents{
+	margin-left: 10px;
+	margin-right: 10px;
+	padding-top: 80px;
+	margin-bottom: 45px;
+}
+.leftarrow {
+	border: solid black;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 12px;
+	colour: grey;
+	transform: rotate(135deg);
+	-webkit-transform: rotate(135deg);
+	float: left;
+	margin-top:27px;
+	margin-left:30px;
+}
+.header {
+	height: 80px;
+	max-height: 15%;
+	text-align: center;
+	width:100%;
+	margin-top:0px;
+	margin-bottom: 0px;
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: fixed;
+	background-color:white;
+}
+.header img{
+	max-width: 60%;
+	max-height: 70px;
+	padding-top: 10px;
+	padding-left: 5px;
+	float:left;
+}
+.announcement{
+	padding-bottom: 14px;
+	border-bottom-style: solid;
+	margin-bottom: 14px;
+}
+.announcement .time{
+	color: darkgrey;
+	text-align: center;
+}
+.announcement .title{
+	font-size: 25px;
+}
+.footer {
+	background-color: lightgray;
+	height: 50px;
+	position: fixed;
+	width: 100%;
+	left: 0;
+	bottom:0;
+	
+}
+.footer .code {
+	font-size: 100%;
+	background-color: grey;
+	padding: 2px;
+	padding-left: 5px;
+	padding-right: 6px;
+	border-radius: 4px;
+	color: white;
+}
+.footer .gamenumber{
+	float:left;
+	font-size: 140%;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.footer .username {
+	margin-top: 10px;
+	font-size: 140%;
+	float: right;
+	margin-right: 12px;
+}

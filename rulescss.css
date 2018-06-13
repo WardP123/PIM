@@ -1,0 +1,121 @@
+@charset "utf-8";
+
+body {
+	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+	background-color: black;
+	margin: 0px;
+}
+.internal1{
+	width: 100%;
+	height: 89vh;
+	display: inline-block;
+	float:left;
+	top: 0;
+	left: 0;
+	color: white;
+	background: -webkit-linear-gradient(left, #379683, #05386B);
+    background: -o-linear-gradient(left, #379683, #05386B);
+    background: linear-gradient(to right, #379683, #05386B);
+
+}
+.internal{
+	width: 100%;
+	height: 89vh;
+	top: 0;
+	left: 0;
+	display: inline-block;
+	color: white;
+	margin: 0;
+	background: -webkit-linear-gradient(left, red, tomato);
+	background: -o-linear-gradient(left, red, tomato);
+	background: linear-gradient(to right, red, tomato); 
+
+}
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+	margin-top:10vh;
+	max-width: 200px;
+}
+
+#logo{
+	width:80%;
+	margin-top:20vh;
+	max-width: 500px;
+}
+
+
+.Title {
+	margin-top: 10vh;
+	font-size: 60px;
+	width: 70%;
+	margin-left: 15%;
+	text-align: center;
+	text-overflow: clip;
+}
+.decription{
+	margin-top: 25px;
+	color: lightgray;
+	text-align: center;
+	float: left;
+	margin-left: 20%;
+	word-wrap: break-word;
+	white-space: normal;
+	width: 60%;
+	text-overflow:clip; 
+	
+}
+
+.center{
+ float: left; 
+ width: 100%;
+ overflow: hidden;
+ /*will change this to hidden later to deny scolling to user*/
+ white-space: nowrap;
+}
+#right-button {
+    position: relative;
+	float: right;
+    background-color: #4CAF50;
+    border: none;
+    font-size: 17px;
+    color: #FFFFFF;
+	margin: 0.5vh;
+	margin-right:5px;
+    height: 7vh;
+    width: 30%;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#right-button:after {
+    content: "";
+    background: #90EE90;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+#right-button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+.footer{
+	float:left;
+	background-color: #0b2133;
+	height: 8vh;
+	width: 100%;
+}
