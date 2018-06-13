@@ -7,20 +7,25 @@
 	<script>
 		function CreateGroup() {
 			var groupname_local = document.getElementById("groupnameinput").value;
-            $.ajax({
-                url: "http://localhost:8081/new-game",
-                type: 'POST',
-				data: JSON.stringify({ groupname: groupname_local}),
-				contentType: "application/json; charset=utf-8",
-				dataType: "json",
-                async: true,
-                success: function(result) {
-					alert(result);
-				},
-        		error: function(data) {
-					alert("foutje")
-        			}
-             });
+			if (groupname_local == ""){
+				alert('Geef een groepnaam.')
+			}
+			else {
+				$.ajax({
+					url: "http://localhost:8081/new-game",
+					type: 'POST',
+					data: JSON.stringify({ groupname: groupname_local}),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					async: true,
+					success: function(result) {
+						alert("Groepnaam: " + groupname_local + "\n" + "PIN: " + result.gameid + "\n" + "Wachtwoord: " + result.gamepass);
+					},
+					error: function(data) {
+						alert("Groep aanmaken mislukt.")
+						}
+				});
+			}
 		}
 	</script>
 </head>
