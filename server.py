@@ -40,53 +40,19 @@ def make_new_game(db):
            gamecode = random.randint(MIN_GAME_CODE, MAX_GAME_CODE)
            gamecode_str = str(gamecode)
 
-           gamepass = random.randint(MIN_GAME_PASS, MAX_GAME_PASS)
-           gamepass_str = str(gamepass)
-
            db.execute("SELECT * FROM games WHERE gameid=?", (gamecode_str,))
            if not db.fetchall():
                break
-       db.execute("INSERT INTO games (gameid, groupname, gamepass) VALUES (?, ?, ?)", (gamecode_str, item['groupname'], gamepass_str))
-   import json
+       db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (gamecode_str, item['groupname']))
+       db.execute("INSERT INTO admins (gameid, groupname, adminpass) VALUES (?, ?, ?)", (gamecode_str, item['groupname'], item['adminpass']))
    data = {}
    data['gameid'] = gamecode_str
-   data['gamepass'] = gamepass_str
    json_data = json.dumps(data)
    return json_data
 
 @get('/make-test-group/groupid=<groupid>&groupname=<groupname>')
 def make_test_group(db, groupid, groupname):
     db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (groupid, groupname))
-
-
-# @post('/new-game')
-# def make_new_game(db):
-#     response.headers['Access-Control-Allow-Methods'] = 'POST'
-#     response.headers['Accept'] = 'json'
-#     response.headers['Access-Control-Allow-Origin'] = 'http://create-group.html'
-#     response.content_type = 'application/json; charset=UTF-8'
-#
-#     body = request.forms
-#     game_name = body['groupname']
-#
-#     gamecode = random.randint(MIN_GAME_CODE, MAX_GAME_CODE)
-#     gamecode_str = str(gamecode)
-#
-#     db.execute("SELECT * FROM games")
-#     games = db.fetchall()
-#     for game in games:
-#         if game['gameid'] == gamecode_str:
-#             return json.dumps("Game ID bestaat al")
-#
-#     db.executescript("""
-#         INSERT INTO games
-#         (gameid, groupname)
-#         VALUES ('%s', '%s');
-#         """ % (gamecode_str, game_name))
-#     return json.dumps(gamecode)
-#
-#     currentstatus = response.status
-#     return json.dumps(currentstatus)
 
 @get('/all-gamecodes')
 def get_all_gamecodes(db):
@@ -259,6 +225,22 @@ def login(db):
             return json.dumps(return_string)
         return "LOGIN FALSE"
 
+@post('/adminlogin')
+def adminlogin(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
+        if not db.fetchall():
+            return "ERROR"
+        db.execute("SELECT * FROM admins WHERE gameid=? AND adminpass=?", (item['gameid'], item['adminpass']))
+        if not db.fetchall():
+            authentication = str(random.getrandbits(128))
+            # response.set_cookie("account", authentication)
+            db.execute("INSERT INTO admins (gameid, adminpass, activesessionCoockie) VALUES (?, ?, ?)", (item['gameid'], item['adminpass'], item['pin'], str(authentication)))
+            # db.execute("INSERT INTO activesessions (gameid, userid, activesessionCoockie, status, expires) VALUES (?, (SELECT  id FROM users WHERE gameid, username VALUES (?,?)), ?, ?, ?)", (item['gameid'], item['gameid'], item['username'], item['pin'], 'active', 'beta'))
+            return_string = authentication
+            return json.dumps(return_string)
+        return "LOGIN FALSE"
 
 
 @get('/log-in/gameid=<gameid>&username=<username>&pinhash=<pin>')

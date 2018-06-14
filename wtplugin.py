@@ -73,9 +73,20 @@ class WtDbPlugin(object):
             CREATE TABLE IF NOT EXISTS games
                     (id INTEGER PRIMARY KEY,
                      gameid INTEGER NOT NULL,
-                     groupname CHAR(100) NOT NULL,
-                     gamepass INTEGER NOT NULL)
-            """)
+                     groupname CHAR(100) NOT NULL)
+            """);
+            db.commit()
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' and name='admins'")
+        result = c.fetchone()
+        if not result or u'admins' not in result:
+            c.executescript("""
+            CREATE TABLE IF NOT EXISTS admins 
+                (id INTEGER PRIMARY KEY,
+                gameid INTEGER NOT NULL,
+                groupname CHAR(100) NOT NULL,
+                adminpass CHAR(100) NOT NULL,
+                activesessionCookie INTEGER)
+            """);
             db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='announcements'")
         result = c.fetchone()

@@ -2,24 +2,28 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Naamloos document</title>
+<title>KlasseTour aanmaken</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script>
 		function CreateGroup() {
 			var groupname_local = document.getElementById("groupnameinput").value;
+			var adminpass_local = document.getElementById("adminpass").value;
 			if (groupname_local == ""){
 				alert('Geef een groepnaam.')
+			}
+			if (adminpass_local == ""){
+				alert('Geef een admin wachtwoord.')
 			}
 			else {
 				$.ajax({
 					url: "http://localhost:8081/new-game",
 					type: 'POST',
-					data: JSON.stringify({ groupname: groupname_local}),
+					data: JSON.stringify({ 'groupname': groupname_local, 'adminpass': adminpass_local}),
 					contentType: "application/json; charset=utf-8",
 					dataType: "json",
 					async: true,
 					success: function(result) {
-						alert("Groepnaam: " + groupname_local + "\n" + "PIN: " + result.gameid + "\n" + "Wachtwoord: " + result.gamepass);
+						alert("Groepnaam: " + groupname_local + "\n" + "PIN: " + result.gameid);
 					},
 					error: function(data) {
 						alert("Groep aanmaken mislukt.")
@@ -32,7 +36,14 @@
 
 <body>
 	<form>
-		<input type="text" id = "groupnameinput"><br>
+		Groepnaam:
+		<br>
+		<input type="text" id = "groupnameinput">
+		<br>
+		Admin wachtwoord:
+		<br>
+		<input type="password" id = "adminpass">
+		<br>
 		<input type="button" id="groupButton" value="Submit" onclick="CreateGroup()">
 	</form>
 </body>
