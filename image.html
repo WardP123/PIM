@@ -2,37 +2,36 @@
 <head>
     <!-- http://talkerscode.com/webtricks/upload%20image%20to%20database%20and%20server%20using%20HTML,PHP%20and%20MySQL.php -->
 <script type='text/javascript'>
-function preview_image(event) 
-{
- var reader = new FileReader();
- reader.onload = function()
- {
-  var output = document.getElementById('output_image');
-  output.src = reader.result;
- }
- reader.readAsDataURL(event.target.files[0]);
+function preview_image(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('output_image');
+        output.src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
 }
 </script>
 <style>
-body
-{
- width:100%;
- margin:0 auto;
- padding:0px;
- font-family:helvetica;
- background-color:#0B3861;
+body {
+    width:100%;
+    margin:0 auto;
+    padding:0px;
+    font-family:helvetica;
+    background: -webkit-linear-gradient(left, #379683, #05386B);
+    background: -o-linear-gradient(left, #379683, #05386B);
+    background: linear-gradient(to right, #379683, #05386B);
 }
-#wrapper
-{
- text-align:center;
- margin:0 auto;
- padding:0px;
- width:995px;
+
+#wrapper {
+    text-align:center;
+    margin:0 auto;
+    padding:0px;
+    width:995px;
 }
-#output_image
-{
- max-width:300px;
+#output_image {
+    max-width:300px;
 }
+
 </style>
 </head>
 <body>
