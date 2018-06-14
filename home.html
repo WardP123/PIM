@@ -72,7 +72,10 @@
 					($(".username")).append(username);
 					if (unreadannouncements == 0){
 						announcementdiv = '<a href="announcements.html"><div class="announcementsnonew"><img src="announcement.png" width="50px" alt="announcement horn"><div id="title"> Announcements</div></div></a>'
-					} else {
+					} else if (unreadannouncements == 1) {
+						announcementdiv = '<a href="announcements.html"><div class="announcements"><img src="announcement.png" width="50px" alt="announcement horn"><div id="title"> Announcements</div><div class="unreadannouncements"> Er is ' + unreadannouncements + ' ongelezen announcement!</div></div></a>'
+					}
+					else {
 						announcementdiv = '<a href="announcements.html"><div class="announcements"><img src="announcement.png" width="50px" alt="announcement horn"><div id="title"> Announcements</div><div class="unreadannouncements"> Er zijn ' + unreadannouncements + ' ongelezen announcements!</div></div></a>'
 					}
 					($(".announcementscontainer")).append(announcementdiv);
@@ -114,10 +117,10 @@
 			10:30
 		</div>
 		<div class="title">
-			Versamelen
+			Verzamelen
 		</div>
 		<div class="description">
-			Gadarobe is waar we afspr
+			Garderobe
 		</div>
 		</div>
 	<div class="appointment">

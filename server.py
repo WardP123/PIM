@@ -73,14 +73,16 @@ def get_announcement_by_gameid(db, gameid):
     return json.dumps(gameid_announcements)
 ## acutually put
 
-@get('/new-announcement/gameid=<gameid>&title=<announcement>&decription=<description>')
-def new_announcement(db, gameid, announcement, description):
-    db.execute("SELECT * FROM users WHERE gameid=?", (str(gameid),))
-    all_users = db.fetchall()
-    for user in all_users:
-        new_unreadmessages =  (user['unreadannouncements'] + 1)
-        db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
-    db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (gameid, announcement, description))
+@get('/new-announcement')
+def new_announcement(db):
+	if request.json is not None:
+       item = request.json
+	   db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid']))
+       all_users = db.fetchall()
+       for user in all_users:
+         new_unreadmessages =  (user['unreadannouncements'] + 1)
+         db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
+       db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription']))
 
 ## acutually delete
 @get('/DELETE-ALL')
@@ -257,114 +259,6 @@ def login2(db, gameid, username, pin):
             return "LOGIN OKAY"
         return False
 
-
-## OLLDDDDDDD
-
-
-@get('/phones')
-def get_phones(db):
-    db.execute("SELECT * FROM phones")
-    all_phones = db.fetchall()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(all_phones)
-
-@get('/phones/brand=<brand>')
-def get_phones_brand(db, brand):
-    db.execute("SELECT * FROM phones WHERE brand=?", (brand,))
-    brand_phones = db.fetchall()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(brand_phones)
-
-@get('/phones/screensize=<size>')
-def db_retrieve(db, size):
-    db.execute("SELECT * FROM phones WHERE screensize=?", (size,))
-    screensize_phones = db.fetchone()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(screensize_phones)
-
-@get('/phones/os=<os>')
-def get_phones_brand(db, os):
-    db.execute("SELECT * FROM phones WHERE os=?", (os,))
-    os_phones = db.fetchall()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(os_phones)
-
-@get('/phones/id=<phone_id>')
-def get_phones_id(db, phone_id):
-    db.execute("SELECT FROM phones WHERE id=?", (phone_id,))
-    id_phone = db.fetchone()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(id_phone)
-
-
-#DELETE
-
-@delete('/phones/id=<phone_id>')
-def delete_phone(db, phone_id):
-    db.execute("DELETE FROM phones WHERE id=?", (phone_id,))
-    response.status = 204
-
-@delete('/phones')
-def delete_phone_json(db):
-    item = request.json
-    db.execute("DELETE FROM phones WHERE id=?", str(item['id']))
-    response.status = 204
-
-@delete('/delete-all-phones')
-def delete_all_phones(db):
-    db.execute("DELETE FROM phones")
-    response.status = 204
-
-
-#POST
-
-@post('/phones')
-def add_new_phone(db):
-    if request.json is not None:
-        item = request.json
-        db.execute(""" INSERT INTO phones (brand, model, os, image, screensize)
-                VALUES (?, ?, ?, ?, ?)""",
-                (item['brand'], item['model'], item['os'], item['image'],  item['screensize']))
-    else:
-        brand = request.forms.get('brand')
-        model = request.forms.get('model')
-        os = request.forms.get('os')
-        screensize = request.forms.get('screensize')
-        image = request.forms.get('image')
-        db.execute("INSERT INTO phones (brand, model, os, screensize, image) VALUES (?, ?, ?, ?, ?)", (brand, model, os, screensize, image))
-
-# PUT
-@put('/phones')
-def update_phone(db):
-    item = request.json
-    db.execute("""UPDATE phones SET brand=?, model=?, os=?, image=?, screensize=? WHERE id=?""",
-            (item['brand'], item['model'], item['os'], item['image'],  item['screensize']))
-    response.status = 204
-
-@put('/phones/id=<id>&newbrand=<newbrand>')
-def change_brand(db, id, newbrand):
-    db.execute("UPDATE phones SET brand=? WHERE id=?", (newbrand, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newmodel=<newmodel>')
-def change_brand(db, id, newmodel):
-    db.execute("UPDATE phones SET model=? WHERE id=?", (newmodel, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newos=<newos>')
-def change_brand(db, id, newos):
-    db.execute("UPDATE phones SET os=? WHERE id=?", (newos, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newscreensize=<newscreensize:int>')
-def change_brand(db, id, newscreensize):
-    db.execute("UPDATE phones SET screensize=? WHERE id=?", (newscreensize, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newimage=<newimage>')
-def change_brand(db, id, newimage):
-    db.execute("UPDATE phones SET image=? WHERE id=?", (newimage, id,))
-    response.status = 204
 
 # ERRORS
 

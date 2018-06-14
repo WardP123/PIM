@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Naamloos document</title>
+<title>Desktop</title>
 <link href="desktopcss.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -126,7 +126,7 @@
 			10:30
 		</div>
 		<div class="title">
-			Versamelen
+			Verzamelen
 		</div>
 		<div class="description">
 			Gadarobe is waar we afspr
@@ -220,8 +220,6 @@
 			</div>
 		</div>
 	</div>
-		<!-- Trigger/Open The Modal -->
-	<button id="myBtn">Open Modal</button>
 
 	<!-- The Modal -->
 	<div id="newannouncementmodal" class="modal">
@@ -234,7 +232,7 @@
 				Title: <br>
 				<input type="text" id="antitleintext"> <br>
 				Description: <br>
-				<input type="text" id="andescriptionintext"> <br>
+				<textarea rows="4" cols="50" name="comment" id="announcementdescription" form="usrform"></textarea> <br>
 				<input type="button" id="announcementsendbutton" value="Submit" onclick="new_announcement()">
 			</form>
 	  </div>
@@ -249,7 +247,7 @@
 				Title: <br>
 				<input type="text" id="aptitleintext"> <br>
 				Description: <br>
-				<input type="text" id="apdescriptionintext"> <br>
+				<textarea rows="4" cols="50" name="comment" id="appointmentdescription" form="usrform">Enter text here...</textarea> <br>
 				<input type="button" id="appointmentsendbutton" value="Submit" onclick="new_appointment()">
 			</form>
 	  </div>
@@ -303,6 +301,38 @@ window.onclick = function(event) {
     if (event.target == modalap) {
         modalap.style.display = "none";
     }
+}
+
+function new_announcement(){
+	var announcementtitle_local = document.getElementById("antitleintext").value;
+	var announcementdescription_local = document.getElementById("announcementdescription").value;
+	
+	if (announcementtitle_local == "" && announcementdescription_local == ""){
+		alert('Geef de announcement een titel en inhoud.')
+	}
+	else if (announcementtitle_local == ""){
+		alert('Geef de announcement een titel.')
+	}
+	else if (announcementdescription_local == ""){
+		alert('Geef de announcement een inhoud.')
+	}
+	
+	else {
+		$.ajax({
+			url: "http://localhost:8081/new-announcement",
+			type: 'POST',
+			data: JSON.stringify({ 'gameid': x, 'announcementtitle': announcementtitle_local, 'announcementdescription': announcementdescription_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(result) {
+				alert("Announcement aanmaken gelukt");
+			},
+			error: function(data) {
+				alert("Announcement aanmaken mislukt.");
+			}
+		});
+	}
 }
 </script>
 </body>
