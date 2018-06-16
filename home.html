@@ -15,6 +15,29 @@
 	var authkey_local = getCookie("account");
 //	var authkey_local = "271743223681190786073801387463456770291"	
 	$( document ).ready(function() {
+		if (authkey_local) {
+		$.ajax({
+				
+                url: "http://84.28.82.98:8081/check_authkey",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local, "authkey": authkey}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						alert("already login");
+						
+					}else{
+						alert("no valid login, please continue");
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+		} else {
+			window.location.href = "loginnew.html";
+		};
 		$.ajax({
 			url: "http://84.28.82.98:8081/home",
 			type: 'POST',
