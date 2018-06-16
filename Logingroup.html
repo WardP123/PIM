@@ -168,7 +168,7 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-						document.cookie = ("account="+result);
+						document.cookie = ("account="+result.activesessionCoockie);
 						window.location.href = "rules.html";
 						
 					}else{
