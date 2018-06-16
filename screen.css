@@ -45,9 +45,37 @@ img {
     background-color: white;
 }
 
+.loginbutton {
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.createbutton {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    color: rgb(51, 225, 153);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.login_input {
+    display: inline-block;
+    background-color: rgb(51, 225, 153);
+}
+
 input[type=button] {
     background-color: rgb(51, 225, 153);
     border: none;
+    text-decoration: none;
     color: white;
     padding: 10px 20px;
     text-align: center;

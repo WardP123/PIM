@@ -28,10 +28,16 @@
     <div class="content">
         <img src="logo.png" alt="KlasseTour logo">
         <div id="login">
-          <a href="login.html">Login</a>
+          <button class="loginbutton" onclick="dropDown()">Login</button>
+            <div>
+              <form class="login_input">
+                <p>Groepsnaam: </p>
+                <input type="text">
+              </form> 
+            </div> 
         </div>
         <div id="create">
-             <a href="create.html">Maak een groep</a>
+             <button class="createbutton" onclick="dropDown">Maak een groep</a>
         </div>
     </div>
 
@@ -56,6 +62,10 @@
           document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
       });
+
+      function dropwDown() {
+        
+      }
     </script>
   </body>
 </html>
