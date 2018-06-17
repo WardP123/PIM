@@ -167,11 +167,7 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-<<<<<<< HEAD
-					document.cookie = ("account="+result.authkey);
-=======
-						document.cookie = ("account="+result.activesessionCoockie);
->>>>>>> 106c1ef7b4e1b1ec90e563ceba8920593fadbdd1
+						document.cookie = ("account="+result.authkey);
 						window.location.href = "rules.html";
 					}else{
 						alert("wrong password or username");
