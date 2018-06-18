@@ -1,158 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Website KlasseTour">
-    <meta name="keywords" content="Rijksmuseum, KlasseTour, groep">
-    <meta name="author" content="Luuk Kaandorp, Ward Pennink, Matthijs Blaauw">
-    <title>Welkom bij KlasseTour!</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/5.0.4/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/5.0.4/firebase-auth.js"></script>
-    <script defer src="/__/firebase/5.0.4/firebase-database.js"></script>
-    <script defer src="/__/firebase/5.0.4/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/5.0.4/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="screen.css">
-    <script>
-      function dropDown() {
-        document.getElementById("login_hide").classList.toggle("login_show");
-      }
-      
-      window.getCookie = function(name) {
-        var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-        if (match) return match[2];
-      }
-
-      function showUsername() {
-      var x = document.getElementById("username");
-            var y = document.getElementById("groupButton");
-            x.style.display = "block";
-            y.style.display = "none";
-        }
-  
-      function check_gameid() {
-        var gameid = document.getElementById("group").value;
-          $.ajax({
-              url: "http://84.28.82.98:8081/check_gameid",
-              type: 'POST',
-        data: JSON.stringify({ gameid: gameid}),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
+<head>
+<meta charset="utf-8">
+<title>Naamloos document</title>
+<link href="loginnewcss.css" rel="stylesheet" type="text/css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	function check_gameid() {
+        	var gameid = document.getElementById("gameidintext").value;
+            $.ajax({
+                url: "http://84.28.82.98:8081/check_gameid",
+                type: 'POST',
+				data: JSON.stringify({ gameid: gameid}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
                 async: true,
                 success: function(result) {
-          $.each(result, function(i, item){
-          if (item == "yes" ){
-            showUsername()
-          }else{
-            alert("Group number does not exist!")
-          }
-            });
-          },
-        error: function(data) {
-          alert("foutje")
-            alert(data)
-            }
-          });
-      };
-      
-      function check_username() {
-        var gameid_local = document.getElementById("group").value;
-        var username_local = document.getElementById("usernameintext").value;
-              $.ajax({
-          
-                  url: "http://84.28.82.98:8081/check_username",
-                  type: 'POST',
-          data: JSON.stringify({"gameid": gameid_local, "username": username_local}),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-                  async: true,
-                  success: function(result) {
-            if (result.gamenumber_exists == "no" ){
-              alert("Gamenumber does not exist!");
-              
-            }else{
-              if (result.username_exists == "no"){
-                showPassword();
-              } else {
-              alert("Username already exists!");
-              }
-            }
-          },
-              error: function(data) {
-            alert("foutje")
-                }
-               });
-  
-      }
+					$.each(result, function(i, item){
+					if (item == "yes" ){
+						window.location.href = "logingroup.html?gameid=12";
+					}else{
+						alert("Group number does not exist!")
+					}
+        		});
+				},
+        		error: function(data) {
+					alert("foutje")
+        			alert(data)
+        			}
+             });
+		};
+</script>
+</head>
 
-      function create_account() {
-        var gameid_local = document.getElementById("group").value;
-        var username_local = document.getElementById("usernameintext").value;
-        var pin_local = document.getElementById("pinintext").value;
-              $.ajax({
-                  url: "http://84.28.82.98:8081/login",
-                  type: 'POST',
-          data: JSON.stringify({"gameid": gameid_local, "username": username_local, "pin": pin_local}),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-                  async: true,
-                  success: function(result) {
-            document.cookie = ("account="+result);
-            window.location.href = "rules.html";
-          },
-              error: function(data) {
-            alert("foutje")
-                }
-               });
-          }
-          
-        function showPassword() {
-          var x = document.getElementById("password");
-          var y = document.getElementById("userButton");
-          x.style.display = "block";
-          y.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-          if (!event.target.matches('.loginbutton')) {
-            var dropdowns = document.getElementsByClassName("login_hide");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('login_show')) {
-                openDropdown.classList.remove('login_show');
-              }
-            }
-          }
-        }
-      </script>
-  </head>
-
-  <body>
-    <div class="background"> </div>
-    <img src="logo.png" alt="KlasseTour logo">
-    <div id="login">
-      <button class="loginbutton" onclick="dropDown()">Login</button>
-    </div>
-    <div id="login_hide" class="login_hide">
-      <form>
-        <label for="gname">Group Name:</label><br>
-        <input type="text" id="gname" placeholder="Your groupname...">
-        <input type="button" id="groupButton" value="Submit" onclick="check_gameid()">
-      </form> 
-    </div>
-    <div id="create">
-      <button class="createbutton" onclick="dropDown">Maak een groep</a>
-    </div>
-    <div id="create_hide" class="create_hide">
-      <form>
-      </form>
-    </div>
-  </body>
+<body>
+	<div class="center">
+		<div class="titleimg"><img src="klassetourwit.png"> </div>
+		
+		<div class="groupnumberform">Wat is je groepsnummer? </div>
+		<form>
+			<input type="text" id="gameidintext"><br>
+			<input type="button" value="Oké"  onclick="check_gameid()">
+		</form>
+		<div class="teacher"> Ik ben een leraar </div>
+	</div>
+</body>
 </html>

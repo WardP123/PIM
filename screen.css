@@ -20,10 +20,24 @@ body {
     filter: blur(1px);
 }
 
-img {
+.content {
     position: fixed;
-    margin-top: 10%;
+    left: 0;
+    right: 0;
     z-index: 9999;
+    margin-right: 20px;
+    margin-top: 15%;
+}
+
+form, p {
+    background-color: white;
+    text-align: center;
+    width: 40%;
+    padding: 20px 0;
+    margin: 0 0;
+}
+
+img {
     width: 40%;
     margin-left: 30%;
     height: auto;
@@ -53,72 +67,42 @@ img {
     font-size: 20px;
 }
 
-.login_hide {
-    display: none;
-}
-
-.login_show {
-    display: block;
-    position: fixed;
-    z-index: 1000;
-    background: rgb(51, 225, 153);
-    width: 40%;
-    margin-left: 30%;
-    margin-top: 27%;
-    font-weight: bold;
-    color: white;
-    padding: 20px 0;
-    border: none;
-    text-align: center;
+.login_input {
+    display: inline-block;
+    background-color: rgb(51, 225, 153);
 }
 
 input[type=button] {
-    background-color: white;
+    background-color: rgb(51, 225, 153);
     border: none;
-    color: rgb(51, 225, 153);
+    text-decoration: none;
+    color: white;
     padding: 10px 20px;
     text-align: center;
-    font-weight: bold;
-    width: 90%;
-    border-radius: 4px;
     cursor: pointer;
     margin-top: 2px;
 }
 
 #login {
-    position: fixed;
+    display: inline-block;
+    float: left;
     background: rgb(51, 225, 153);
     width: 20%;
-    margin-top: 22%;
     margin-left: 30%;
-    color: white;
+    text: white;
     padding: 20px 0;
     border: none;
-    font-weight: bold;
     text-align: center;
-    z-index: 1000;
 }
 
 #create {
-    position: fixed;
+    display: inline-block;
+    float: left;
     background: white;
     width: 20%;
-    margin-top: 22%;
-    margin-left: 50%;   
     padding: 20px 0;
     border: none;
     text-align: center;
-    z-index: 1000;
-}
-
-input[type=text] {
-    width: 90%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
 }
 
 #login a {
@@ -138,49 +122,18 @@ input[type=text] {
 }
 
 @media (max-width: 1000px) {
-    img {
+    .content {
+        margin-left: 20%;
+    }
+
+    img, form, p {
         width: 60%;
-        margin-left: 20%;
     }
 
-    #login {
+    #login, #create {
         width: 30%;
-        margin-top: 28%;
-        margin-left: 20%;
-    }
-
-    #create {
-        width: 30%;
-        margin-top: 28%;
-        margin-left: 50%;
-    }
-
-    .login_show {
-        display: block;
-        position: fixed;
-        z-index: 1000;
-        background: rgb(51, 225, 153);
-        width: 60%;
-        margin-left: 20%;
-        margin-top: 37%;
-        color: white;
-        font-weight: bold;
-        padding: 20px 0;
-        border: none;
-        text-align: center;
-    }
-
-    input[type=text] {
-        width: 90%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
     }
 }
-/* 
 
 @media (max-width: 600px) {
     body {
@@ -198,5 +151,5 @@ input[type=text] {
     #login, #create{
         width: 100%;
     }
-} */
-
+}
+}
