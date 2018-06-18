@@ -74,9 +74,10 @@
                 success: function(result) {
 					if (result.email_exists == "yes") {
 						alert("dit e-mailadress is al eerder gebruikt!")
-					}
-					document.cookie = ("accountadmin="+result.authkey);
+					} else {
+						document.cookie = ("accountadmin="+result.authkey);
 					window.location.href = "desktop.html";
+					}
 				},
         		error: function(data) {
 					alert("foutje")
