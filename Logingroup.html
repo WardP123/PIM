@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Naamloos document</title>
+<link href="loginnewcss.css" rel="stylesheet" type="text/css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	window.getCookie = function(name) {
+	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+	  if (match) return match[2];
+	}
+	function getQueryVariable(variable){
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+	}
+	gameid_local = getQueryVariable("gameid");
+	$( document ).ready(function() {
+		authkey = getCookie("account");
+		if (authkey) {
+		$.ajax({
+				
+                url: "http://84.28.82.98:8081/check_authkey",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local, "authkey": authkey}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						window.location.href = "rules.html";
+						
+					}else{
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+		}
+		$.ajax({
+                url: "http://84.28.82.98:8081/get_group_info",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					$.each(result, function(i, item){
+						groupname_download = item.groupname;
+					})
+				$(".groupname").append(groupname_download);
+				},
+        		error: function(data) {
+        			}
+             });
+		
+	});
+	
+	
+	function check_usernamenew() {
+			username_local = document.getElementById("usernameintext").value;
+
+            $.ajax({
+				
+                url: "http://84.28.82.98:8081/check_username",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local, "username": username_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.gamenumber_exists == "no" ){
+						alert("Gamenumber does not exist!");
+						
+					}else{
+						if (result.username_exists == "no"){
+							showPasswordnew();
+						} else {
+						alert("Username already exists!");
+						}
+					}
+				},
+        		error: function(data) {
+					alert("foutje")
+        			}
+             });
+
+        }
+	function check_usernameexists() {
+			username_local = document.getElementById("usernameintext").value;
+
+            $.ajax({
+				
+                url: "http://84.28.82.98:8081/check_username",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local, "username": username_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.gamenumber_exists == "no" ){
+						alert("Gamenumber does not exist!");
+						
+					}else{
+						if (result.username_exists == "no"){
+							alert("Username does not exist!");
+						} else {
+							showPasswordexists();
+						
+						}
+					}
+				},
+        		error: function(data) {
+					alert("foutje")
+        			}
+             });
+
+        }
+		function showPasswordnew() {
+				var x = document.getElementById("pinformnew");
+				var y = document.getElementById("firstform");
+				x.style.display = "block";
+				y.style.display = "none";
+				namespan = document.getElementById("name");
+				$(".name").append(username_local);
+			}
+	function showPasswordexists() {
+				var x = document.getElementById("pinformexists");
+				var y = document.getElementById("firstform");
+				x.style.display = "block";
+				y.style.display = "none";
+				namespan = document.getElementById("name");
+				$(".name").append(username_local);
+			}
+	function create_account() {
+			var pin_local = document.getElementById("pinintext").value;
+            $.ajax({
+                url: "http://84.28.82.98:8081/login",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local, "username": username_local, "pin": pin_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					document.cookie = ("account="+result);
+					window.location.href = "rules.html";
+				},
+        		error: function(data) {
+					alert("foutje")
+        			}
+             });
+        }
+	function check_existing_login() {
+		var pin_local = document.getElementById("pinintextexists").value;
+		$.ajax({
+				
+                url: "http://84.28.82.98:8081/check_login",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local, "username": username_local, "PIN": pin_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						document.cookie = ("account="+result.authkey);
+						window.location.href = "rules.html";
+					}else{
+						alert("wrong password or username");
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+	}
+</script>
+</head>
+
+<body>
+	<div class="center">
+		<div class="titleimg"><img src="klassetourwit.png"> </div>
+		<div id="firstform">
+		<div class="welcome">Welkom bij groep <span class ="groupname"></span> </div>
+		<div class="info"> Wat is je volledige naam? </div>
+		<div class="groupnumbeform">
+		<form>
+			<input type="text" id="usernameintext"><br>
+			<input type="button" id="userButton" value="Maak een nieuw account" onclick="check_usernamenew()">
+		</form>
+		</div>
+		<form>
+			<input type="button" value="Ik heb al een account" onclick="check_usernameexists()">
+		</form>
+		</div>
+		<div id="pinformnew">
+		<form id="pin">
+			<div class="pintext">Hoi <span class="name"></span>! <br>
+				Vul je PINcode In ( 5 cijfers) new:</div>
+			<input type="password" id="pinintext" >
+			<input type="button" value="Login" onclick="create_account()">
+		</div>
+		<div id="pinformexists">
+		<form id="pin">
+			<div class="pintext">Hoi <span class="name"></span>! <br>
+				Vul je PINcode In ( 5 cijfers) old:</div>
+			<input type="password" id="pinintextexists"><br>
+			 <input type="button" value="Login" onclick="check_existing_login()">
+		</div>
+		</div>
+</body>
+</html>

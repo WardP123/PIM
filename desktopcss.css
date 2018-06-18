@@ -176,9 +176,10 @@ body {
 	padding: 20px;
 	border-radius: 10px;
 	margin-top: 40px;
-	width: 33%;
+	width: 31%;
 	float: left;
 	min-width: 250px;
+	max-width: 490px;
 }
 .appointment {
 	height: 100px;
@@ -228,8 +229,7 @@ body {
     background: linear-gradient(to right, #f7b733, #f79933);
 	text-align: center;
 	border-radius: 15px;
-	margin-bottom: 10px;
-	float: left;
+	float: right;
 	padding: 10px;
 }
 .plusappointment {
@@ -264,7 +264,6 @@ body {
 	background: -webkit-linear-gradient(to right, #4abdac, #4abddd);
     background: -o-linear-gradient(to right, #4abdac, #4abddd);
     background: linear-gradient(to right, #4abdac, #4abddd);
-	margin-right: 8%;
 	text-align: center;
 	border-radius: 15px;
 	margin-bottom: 10px;
