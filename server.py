@@ -73,26 +73,27 @@ def get_announcement_by_gameid(db, gameid):
     return json.dumps(gameid_announcements)
 ## acutually put
 
-@get('/new-announcement')
+@post('/new-announcement')
 def new_announcement(db):
-	if request.json is not None:
-       item = request.json
-	   db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid']))
-       all_users = db.fetchall()
-       for user in all_users:
-         new_unreadmessages =  (user['unreadannouncements'] + 1)
-         db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
-       db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription']))
+    if request.json is not None:
+        item = request.json
+        db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid']))
+        all_users = db.fetchall()
+        for user in all_users:
+            new_unreadmessages =  (user['unreadannouncements'] + 1)
+            db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
+        db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription']))
 
+@post('/new-appointment')
+def new_appointment(db):
+	if request.json is not None:
+		item = request.json
+		db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (item['gameid'], "appointment", item['title'], item['description'], item['time']))
+		
 ## acutually delete
 @get('/DELETE-ALL')
 def delete_all_games(db):
     db.execute("DELETE FROM games")
-
-@post('/new-appointment')
-def new_appointment(db):
-    appointment = request.json
-    db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (appointment['gameid'], "appointment", appointment['title'], appointment['description'], appointment['times']))
 
 @post('/new-quiz')
 def new_appointment(db):
@@ -151,7 +152,6 @@ def home(db):
 
 @get('/home')
 def home(db):
-    print(request.get_cookie("account"))
     authentication = request.get_cookie("account")
     # authentication = key
     print(authentication)

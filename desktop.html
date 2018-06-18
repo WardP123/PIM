@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Desktop</title>
 <link href="desktopcss.css" rel="stylesheet" type="text/css">
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
 	<div id="header">
@@ -35,8 +35,8 @@
 		</div>
 		</div>
 		<div class="announcements">
-			<div class="announcementstitle"> Announcements </div>
-			<div id = "newannouncement" class="newannouncement"> Nieuwe Announcement <br> <span class="plusannouncement"> + </span> </div></button>
+			<div class="announcementstitle"> Meldingen </div>
+			<div id = "newannouncement" class="newannouncement"> Nieuwe Melding <br> <span class="plusannouncement"> + </span> </div></button>
 		<div class="announcement">
 		<div class="new"></div>
 		<div class="time">1h geleden</div>
@@ -102,7 +102,7 @@
 		</div>
 		<div class="allevents">
 			<div class = "bottons">
-				<div class="newappointmentcontainer"> <div id="newappointment" class="newappointment"> <br> Nieuwe afspraak <br><span class="plusappointment"> +</span></div> </div>
+				<div class="newappointmentcontainer"> <div id="newappointment" class="newappointment"> <br> Nieuwe Afspraak <br><span class="plusappointment"> +</span></div> </div>
 				<div class="newquizcontainer"><div class="newquiz"> <br>  Nieuwe Quiz <br><span class="plusquiz"> +</span></div></div>
 			</div>
 		<div class="events">
@@ -227,11 +227,11 @@
 	  <!-- Modal content -->
 	  <div class="modal-content">
 		<span class="closean">&times;</span>
-		<div class="title">New Announcement</div>
+		<div class="title">Nieuwe Melding</div>
 			<form>
-				Title: <br>
+				Titel: <br>
 				<input type="text" id="antitleintext"> <br>
-				Description: <br>
+				Inhoud: <br>
 				<textarea rows="4" cols="50" name="comment" id="announcementdescription" form="usrform"></textarea> <br>
 				<input type="button" id="announcementsendbutton" value="Submit" onclick="new_announcement()">
 			</form>
@@ -242,12 +242,16 @@
 	  <!-- Modal content -->
 	  <div class="modal-content">
 		<span class="closeap">&times;</span>
-		<div class="title">New Appointment</div>
+		<div class="title">Nieuwe Afspraak</div>
 			<form>
-				Title: <br>
+				Type: <br>
+				<input type="text" id="aptype"> <br>
+				Titel: <br>
 				<input type="text" id="aptitleintext"> <br>
-				Description: <br>
-				<textarea rows="4" cols="50" name="comment" id="appointmentdescription" form="usrform">Enter text here...</textarea> <br>
+				Inhoud: <br>
+				<input type="text" id="apdescription"> <br>
+				Tijd: <br>
+				<input type="time" name="comment" id="appointmenttime"><br>
 				<input type="button" id="appointmentsendbutton" value="Submit" onclick="new_appointment()">
 			</form>
 	  </div>
@@ -321,7 +325,7 @@ function new_announcement(){
 		$.ajax({
 			url: "http://localhost:8081/new-announcement",
 			type: 'POST',
-			data: JSON.stringify({ 'gameid': x, 'announcementtitle': announcementtitle_local, 'announcementdescription': announcementdescription_local }),
+			data: JSON.stringify({ 'gameid': 12, 'announcementtitle': announcementtitle_local, 'announcementdescription': announcementdescription_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -330,6 +334,43 @@ function new_announcement(){
 			},
 			error: function(data) {
 				alert("Announcement aanmaken mislukt.");
+			}
+		});
+	}
+}
+
+function new_appointment(){
+	var appointmenttype_local = document.getElementById("aptype").value;
+	var appointmentlocation_local = document.getElementById("aptitleintext").value;
+	var appointmentdescription_local = document.getElementById("apdescription").value;
+	var appointmenttime_local = document.getElementById("appointmenttime").value;
+	
+	if (appointmenttype_local == ""){
+		alert('Kies een type afspraak: appointment of quiz.')
+	}
+	if (appointmentlocation_local == "" && appointmenttime_local == ""){
+		alert('Geef de afspraak een titel en tijd.')
+	}
+	else if (appointmentlocation_local == ""){
+		alert('Geef de afspraak een titel.')
+	}
+	else if (appointmenttime_local == ""){
+		alert('Geef de afspraak een tijd.')
+	}
+	
+	else {
+		$.ajax({
+			url: "http://localhost:8081/new-appointment",
+			type: 'POST',
+			data: JSON.stringify({ 'gameid': 12, 'type': appointmenttype_local, 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(result) {
+				alert("Afspraak aanmaken gelukt");
+			},
+			error: function(data) {
+				alert("Afspraak aanmaken mislukt.");
 			}
 		});
 	}
