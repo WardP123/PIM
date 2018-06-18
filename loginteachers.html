@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Naamloos document</title>
+<link href="loginteacherscss.css" rel="stylesheet" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	window.getCookie = function(name) {
+	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+	  if (match) return match[2];
+	}
+	$( document ).ready(function() {
+		authkey = getCookie("accountadmin");
+		if (authkey) {
+		$.ajax({
+				
+                url: "http://84.28.82.98:8081/check_authkeyadmin",
+                type: 'POST',
+				data: JSON.stringify({"authkey": authkey}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						window.location.href = "desktop.html";	
+					}},
+        		error: function(data) {
+        			}
+             });
+		}		
+	});
+	function showMakeNewAccount() {
+				var x = document.getElementById("firstform");
+				var y = document.getElementById("secondform");
+				x.style.display = "none";
+				y.style.display = "block";
+			}
+	function login() {
+		var password_local = document.getElementById("passwordintext").value;
+		var email_local = document.getElementById("emailintext").value;
+		$.ajax({
+				
+                url: "http://84.28.82.98:8081/check_loginadmin",
+                type: 'POST',
+				data: JSON.stringify({"email": email_local, "password": password_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						document.cookie = ("accountadmin="+result.authkey);
+						window.location.href = "desktop.html";
+					}else{
+						alert("wrong password or username");
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+	}
+	function makeNewAccount() {
+			var password_local = document.getElementById("passwordintextnew").value;
+			var email_local = document.getElementById("emailintextnew").value;
+			var name_local = document.getElementById("nameintextnew").value;
+            $.ajax({
+                url: "http://84.28.82.98:8081/createnewadmin",
+                type: 'POST',
+				data: JSON.stringify({"name": name_local, "email": email_local, "password": password_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					document.cookie = ("accountadmin="+result);
+					window.location.href = "desktop.html";
+				},
+        		error: function(data) {
+					alert("foutje")
+        			}
+             });
+        }
+	
+</script>
+</head>
+
+<body>
+	<div class="center">
+		<div class="titleimg"><img src="klassetourwit.png"> </div>
+		<div class="secondtitle"> Login voor leraren </div>
+		<div id="firstform">
+		<form>
+			<input type="button" value="Maak een nieuw Account" onclick="showMakeNewAccount()">
+		</form>
+			<div class="line"> </div>
+		<div class="welcome">Of <span class ="groupname">Login</span> </div>
+		<div class="groupnumbeform">
+		<form>
+			<input type="text" id="emailintext" placeholder="E-Mail"><br>
+			<input type="password" id="passwordintext" placeholder="Wachtwoord"><br>
+			<input type="button" id="userButton" value="Login" onclick="login()">
+		</form>
+		</div>
+		</div>
+		<div id="secondform">
+		<form>
+			<input type="text" id="nameintextnew" placeholder="Volledige Naam">
+			<input type="text" id="emailintextnew" placeholder="E-Mail"><br>
+			<input type="password" id="passwordintextnew" placeholder="Wachtwoord"><br>
+			<input type="button" id="userButton2" value="Maak nieuw account" onclick="makeNewAccount()">
+		</form>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+@charset "utf-8";
+body {
+	margin: 0px;
+	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+}
+#header {
+	height: 90px;
+	max-height: 15%;
+	text-align: center;	
+	margin-bottom: 0px;
+	background-size: 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: white;
+}
+a{
+	text-decoration: none;
+}
+#header img{
+	max-width: 60%;
+	max-height: 80px;
+	margin:auto;
+	padding-top: 5px;
+	display: block;
+}
+.rightarrow {
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	float:right;
+	padding: 10px;
+	colour: grey;
+	transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+	margin-right: 10px;
+	margin-top: 5px;
+}
+.mainpicture {
+	background-image: url(Rijksmuseum-2014-John-Lewis-Marshall-02-JPEG.jpg);
+	background-position: 50% 50%;
+	height: 70vh;
+	font-size: 80px;
+	color: white;
+	text-shadow: 0px 0px 100px #000000;
+	padding-top: 100px;
+	padding-left: 50px;
+}
+.information{
+	width: 100%;
+	background-color: #4abdac;
+	height: 50px;
+}
+.creategroupbutton:hover {
+	background-color: #4abdac;
+	width: 400px;
+	transition: all 0.5s;
+}
+.creategroupbutton{
+	margin-top: 20px;
+	background-color:#005163;
+	color: white;
+	font-size: 30px; 
+	padding: 10px;
+	width: 375px;
+	text-decoration: none;
+}
+.container {
+	background-color: lightgray;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 40px;
+}
+

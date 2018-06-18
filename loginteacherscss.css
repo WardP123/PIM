@@ -7,10 +7,6 @@ body{
 }
 .titleimg {
 	background-color: #005163;
-	margin-bottom: 10px;
-}
-a {
-	color: darkgray;
 }
 .titleimg img {
 	width: 300px;
@@ -18,9 +14,19 @@ a {
 .heavy {
 	font-weight: 1000;
 }
-
+.line {
+	width: 90%;
+	height: 3px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+	background-color: lightgray;
+}
+.welcome {
+	margin-top: 10px;
+}
 .center {
-	margin-top: 30vh;
+	margin-top: 24vh;
 	width: 400px;
 	margin-left: auto;
 	margin-right: auto;
@@ -64,6 +70,7 @@ input[type=button] {
     border-radius: 4px;
 	background-color: #4abdac;
     cursor: pointer;
+	margin-bottom: 20px;
 	-webkit-transition: background-color 0.25s; /* Safari */
     transition: background-color 0.25s;
 }
@@ -77,23 +84,21 @@ input[value=Ok]:hover {
 	color: darkgray;
 
 }
+.secondtitle {
+	background-color: #00323e;
+	color: white;
+	padding: 10px;
+	margin-bottom: 10px;
+}
 .info {
 	
 }
+#firstform {
+	display: block;
+}
+#secondform {
+	display: none;
+}
 .name{
-	font-weight: 1000;
-}
-.pintext {
-	margin-top: 10px;
-}
-#pinformnew {
-	display: none;
-}
-
-#pinformexists {
-	display: none;
-}
-
-.groupname {
 	font-weight: 1000;
 }
