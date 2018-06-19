@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="quizcss.css" rel="stylesheet" type="text/css">
+        <title>Quiz Form</title>
+        <!-- http://talkerscode.com/webtricks/upload%20image%20to%20database%20and%20server%20using%20HTML,PHP%20and%20MySQL.php -->
+        <script type='text/javascript'>
+            function preview_image(event) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var output = document.getElementById('output_image');
+                    output.src = reader.result;
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
+    </head>
+    <body>
+        <div id="content">
+        <div class="titleimg"><img src="klassetourwit.png"> </div>
+        <h1>Quiz Title</h1>
+            <input type="image" alt="Add question" id="button" src="Add.png"><br>
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <form id="form_fields">
+                        <span class="close">&times;</span><br>
+                        <label for="title">Vraag titel:</label><br>
+                        <input type="text" id="title" required><br>
+                        <label for="question">Vraag:</label><br>
+                        <input type="text" id="question" required><br>
+                        <label for="image">Afbeelding:</label> <p> (Optional)</p> <br>
+                        <input type="file" id="image" accept="image/*" onchange="preview_image(event)">
+                        <img id="output_image"/> <br> <br>
+                        <button id="submit" onclick="submitquestion()">Vroeg vraag toe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="note">
+                <p>Geen vragen beschikbaar</p>
+            </div>
+            <div id="questions">
+            </div>
+        </div>
+        <script>
+            // Get the modal
+            var modal = document.getElementById('modal');
+            // Get the button that opens the modal
+            var btn = document.getElementById("button");
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+            // When the user clicks the button, open the modal 
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            function submitquestion() {
+                question_title = document.getElementById('title').value;
+                question = document.getElementById('question').value;
+                image = document.getElementById('image').value;
+                $.ajax({
+                    url: "http://localhost:5000/new-quiz",
+                    type: 'POST',
+                    data: JSON.stringify({ 'questiontitle': question_title, 'question': question, 'image': image }),
+                    contentType: "application/json; charset=utf-8",
+        			dataType: "json",
+			        async: true,
+			        success: function(result) {
+				        alert("Vraag toegevoegd");
+                        updateQuestions();
+			        }, error: function(data) {
+				        alert("Er is iets fout gegaan");
+			        }
+                })
+            }
+
+            function updateQuestions() {
+                $.getJSON("http://localhost:5000/questions", function(result) {
+                    $.each(result, function(i, item) {
+                        var p = '';
+                        p += '<p class=items>';
+                        p += i + '. ';
+                        p += item.title;
+                        p += '</p>';
+                        ($("questions")).append(p);
+                    });
+                });
+            }
+
+            document.ready(function(){
+                $.getJSON("http://localhost:5000/questions", function(result) {
+                    $.each(result, function(i, item) {
+                        var p = '';
+                        p += '<p class=items>';
+                        p += i + '. ';
+                        p += item.title;
+                        p += '</p>';
+                        ($("questions")).append(p);
+                    });
+                });
+            })
+        </script>
+    </body>
+</html>
