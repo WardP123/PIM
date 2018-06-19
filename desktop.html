@@ -16,22 +16,22 @@
 			<div class = "usertitle"> Gebruikers </div>
 			<div class = "total"> 6 Gebruikers totaal </div>
 		<div class = "user">
-			<div class = "name"> Matthijs Blaauw </div>
+			<div class = "name" onclick="delete_user_popup(innerHTML)"> Matthijs Blaauw </div>
 		</div>
 		<div class = "user">
-			<div class = "name"> Pieter de Vries </div>
+			<div class = "name" onclick="delete_user_popup(innerHTML)"> Pieter de Vries </div>
 		</div>
 		<div class = "user">
-			<div class = "name"> Klaasje De Boom </div>
+			<div class = "name" onclick="delete_user_popup(innerHTML)"> Klaasje De Boom </div>
 		</div>
 		<div class = "user">
-			<div class = "name"> Jantje van Berkumveld </div>
+			<div class = "name" onclick="delete_user_popup(innerHTML)"> Jantje van Berkumveld </div>
 		</div>
 		<div class = "user">
-			<div class = "name"> Indy van der Schaap </div>
+			<div class = "name" onclick="delete_user_popup(innerHTML)"> Indy van der Schaap </div>
 		</div>
 		<div class = "user">
-			<div class = "name"> Noah van der Brink </div>
+			<div class = "name" onclick="delete_user_popup(innerHTML)"> Noah van der Brink </div>
 		</div>
 		</div>
 		<div class="announcements">
@@ -256,6 +256,20 @@
 			</form>
 	  </div>
 	</div>
+	
+	<div id="deleteusermodal" class="modal">
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="closeap" onclick="close_span()">&times;</span>
+		<div class="title">Groepslid verwijderen</div>
+			<form>
+				<div>Weet u zeker dat u <span id="insertname"></span> wil verwijderen?</div><br>
+				<input type="button" id="deleteuserbutton" value="Ja" onclick="delete_user()">
+				<input type="button" value="Nee" onclick="close_span()">
+			</form>
+	  </div>
+	</div>
 	<script>
 // Get the modal
 var modalan = document.getElementById('newannouncementmodal');
@@ -325,7 +339,7 @@ function new_announcement(){
 		$.ajax({
 			url: "http://localhost:8081/new-announcement",
 			type: 'POST',
-			data: JSON.stringify({ 'gameid': 12, 'announcementtitle': announcementtitle_local, 'announcementdescription': announcementdescription_local }),
+			data: JSON.stringify({ 'gameid': '12', 'announcementtitle': announcementtitle_local, 'announcementdescription': announcementdescription_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -362,7 +376,7 @@ function new_appointment(){
 		$.ajax({
 			url: "http://localhost:8081/new-appointment",
 			type: 'POST',
-			data: JSON.stringify({ 'gameid': 12, 'type': appointmenttype_local, 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
+			data: JSON.stringify({ 'gameid': '12', 'type': appointmenttype_local, 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -375,6 +389,32 @@ function new_appointment(){
 		});
 	}
 }
+
+function delete_user_popup(innerHTML){
+	document.getElementById("insertname").innerHTML = innerHTML;
+	var modalap = document.getElementById('deleteusermodal');
+	modalap.style.display = "block";
+}
+
+function close_span(){
+	var modalap = document.getElementById('deleteusermodal');
+	modalap.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+	var modalap = document.getElementById('deleteusermodal');
+    if (event.target == modalap) {
+        modalap.style.display = "none";
+    }
+}
+
+function delete_user(){
+	name = document.getElementById("insertname").innerHTML;
+	gameid = 12;
+	
+}
+
 </script>
 </body>
 </html>

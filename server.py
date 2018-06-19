@@ -77,7 +77,7 @@ def get_announcement_by_gameid(db, gameid):
 def new_announcement(db):
     if request.json is not None:
         item = request.json
-        db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid']))
+        db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid'],))
         all_users = db.fetchall()
         for user in all_users:
             new_unreadmessages =  (user['unreadannouncements'] + 1)
