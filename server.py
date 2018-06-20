@@ -99,8 +99,24 @@ def delete_all_games(db):
 
 @post('/new-quiz')
 def new_quiz(db):
+<<<<<<< HEAD
     appointment = request.json
     db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (appointment['gameid'], "quiz", appointment['title'], appointment['times']))
+=======
+    quiz = request.json()
+    db.execute("INSERT INTO appointments (gameid, title, type, times) VALUES (?, ?, ?, ?)", (quiz['gameid'], quiz['type'] , quiz['title'], quiz['times']))
+
+@post('/update-quiz')
+def update_quiz(db):
+    quiz = request.json()
+    db.update("INSERT INTO quizzes (gameid, title, question_title, question, image)", (quiz['gameid'], quiz['type'], quiz['question_title'], quiz['question'], quiz['image']))
+
+@get('/getquestions/id=<id>&title=<title>')
+def getquestions(db, id, title):
+    db.execute("SELECT * FROM quizzes WHERE gameid=? AND title=?", (str(id), str(title)))
+    questions = db.fetchall()
+    return json.dumps(questions)
+>>>>>>> 53512e766410d293ec26c22a6215b15fd597fece
 
 @get('/getuserdata/authkey=<key>')
 def getuserinfo(db, key):
@@ -261,6 +277,7 @@ def login2(db, gameid, username, pin):
             return "LOGIN OKAY"
         return False
 
+<<<<<<< HEAD
 @post('/delete-user')
 def delete_user(db):
     item = request.json
@@ -273,6 +290,8 @@ def get_all_appointments(db):
 	db.execute("SELECT * FROM appointments")
 	appointments = db.fetchall()
 	return json.dumps(appointments)
+=======
+>>>>>>> 53512e766410d293ec26c22a6215b15fd597fece
 
 # ERRORS
 
