@@ -24,7 +24,7 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-						window.location.href = "desktop.html";	
+						window.location.href = "groupoverview.html";	
 					}},
         		error: function(data) {
         			}
@@ -51,7 +51,7 @@
                 success: function(result) {
 					if (result.valid == "yes" ){
 						document.cookie = ("accountadmin="+result.authkey);
-						window.location.href = "desktop.html";
+						window.location.href = "groupoverview.html";
 					}else{
 						alert("Verkeerde combinatie van wachtwoord en email!");
 					}
@@ -76,7 +76,7 @@
 						alert("dit e-mailadress is al eerder gebruikt!")
 					} else {
 						document.cookie = ("accountadmin="+result.authkey);
-					window.location.href = "desktop.html";
+					window.location.href = "groupoverview.html";
 					}
 				},
         		error: function(data) {
