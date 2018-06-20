@@ -97,8 +97,19 @@ def delete_all_games(db):
 
 @post('/new-quiz')
 def new_quiz(db):
-    appointment = request.json()
-    db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (appointment['gameid'], "quiz", appointment['title'], appointment['times']))
+    quiz = request.json()
+    db.execute("INSERT INTO appointments (gameid, title, type, times) VALUES (?, ?, ?, ?)", (quiz['gameid'], quiz['type'] , quiz['title'], quiz['times']))
+
+@post('/update-quiz')
+def update_quiz(db):
+    quiz = request.json()
+    db.update("INSERT INTO quizzes (gameid, title, question_title, question, image)", (quiz['gameid'], quiz['type'], quiz['question_title'], quiz['question'], quiz['image']))
+
+@get('/getquestions/id=<id>&title=<title>')
+def getquestions(db, id, title):
+    db.execute("SELECT * FROM quizzes WHERE gameid=? AND title=?", (str(id), str(title)))
+    questions = db.fetchall()
+    return json.dumps(questions)
 
 @get('/getuserdata/authkey=<key>')
 def getuserinfo(db, key):
@@ -259,12 +270,6 @@ def login2(db, gameid, username, pin):
             return "LOGIN OKAY"
         return False
 
-@post('/delete-user')
-def delete_user(db):
-    item = request.json()
-    if item is not None:
-        item = request.json()
-        db.execute("DELETE FROM users WHERE gameid=? AND username=?", (item['gameid'], item['username']))
 
 # ERRORS
 

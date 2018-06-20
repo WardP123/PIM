@@ -19,8 +19,8 @@
     <body>
         <div id="content">
         <div class="titleimg"><img src="klassetourwit.png"> </div>
-        <h1>Quiz Title</h1>
-        <h3>(13.00-17.00)</h3>
+        <h1 id="quiz_title">Quiz Title</h1>
+        <h3 id="quiz_time">(13.00-17.00)</h3>
             <input type="image" alt="Add question" id="button" src="Add.png"><br>
             <div id="modal" class="modal">
                 <div class="modal-content">
@@ -66,14 +66,23 @@
                 }
             }
 
+            $(document).ready(function() { 
+                time = getQueryVariable('time');
+                title = getQueryVariable('title');
+                document.getElementById('quiz_title').value = title;
+                document.getElementById('quiz_time').value = time;
+            });
+
             function submitquestion() {
                 question_title = document.getElementById('title').value;
                 question = document.getElementById('question').value;
                 image = document.getElementById('image').value;
+                gameid = getQueryVariable('gameid');
+                title = getQueryVariable('title');
                 $.ajax({
-                    url: "http://localhost:5000/new-quiz",
+                    url: "http://localhost:5000/update-quiz",
                     type: 'POST',
-                    data: JSON.stringify({ 'questiontitle': question_title, 'question': question, 'image': image }),
+                    data: JSON.stringify({ 'gameid': gameid, 'title': title,  'question_title': question_title, 'question': question, 'image': image }),
                     contentType: "application/json; charset=utf-8",
         			dataType: "json",
 			        async: true,
@@ -87,7 +96,7 @@
             }
 
             function updateQuestions() {
-                $.getJSON("http://localhost:5000/questions", function(result) {
+                $.getJSON("http://localhost:5000/getquestions", function(result) {
                     $.each(result, function(i, item) {
                         var p = '';
                         p += '<p class=items>';
@@ -100,7 +109,7 @@
             }
 
             $(document).ready(function(){
-                $.getJSON("http://localhost:5000/questions", function(result) {
+                $.getJSON("http://localhost:5000/getquestions", function(result) {
                     $.each(result, function(i, item) {
                         var p = '';
                         p += '<p class=items>';
@@ -111,6 +120,17 @@
                     });
                 });
             })
+            
+            // https://css-tricks.com/snippets/javascript/get-url-variables/
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+                }
+                return(false);
+            }
         </script>
     </body>
 </html>
