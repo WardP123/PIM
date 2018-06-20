@@ -155,6 +155,7 @@ body {
 .newannouncement:hover {
 	color: #0f7780;
 	background-color: white;
+	cursor: pointer;
 }
 .plusannouncement {
 	font-size: 25px;
@@ -257,6 +258,7 @@ body {
 	height: 100%;
 	border-radius: 10px;
 	text-align: center;
+	cursor: pointer;
 }
 .newappointmentcontainer{
 	position: relative;
@@ -289,6 +291,7 @@ body {
 	height: 100%;
 	border-radius: 10px;
 	text-align: center;
+	cursor: pointer;
 }
 .icons {
 	float:left;

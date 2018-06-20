@@ -447,6 +447,7 @@ function new_appointment(){
 }
 
 function new_quiz(){
+	alert('test');
 	var title = document.getElementById("quiztitleintext").value;
 	var time = document.getElementById("quiztime").value;
 	
@@ -458,14 +459,15 @@ function new_quiz(){
 	}
 	else {
 		$.ajax({
-			url: "http://localhost:8081/quiz.html/id=12&title="+ title,
+			url: "http://localhost:5000/new-quiz",
 			type: 'POST',
-			data: JSON.stringify({ 'gameid': '12', 'type': appointmenttype_local, 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
+			data: JSON.stringify({ 'gameid': '12','title': title, 'type': '1', 'time': time }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
 			success: function(result) {
-				alert("Afspraak aanmaken voor gameid " + result + " gelukt");
+				alert('ok');
+				window.location = "http://localhost:5000/quiz.html/id=12&title=" + title;
 			},
 			error: function(data) {
 				alert("Afspraak aanmaken mislukt.");

@@ -99,12 +99,12 @@ def delete_all_games(db):
 
 @post('/new-quiz')
 def new_quiz(db):
-    quiz = request.json()
+    quiz = request.json
     db.execute("INSERT INTO appointments (gameid, title, type, times) VALUES (?, ?, ?, ?)", (quiz['gameid'], quiz['type'] , quiz['title'], quiz['times']))
 
 @post('/update-quiz')
 def update_quiz(db):
-    quiz = request.json()
+    quiz = request.json
     db.update("INSERT INTO quizzes (gameid, title, question_title, question, image)", (quiz['gameid'], quiz['type'], quiz['question_title'], quiz['question'], quiz['image']))
 
 @get('/getquestions/id=<id>&title=<title>')
