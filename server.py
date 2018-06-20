@@ -289,8 +289,34 @@ def get_all_appointments(db):
 def delete_announcement(db):
     item = request.json
     if item is not None:
-        db.execute("DELETE FROM announcements WHERE gameid=? AND announcementtitle=?", (item['gameid'], item['title']))
-    return json.dumps(item)
+        db.execute("SELECT * FROM announcements WHERE id=?", (item['id']))
+        announcement = db.fetchall()
+        db.execute("DELETE FROM announcements WHERE id=?", (item['id']))
+        return json.dumps(announcement)
+
+@post('/retrieve-users')
+def retrieve_users(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid'],))
+        users = db.fetchall()
+        return json.dumps(users)
+
+@post('/retrieve-announcements')
+def retrieve_announcements(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM announcements WHERE gameid=?", (item['gameid'],))
+        announcements = db.fetchall()
+        return json.dumps(announcements)
+
+@post('/announcement-title')
+def announcement_title(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM announcements WHERE id=?", (item['id']))
+        announcements = db.fetchall()
+        return json.dumps(announcements)
 
 # ERRORS
 

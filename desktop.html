@@ -7,34 +7,19 @@
 <link href="desktopcss.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
-<body>
+<body onload="RetrieveUsers(); RetrieveAnnouncements();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
 	<div class="container">
-		<div class = "users">
-			<div class = "usertitle"> Gebruikers </div>
-			<div class = "total"> 6 Gebruikers totaal </div>
+		<div class = "users" id="usercontainer">
+			<div class = "usertitle"> Groepsleden </div>
+			<div class = "total"> x Groepsleden totaal </div>
 		<div class = "user">
 			<div class = "name" onclick="delete_user_popup(innerHTML)"> Matthijs Blaauw </div>
 		</div>
-		<div class = "user">
-			<div class = "name" onclick="delete_user_popup(innerHTML)"> Pieter de Vries </div>
 		</div>
-		<div class = "user">
-			<div class = "name" onclick="delete_user_popup(innerHTML)"> Klaasje De Boom </div>
-		</div>
-		<div class = "user">
-			<div class = "name" onclick="delete_user_popup(innerHTML)"> Jantje van Berkumveld </div>
-		</div>
-		<div class = "user">
-			<div class = "name" onclick="delete_user_popup(innerHTML)"> Indy van der Schaap </div>
-		</div>
-		<div class = "user">
-			<div class = "name" onclick="delete_user_popup(innerHTML)"> Noah van der Brink </div>
-		</div>
-		</div>
-		<div class="announcements">
+		<div class="announcements" id="announcementcontainer">
 			<div class="announcementstitle"> Meldingen </div>
 			<div id = "newannouncement" class="newannouncement"> Nieuwe Melding <br> <span class="plusannouncement"> + </span> </div></button>
 		<div class="announcement">
@@ -50,52 +35,6 @@
 			<div class="readed"> Gelezen door 6 deelnemers </div>
 			<div class="iconsan">
 			<img src="delete.png" onclick="delete_announcement_popup(this.parentElement.parentElement)">
-			<img src="edit.png">
-		</div>
-		</div>
-		<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula 
-			</div>
-			<div class="readed"> Gelezen door 6 deelnemers </div>
-			<div class="iconsan">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-			</div>
-			<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. 
-		</div>
-		<div class="readed"> Gelezen door 6 deelnemers </div>
-				<div class="iconsan">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-		</div>
-		<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula quis urna sed efficitur. Praesent ac justo erat. Pellentesque et nunc id metus finibus pretium. Duis id malesuada neque. Cras vestibulum augue luctus dolor imperdiet consectetur. Mauris vel lorem at arcu blandit vulputate. Sed ac mauris sagittis, elementum eros id, porta mauris. 
-		
-		</div>
-			<div class="readed"> Gelezen door 6 deelnemers </div>
-			<div class="iconsan">
-			<img src="delete.png">
 			<img src="edit.png">
 		</div>
 		</div>
@@ -509,31 +448,46 @@ function delete_user(){
 }
 
 function delete_announcement_popup(parentdiv){
-	title = parentdiv.childNodes[5].innerHTML;
- 	document.getElementById("inserttitle").innerHTML = title;
+	id_local = parentdiv.id;
+	
+	$.ajax({
+		url: "http://localhost:8081/announcement-title",
+        type: 'POST',
+		data: JSON.stringify({ id: id_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			document.getElementById("inserttitle").innerHTML = result[0].announcementtitle;
+			document.getElementById("inserttitle").setAttribute("class", result[0].id);
+		},
+        error: function(data) {
+        }
+	});		
+
 	var modalap = document.getElementById('deleteannouncementmodal');
 	modalap.style.display = "block";
 }
 
 function delete_announcement(){
-	title_local = document.getElementById('inserttitle').innerHTML;
-	alert(title_local);
-	gameid_local = 12;
+	announcement_id_local = document.getElementById("inserttitle").className;
 	
 	$.ajax({
 		url: "http://localhost:8081/delete-announcement",
         type: 'POST',
-		data: JSON.stringify({ gameid: gameid_local, title: title_local}),
+		data: JSON.stringify({ id: announcement_id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
         success: function(result) {
-			alert('Melding ' + result.title + ' uit gameid ' + result.gameid + ' verwijderd.')
+			alert('Melding ' + result[0].announcementtitle + ' uit gameid ' + result[0].gameid + ' verwijderd.')
+			close_span_announcement()
+			location.reload()
 		},
         error: function(data) {
 			alert('Melding verwijderen mislukt.')
         }
-});		
+	});		
 }
 
 function close_span_announcement(){
@@ -553,6 +507,101 @@ window.onclick = function(event) {
 	}
 }
 
+function RetrieveUsers(){
+	gameid_local = 12;
+    $.ajax({
+       url: "http://localhost:8081/retrieve-users",
+       type: 'POST',
+	   data: JSON.stringify({ gameid: gameid_local}),
+	   contentType: "application/json; charset=utf-8",
+       dataType: 'json',
+       async: true,
+       success: function(data) {
+		  ProcessUsers(data);
+	   },
+	   error: function() {
+		  alert('Groepsleden kunnen niet geladen worden door een servererror.');
+       },
+    });
+}
+
+function ProcessUsers(data){
+	for (user in data){
+		var maindiv  = document.createElement("div");
+		maindiv.setAttribute("class", "user")
+		var seconddiv = document.createElement("div");
+		seconddiv.setAttribute("id", user.id);
+		seconddiv.setAttribute("class", "name");
+		seconddiv.setAttribute("onclick", "delete_user_popup(innerHTML)");
+		seconddiv.innerHTML = user.username;
+		maindiv.appendChild(seconddiv);
+		document.getElementById("usercontainer").appendChild(maindiv);
+	}
+}
+
+function RetrieveAnnouncements(){
+	gameid_local = 12;
+    $.ajax({
+       url: "http://localhost:8081/retrieve-announcements",
+       type: 'POST',
+	   data: JSON.stringify({ gameid: gameid_local}),
+	   contentType: "application/json; charset=utf-8",
+       dataType: 'json',
+       async: true,
+       success: function(data) {
+		  ProcessAnnouncements(data);
+	   },
+	   error: function() {
+		  alert('Meldingen kunnen niet geladen worden door een servererror.');
+       },
+    });
+}
+
+function ProcessAnnouncements(data){
+	for (announcement in data){
+		var maindiv  = document.createElement("div");
+		maindiv.setAttribute("class", "announcement");
+		maindiv.setAttribute("id", data[announcement].id);
+		
+		var seconddiv = document.createElement("div");
+		seconddiv.setAttribute("class", "new");
+		
+		var timediv = document.createElement("div");
+		timediv.setAttribute("class", "time");
+		
+		var titlediv = document.createElement("div");
+		titlediv.setAttribute("class", "title");
+		titlediv.setAttribute("id", "announcementtitle");
+		titlediv.innerHTML = data[announcement].announcementtitle;
+		
+		var descriptiondiv = document.createElement("div");
+		descriptiondiv.setAttribute("class", "description");
+		descriptiondiv.innerHTML = data[announcement].announcementdecription;
+		
+		var readdiv = document.createElement("div");
+		readdiv.setAttribute("class", "readed");
+		readdiv.innerHTML = "Gelezen door 6 groepsleden";
+		
+		var iconsdiv = document.createElement("div");
+		iconsdiv.setAttribute("class", "iconsan");
+		
+		var deleteimage = document.createElement("img");
+		deleteimage.setAttribute("src", "delete.png");
+		deleteimage.setAttribute("onclick", "delete_announcement_popup(this.parentElement.parentElement)");
+		
+		var editimage = document.createElement("img");
+		editimage.setAttribute("src", "edit.png");
+		
+		iconsdiv.appendChild(deleteimage, editimage);
+		maindiv.appendChild(seconddiv);
+		maindiv.appendChild(timediv);
+		maindiv.appendChild(titlediv);
+		maindiv.appendChild(descriptiondiv);
+		maindiv.appendChild(readdiv);
+		maindiv.appendChild(iconsdiv);
+		document.getElementById("announcementcontainer").appendChild(maindiv);
+	}
+}
 </script>
 </body>
 </html>
