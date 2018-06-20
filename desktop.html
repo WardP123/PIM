@@ -444,6 +444,27 @@ function delete_announcement_popup(parentdiv){
 	modalap.style.display = "block";
 }
 
+function delete_announcement(){
+	title_local = document.getElementById('inserttitle').innerHTML;
+	alert(title_local);
+	gameid_local = 12;
+	
+	$.ajax({
+		url: "http://localhost:8081/delete-announcement",
+        type: 'POST',
+		data: JSON.stringify({ gameid: gameid_local, title: title_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			alert('Melding ' + result.title + ' uit gameid ' + result.gameid + ' verwijderd.')
+		},
+        error: function(data) {
+			alert('Melding verwijderen mislukt.')
+        }
+});		
+}
+
 function close_span_announcement(){
 	var modalap = document.getElementById('deleteannouncementmodal');
 	modalap.style.display = "none";

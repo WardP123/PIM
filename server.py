@@ -99,10 +99,6 @@ def delete_all_games(db):
 
 @post('/new-quiz')
 def new_quiz(db):
-<<<<<<< HEAD
-    appointment = request.json
-    db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (appointment['gameid'], "quiz", appointment['title'], appointment['times']))
-=======
     quiz = request.json()
     db.execute("INSERT INTO appointments (gameid, title, type, times) VALUES (?, ?, ?, ?)", (quiz['gameid'], quiz['type'] , quiz['title'], quiz['times']))
 
@@ -116,7 +112,6 @@ def getquestions(db, id, title):
     db.execute("SELECT * FROM quizzes WHERE gameid=? AND title=?", (str(id), str(title)))
     questions = db.fetchall()
     return json.dumps(questions)
->>>>>>> 53512e766410d293ec26c22a6215b15fd597fece
 
 @get('/getuserdata/authkey=<key>')
 def getuserinfo(db, key):
@@ -277,7 +272,6 @@ def login2(db, gameid, username, pin):
             return "LOGIN OKAY"
         return False
 
-<<<<<<< HEAD
 @post('/delete-user')
 def delete_user(db):
     item = request.json
@@ -290,8 +284,13 @@ def get_all_appointments(db):
 	db.execute("SELECT * FROM appointments")
 	appointments = db.fetchall()
 	return json.dumps(appointments)
-=======
->>>>>>> 53512e766410d293ec26c22a6215b15fd597fece
+
+@post('/delete-announcement')
+def delete_announcement(db):
+    item = request.json
+    if item is not None:
+        db.execute("DELETE FROM announcements WHERE gameid=? AND announcementtitle=?", (item['gameid'], item['title']))
+    return json.dumps(item)
 
 # ERRORS
 
