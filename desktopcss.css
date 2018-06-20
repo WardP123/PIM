@@ -29,7 +29,7 @@ body {
 }
 
 /* The Close Button */
-.closean {
+.closean, .closequiz {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
@@ -37,7 +37,9 @@ body {
 }
 
 .closean:hover,
-.closean:focus {
+.closean:focus, 
+.closequiz:hover, 
+.closequiz:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;

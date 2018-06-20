@@ -103,7 +103,7 @@
 		<div class="allevents">
 			<div class = "bottons">
 				<div class="newappointmentcontainer"> <div id="newappointment" class="newappointment"> <br> Nieuwe Afspraak <br><span class="plusappointment"> +</span></div> </div>
-				<div class="newquizcontainer"><div class="newquiz"> <br>  Nieuwe Quiz <br><span class="plusquiz"> +</span></div></div>
+				<div class="newquizcontainer"><div id="newquiz" class="newquiz"> <br>  Nieuwe Quiz <br><span class="plusquiz"> +</span></div></div>
 			</div>
 		<div class="events">
 	<div class="appointment">
@@ -256,6 +256,22 @@
 			</form>
 	  </div>
 	</div>
+
+	<div id="newquizmodal" class="modal">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+		  <span class="closequiz">&times;</span>
+		  <div class="title">Nieuwe Quiz</div>
+			  <form>
+				  Quiz titel: <br>
+				  <input type="text" id="quiztitleintext"> <br>
+				  Tijd: <br>
+				  <input type="time" name="comment" id="quiztime"><br>
+				  <input type="button" id="quizsendbutton" value="Submit" onclick="new_quiz()">
+			  </form>
+		</div>
+	  </div>
 	
 	<div id="deleteusermodal" class="modal">
 
@@ -333,6 +349,31 @@ spanap.onclick = function() {
 window.onclick = function(event) {
     if (event.target == modalap) {
         modalap.style.display = "none";
+    }
+}
+
+var modalquiz = document.getElementById('newquizmodal');
+
+// Get the button that opens the modal
+var btnquiz = document.getElementById("newquiz");
+
+// Get the <span> element that closes the modal
+var spanquiz = document.getElementsByClassName("closequiz")[0];
+
+// When the user clicks the button, open the modal 
+btnquiz.onclick = function() {
+    modalquiz.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+spanquiz.onclick = function() {
+    modalquiz.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modalquiz) {
+        modalquiz.style.display = "none";
     }
 }
 
@@ -442,6 +483,27 @@ function delete_announcement_popup(parentdiv){
  	document.getElementById("inserttitle").innerHTML = title;
 	var modalap = document.getElementById('deleteannouncementmodal');
 	modalap.style.display = "block";
+}
+
+function delete_announcement(){
+	title_local = document.getElementById('inserttitle').innerHTML;
+	alert(title_local);
+	gameid_local = 12;
+	
+	$.ajax({
+		url: "http://localhost:8081/delete-announcement",
+        type: 'POST',
+		data: JSON.stringify({ gameid: gameid_local, title: title_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			alert('Melding ' + result.title + ' uit gameid ' + result.gameid + ' verwijderd.')
+		},
+        error: function(data) {
+			alert('Melding verwijderen mislukt.')
+        }
+});		
 }
 
 function close_span_announcement(){
