@@ -359,10 +359,10 @@ function new_announcement(){
 			dataType: "json",
 			async: true,
 			success: function(result) {
-				alert("Announcement aanmaken gelukt");
+				alert("Melding met titel " + announcementtitle_local + " voor gameid " + result + " aangemaakt.");
 			},
 			error: function(data) {
-				alert("Announcement aanmaken mislukt.");
+				alert("Melding aanmaken mislukt.");
 			}
 		});
 	}
@@ -396,7 +396,7 @@ function new_appointment(){
 			dataType: "json",
 			async: true,
 			success: function(result) {
-				alert("Afspraak aanmaken gelukt");
+				alert("Afspraak aanmaken voor gameid " + result + " gelukt");
 			},
 			error: function(data) {
 				alert("Afspraak aanmaken mislukt.");
@@ -429,7 +429,7 @@ function delete_user(){
 		dataType: "json",
         async: true,
         success: function(result) {
-			alert('Groepslid verwijderd.')
+			alert('Groepslid ' + result.username + ' uit gameid ' + result.gameid + ' verwijderd.')
 		},
         error: function(data) {
 			alert('Groepslid verwijderen mislukt.')
