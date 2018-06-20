@@ -20,6 +20,24 @@ body{
     margin-right: auto;
 }
 
+.line {
+    margin-bottom: 30px;
+}
+
+hr {
+    width: 300px;
+    border-color: rgb(155, 155, 155);
+    border-width: 2px;
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+h3 {
+    margin-top: 0;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */

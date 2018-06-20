@@ -4,6 +4,7 @@
         <link href="quizcss.css" rel="stylesheet" type="text/css">
         <title>Quiz Form</title>
         <!-- http://talkerscode.com/webtricks/upload%20image%20to%20database%20and%20server%20using%20HTML,PHP%20and%20MySQL.php -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type='text/javascript'>
             function preview_image(event) {
                 var reader = new FileReader();
@@ -19,6 +20,7 @@
         <div id="content">
         <div class="titleimg"><img src="klassetourwit.png"> </div>
         <h1>Quiz Title</h1>
+        <h3>(13.00-17.00)</h3>
             <input type="image" alt="Add question" id="button" src="Add.png"><br>
             <div id="modal" class="modal">
                 <div class="modal-content">
@@ -35,6 +37,7 @@
                     </form>
                 </div>
             </div>
+            <hr noshade="noshade">
             <div class="note">
                 <p>Geen vragen beschikbaar</p>
             </div>
@@ -96,7 +99,7 @@
                 });
             }
 
-            document.ready(function(){
+            $(document).ready(function(){
                 $.getJSON("http://localhost:5000/questions", function(result) {
                     $.each(result, function(i, item) {
                         var p = '';
