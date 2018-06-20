@@ -259,6 +259,12 @@ def login2(db, gameid, username, pin):
             return "LOGIN OKAY"
         return False
 
+@post('/delete-user')
+def delete_user(db):
+    item = request.json()
+    if item is not None:
+        item = request.json()
+        db.execute("DELETE FROM users WHERE gameid=? AND username=?", (item['gameid'], item['username']))
 
 # ERRORS
 
