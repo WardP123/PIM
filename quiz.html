@@ -23,8 +23,8 @@
             <label for="quiztitle">Quiz titel:</label> <br>
             <input type="text" id="quiztitle" oninput="this.className = ''" name="tname"> <br>
             <label for="quiztime">Quiz tijd:</label> <br>
-            <input type="text" oninput="this.className = ''" id="quiztime" name="time">
-            <button id="gegevens" onclick="submitGegevens()">Ga verder</button>
+            <input type="time" oninput="this.className = ''" id="quiztime" name="time">
+            <input type="button" id="gegevens" value="Ga verder" onclick="submitGegevens()">
         </form>
         
         <div id="hide" class="hide">
@@ -56,25 +56,26 @@
         </div>
         <script>
             function submitGegevens() {
-                var quiz_title = document.getElementById("quiztitle").value;
-	            var time = document.getElementById("quiztime").value;
+                var titel_quiz = document.getElementById("quiztitle").value;
+	            var tijd = document.getElementById("quiztime").value;
 	
-	            if (quiz_title == ""){
-		            alert('Geef de quiz een titel.')
-	            } else if (time == ""){
-		            alert('Geef de quiz een tijd.')
-	            } else {
+	            if (titel_quiz == ""){
+		            alert('Geef de quiz een titel.');
+	            } 
+                else if (tijd == ""){
+		            alert('Geef de quiz een tijd.');
+	            } 
+                else {
                     $.ajax({
-                        type: "POST",
                         url: "http://localhost:8081/new-quiz",
-                        data: JSON.stringify({ gameid: '12', type: '1', description: 'quiz', title: quiz_title,  times: time }),
+                        type: 'POST',
+                        data: JSON.stringify({ gameid: '12', type: "quiz", title: titel_quiz,  time: tijd }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,
                         success: function(result) {
-                            alert('test');
-                            alert(result);
                             document.getElementById('hide').className = 'show';
+                            document.getElementById('titleForm').className = 'hide';
                         },
                         error: function(data) {
                             alert(data);
