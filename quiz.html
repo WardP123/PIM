@@ -42,12 +42,12 @@
                             <label for="image">Afbeelding:</label> <p> (Optional)</p> <br>
                             <input type="file" id="image" accept="image/*" onchange="preview_image(event)">
                             <img id="output_image"/> <br> <br>
-                            <button id="submit" onclick="submitquestion()">Vroeg vraag toe</button>
+                            <input type="button" id="submit" value="Voeg vraag toe" onclick="submitquestion()">
                         </form>
                     </div>
                 </div>
                 <hr noshade="noshade">
-                <div class="note">
+                <div id="note">
                     <p>Geen vragen beschikbaar</p>
                 </div>
                 <div id="questions">
@@ -56,10 +56,11 @@
         </div>
         <script>
             function submitGegevens() {
-                var titel_quiz = document.getElementById("quiztitle").value;
+                window.titel = document.getElementById("quiztitle").value;
+                window.id = 12;
 	            var tijd = document.getElementById("quiztime").value;
 	
-	            if (titel_quiz == ""){
+	            if (window.titel == ""){
 		            alert('Geef de quiz een titel.');
 	            } 
                 else if (tijd == ""){
@@ -69,13 +70,14 @@
                     $.ajax({
                         url: "http://localhost:8081/new-quiz",
                         type: 'POST',
-                        data: JSON.stringify({ gameid: '12', type: "quiz", title: titel_quiz,  time: tijd }),
+                        data: JSON.stringify({ gameid: '12', type: "quiz", title: window.titel,  time: tijd }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,
                         success: function(result) {
                             document.getElementById('hide').className = 'show';
                             document.getElementById('titleForm').className = 'hide';
+                            updateData(window.id, window.titel, tijd);
                         },
                         error: function(data) {
                             alert(data);
@@ -84,6 +86,35 @@
 	            }
             }
         
+            function submitquestion() {
+                quiz_question_title = document.getElementById('title').value;
+                quiz_question = document.getElementById('question').value;
+                quiz_image = document.getElementById('image').value;    
+                
+                if (quiz_question_title == "") {
+                    alert("Vul een quiz titel in");
+                } else if (quiz_question == "") {
+                    alert("Vul een vraag in");
+                } else {
+                    $.ajax({
+                        url: "http://localhost:8081/add-question",
+                        type: 'POST',
+                        data: JSON.stringify({ gameid: window.gameid, title: window.titel,  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: true,
+                        success: function(result) {
+                            alert("Vraag toegevoegd");
+                            document.getElementById("note").innerHTML = "";
+                            updateQuestions();
+                        }, 
+                        error: function(data) {
+                            alert(data);
+                            alert("Er is iets fout gegaan");
+                        }
+                    });
+                }
+            }
 
             // Get the modal
             var modal = document.getElementById('modal');
@@ -106,49 +137,38 @@
                 }
             }
 
-            $(document).ready(function() { 
-                time = getQueryVariable('time');
-                title = getQueryVariable('title');
-                document.getElementById('quiz_title').value = title;
-                document.getElementById('quiz_time').value = time;
-            });
-
-            function submitquestion() {
-                quiz_gameid = getQueryVariable('gameid');
-                quiz_title = getQueryVariable('title');
-                alert(quiz_gameid);
-                quiz_question_title = document.getElementById('title').value;
-                quiz_question = document.getElementById('question').value;
-                quiz_image = document.getElementById('image').value;        
-                $.ajax({
-                    url: "http://localhost:8081/update-quiz",
-                    type: 'POST',
-                    data: JSON.stringify({ gameid: quiz_gameid, title: quiz_title,  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
-                    contentType: "application/json; charset=utf-8",
-        			dataType: "json",
-			        async: true,
-			        success: function(result) {
-				        alert("Vraag toegevoegd");
-                        updateQuestions();
-			        }, error: function(data) {
-				        alert("Er is iets fout gegaan");
-			        }
-                })
+            function updateData(gameid, title, time) { 
+                document.getElementById('quiz_title').innerHTML = title;
+                document.getElementById('quiz_time').innerHTML = time;
             }
 
             function updateQuestions() {
-                title = getQueryVariable('title');
-                gameid = getQueryVariable('id');
-                $.getJSON("http://localhost:5000/getquestions/id=" + gameid + "&title=" + title, function(result) {
-                    $.each(result, function(i, item) {
-                        var p = '';
-                        p += '<p class=items>';
-                        p += i + '. ';
-                        p += item.title;
-                        p += '</p>';
-                        ($("questions")).append(p);
-                    });
+                $.ajax({
+                    url: "http://localhost:8081/retrieve-question-title",
+                    type: 'POST',
+                    data: JSON.stringify({ gameid: window.id, title: window.title}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    async: true,
+                    succes: function(data) {
+                        alert('ok');
+                        process_titles(data);
+                    },
+                    error: function() {
+                        alert("Er is iets fout gegaan");
+                    },
                 });
+            }
+
+            function process_titles(data) {
+                alert('test2');
+                for (title in data) {
+                    var maindiv = document.createElement("div");
+                    maindiv.setAttribute("class", "question_title");
+                    maindiv.innerHTML = title + ". " + data[title].question_title;
+                    document.getElementById("questions").appendChild(maindiv);
+                    alert(ok);
+                }
             }
 
             $(document).ready(function(){

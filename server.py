@@ -104,16 +104,20 @@ def new_quiz(db):
         db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (item['gameid'], "quiz" , item['title'],  item['time']))
         return json.dumps(item['gameid'])
 
-@post('/update-quiz')
-def update_quiz(db):
-    quiz = request.json
-    db.update("INSERT INTO quizzes (gameid, title, question_title, question, image)", (quiz['gameid'], quiz['type'], quiz['question_title'], quiz['question'], quiz['image']))
+@post('/add-question')
+def add_question(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("INSERT INTO quizzes (gameid, title, question_title, question, image) VALUES (?, ?, ?, ?, ?)", (item['gameid'], item['title'], item['question_title'], item['question'], item['image']))
+        return json.dumps(item['gameid'])
 
-@get('/getquestions/id=<id>&title=<title>')
-def getquestions(db, id, title):
-    db.execute("SELECT * FROM quizzes WHERE gameid=? AND title=?", (str(id), str(title)))
-    questions = db.fetchall()
-    return json.dumps(questions)
+@post('/retrieve-question-title')
+def retrieve_question_title(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM quizzes WHERE gameid=? AND title=?", (item['gameid'], item['title']))
+        titles = db.fetchall()
+        return json.dumps(titles)
 
 @get('/getuserdata/authkey=<key>')
 def getuserinfo(db, key):
