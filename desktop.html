@@ -276,31 +276,30 @@ function new_appointment(){
 	}
 }
 
-function new_quiz(){
+function new_quiz() {
 	alert('test');
-	var title = document.getElementById("quiztitleintext").value;
+	var quiz_title = document.getElementById("quiztitleintext").value;
 	var time = document.getElementById("quiztime").value;
-	
-	if (title == ""){
+
+	if (quiz_title == ""){
 		alert('Geef de quiz een titel.')
-	}
-	else if (time == ""){
+	} else if (time == ""){
 		alert('Geef de quiz een tijd.')
-	}
-	else {
+	} else {
 		$.ajax({
-			url: "http://localhost:5000/new-quiz",
-			type: 'POST',
-			data: JSON.stringify({ 'gameid': '12','title': title, 'type': '1', 'time': time }),
+			type: "POST",
+			url: "http://localhost:8081/new-quiz",
+			data: JSON.stringify({ gameid: '12', type: 'quiz', description: 'quiz', title: quiz_title,  times: time }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
 			success: function(result) {
-				alert('ok');
-				window.location = "http://localhost:5000/quiz.html/id=12&title=" + title;
+				alert('test');
+				alert(result);
+				document.getElementById('hide').className = 'show';
 			},
 			error: function(data) {
-				alert("Afspraak aanmaken mislukt.");
+				alert(data);
 			}
 		});
 	}
