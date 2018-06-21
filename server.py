@@ -291,9 +291,9 @@ def get_all_appointments(db):
 def delete_announcement(db):
     item = request.json
     if item is not None:
-        db.execute("SELECT * FROM announcements WHERE id=?", (item['id']))
+        db.execute("SELECT * FROM announcements WHERE id=?", (item['id'],))
         announcement = db.fetchall()
-        db.execute("DELETE FROM announcements WHERE id=?", (item['id']))
+        db.execute("DELETE FROM announcements WHERE id=?", (item['id'],))
         return json.dumps(announcement)
 
 @post('/retrieve-users')
@@ -316,7 +316,7 @@ def retrieve_announcements(db):
 def announcement_title(db):
     item = request.json
     if item is not None:
-        db.execute("SELECT * FROM announcements WHERE id=?", (item['id']))
+        db.execute("SELECT * FROM announcements WHERE id=?", (item['id'],))
         announcements = db.fetchall()
         return json.dumps(announcements)
 
@@ -324,16 +324,16 @@ def announcement_title(db):
 def delete_appointment(db):
     item = request.json
     if item is not None:
-        db.execute("SELECT * FROM appointments WHERE id=?", (item['id']))
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['id'],))
         appointment = db.fetchall()
-        db.execute("DELETE FROM appointments WHERE id=?", (item['id']))
+        db.execute("DELETE FROM appointments WHERE id=?", (item['id'],))
         return json.dumps(appointment)
 
 @post('/appointment-title')
 def appointment_title(db):
     item = request.json
     if item is not None:
-        db.execute("SELECT * FROM appointments WHERE id=?", (item['id']))
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['id'],))
         appointments = db.fetchall()
         return json.dumps(appointments)
 
@@ -344,6 +344,24 @@ def retrieve_appointments(db):
         db.execute("SELECT * FROM appointments WHERE gameid=?", (item['gameid'],))
         appointments = db.fetchall()
         return json.dumps(appointments)
+
+@post('/update-announcement')
+def update_announcement(db):
+    item = request.json
+    if item is not None:
+        db.execute("UPDATE announcements SET announcementtitle=? WHERE id=?", (item['title'], item['id'],))
+        db.execute("UPDATE announcements SET announcementdecription=? WHERE id=?", (item['description'], item['id'],))
+        return json.dumps(item)
+
+@post('/update-appointment')
+def update_appointment(db):
+    item = request.json
+    if item is not None:
+        db.execute("UPDATE appointments SET title=? WHERE id=?", (item['title'], item['id'],))
+        db.execute("UPDATE appointments SET description=? WHERE id=?", (item['description'], item['id'],))
+        db.execute("UPDATE appointments SET times=? WHERE id=?", (item['time'], item['id'],))
+        return json.dumps(item)
+
 
 # ERRORS
 
