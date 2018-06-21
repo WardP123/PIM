@@ -14,7 +14,7 @@
 	<div class="container">
 		<div class = "users" id="usercontainer">
 			<div class = "usertitle"> Groepsleden </div>
-			<div class = "total"> x Groepsleden totaal </div>
+			<div class = "total"><span id="usercounter"></span> Groepsleden totaal </div>
 		<div class = "user">
 			<div class = "name" onclick="delete_user_popup(innerHTML)"> Matthijs Blaauw </div>
 		</div>
@@ -56,12 +56,10 @@
 		<span class="closeap" onclick="close_span_appointment()">&times;</span>
 		<div class="title">Nieuwe Afspraak</div>
 			<form>
-				Type: <br>
-				<input type="text" id="aptype"> <br>
 				Titel: <br>
 				<input type="text" id="aptitleintext"> <br>
 				Inhoud: <br>
-				<input type="text" id="apdescription"> <br>
+				<textarea rows="4" cols="50" id="apdescription"></textarea> <br>
 				Tijd: <br>
 				<input type="time" name="comment" id="appointmenttime"><br>
 				<input type="button" id="appointmentsendbutton" value="Submit" onclick="new_appointment()">
@@ -238,14 +236,11 @@ function new_announcement(){
 }
 
 function new_appointment(){
-	var appointmenttype_local = document.getElementById("aptype").value;
 	var appointmentlocation_local = document.getElementById("aptitleintext").value;
 	var appointmentdescription_local = document.getElementById("apdescription").value;
 	var appointmenttime_local = document.getElementById("appointmenttime").value;
 	
-	if (appointmenttype_local == ""){
-		alert('Kies een type afspraak: appointment of quiz.')
-	}
+
 	if (appointmentlocation_local == "" && appointmenttime_local == ""){
 		alert('Geef de afspraak een titel en tijd.')
 	}
@@ -260,7 +255,7 @@ function new_appointment(){
 		$.ajax({
 			url: "http://localhost:8081/new-appointment",
 			type: 'POST',
-			data: JSON.stringify({ 'gameid': '12', 'type': appointmenttype_local, 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
+			data: JSON.stringify({ 'gameid': '12', 'type': 'appointment', 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -470,7 +465,9 @@ function RetrieveUsers(){
 }
 
 function ProcessUsers(data){
+	usercounter = 0;
 	for (user in data){
+		usercounter += 1;
 		var maindiv  = document.createElement("div");
 		maindiv.setAttribute("class", "user");
 		var seconddiv = document.createElement("div");
@@ -481,6 +478,7 @@ function ProcessUsers(data){
 		maindiv.appendChild(seconddiv);
 		document.getElementById("usercontainer").appendChild(maindiv);
 	}
+	document.getElementById("usercounter").innerHTML = usercounter;
 }
 
 function RetrieveAnnouncements(){
