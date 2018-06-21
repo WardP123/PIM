@@ -7,7 +7,7 @@
 <link href="desktopcss.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
-<body onload="RetrieveUsers(); RetrieveAnnouncements();">
+<body onload="RetrieveUsers(); RetrieveAnnouncements(); RetrieveAppointments();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
@@ -22,141 +22,14 @@
 		<div class="announcements" id="announcementcontainer">
 			<div class="announcementstitle"> Meldingen </div>
 			<div id = "newannouncement" class="newannouncement"> Nieuwe Melding <br> <span class="plusannouncement"> + </span> </div></button>
-		<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title" id="announcementtitle">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula quis urna sed efficitur. Praesent ac justo erat. Pellentesque et nunc id metus finibus pretium. Duis id malesuada neque. Cras vestibulum augue luctus dolor imperdiet consectetur. Mauris vel lorem at arcu blandit vulputate. Sed ac mauris sagittis, elementum eros id, porta mauris. 
-			
-		</div>
-			<div class="readed"> Gelezen door 6 deelnemers </div>
-			<div class="iconsan">
-			<img src="delete.png" onclick="delete_announcement_popup(this.parentElement.parentElement)">
-			<img src="edit.png">
-		</div>
-		</div>
 		</div>
 		<div class="allevents">
 			<div class = "bottons">
 				<div class="newappointmentcontainer"> <div id="newappointment" class="newappointment"> <br> Nieuwe Afspraak <br><span class="plusappointment"> +</span></div> </div>
 				<div class="newquizcontainer"><div id="newquiz" class="newquiz"> <br>  Nieuwe Quiz <br><span class="plusquiz"> +</span></div></div>
 			</div>
-		<div class="events">
-	<div class="appointment">
-		<div class="time">
-			9:00
+		<div class="events" id="eventscontainer">
 		</div>
-		<div class="title">
-			Vertrek bus
-		</div><br>
-		<div class="description">
-			Hoorn busstation
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-	<div class="appointment">
-		<div class="time">
-			10:30
-		</div>
-		<div class="title">
-			Verzamelen
-		</div>
-		<div class="description">
-			Gadarobe is waar we afspr
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-		</div>
-	<div class="appointment">
-		<div class="time">
-			11:00
-		</div>
-		<div class="title">
-			Start rondleiding
-		</div>
-		<div class="description">
-			rijksmuseum
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-	<div class="quiz">
-		<div class="time">
-			13:00
-		</div>
-		<div class="title">
-			Quiz 1
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-	<div class="appointment">
-		<div class="time">
-			14:00
-		</div>
-		<div class="title">
-			Lunch
-		</div>
-		<div class="description">
-			Openbare kantine bij aula
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-	<div class="quiz">
-		<div class="time">
-			15:00
-		</div>
-		<div class="title">
-			Quiz 2
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-	<div class="quiz">
-		<div class="time">
-			16:00
-		</div>
-		<div class="title">
-			Quiz 3
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-	<div class="appointment">
-		<div class="time">
-			14:00
-		</div>
-		<div class="title">
-			Vertrek
-		</div>
-		<div class="description">
-			Openbare kantine bij aula
-		</div>
-		<div class="icons">
-			<img src="delete.png">
-			<img src="edit.png">
-		</div>
-	</div>
-			</div>
 		</div>
 	</div>
 
@@ -165,7 +38,7 @@
 
 	  <!-- Modal content -->
 	  <div class="modal-content">
-		<span class="closean">&times;</span>
+		<span class="closean" onclick="close_span_announcement()">&times;</span>
 		<div class="title">Nieuwe Melding</div>
 			<form>
 				Titel: <br>
@@ -180,7 +53,7 @@
 
 	  <!-- Modal content -->
 	  <div class="modal-content">
-		<span class="closeap">&times;</span>
+		<span class="closeap" onclick="close_span_appointment()">&times;</span>
 		<div class="title">Nieuwe Afspraak</div>
 			<form>
 				Type: <br>
@@ -236,6 +109,20 @@
 				<div>Weet u zeker dat u de melding "<span id="inserttitle"></span>" wil verwijderen?</div><br>
 				<input type="button" id="deleteannouncementbutton" value="Ja" onclick="delete_announcement()">
 				<input type="button" value="Nee" onclick="close_span_announcement()">
+			</form>
+	  </div>
+	</div>
+	
+	<div id="deleteappointmentmodal" class="modal">
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="closeap" onclick="close_span_appointment()">&times;</span>
+		<div class="title">Afspraak verwijderen</div>
+			<form>
+				<div>Weet u zeker dat u de afspraak "<span id="inserttitleappointment"></span>" wil verwijderen?</div><br>
+				<input type="button" id="deleteappointmentbutton" value="Ja" onclick="delete_appointment()">
+				<input type="button" value="Nee" onclick="close_span_appointment()">
 			</form>
 	  </div>
 	</div>
@@ -340,6 +227,8 @@ function new_announcement(){
 			async: true,
 			success: function(result) {
 				alert("Melding met titel " + announcementtitle_local + " voor gameid " + result + " aangemaakt.");
+				close_span_announcement();
+				location.reload();
 			},
 			error: function(data) {
 				alert("Melding aanmaken mislukt.");
@@ -377,6 +266,8 @@ function new_appointment(){
 			async: true,
 			success: function(result) {
 				alert("Afspraak aanmaken voor gameid " + result + " gelukt");
+				close_span_appointment();
+				location.reload();
 			},
 			error: function(data) {
 				alert("Afspraak aanmaken mislukt.");
@@ -493,6 +384,59 @@ function delete_announcement(){
 function close_span_announcement(){
 	var modalap = document.getElementById('deleteannouncementmodal');
 	modalap.style.display = "none";
+	var modalap = document.getElementById('newannouncementmodal');
+	modalap.style.display = "none";
+}
+
+function delete_appointment_popup(id){
+	id_local = id;
+	
+	$.ajax({
+		url: "http://localhost:8081/appointment-title",
+        type: 'POST',
+		data: JSON.stringify({ id: id_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			document.getElementById("inserttitleappointment").innerHTML = result[0].title;
+			document.getElementById("inserttitleappointment").setAttribute("class", result[0].id);
+		},
+        error: function(data) {
+        }
+	});		
+	
+	var modalap = document.getElementById('deleteappointmentmodal');
+	modalap.style.display = "block";
+}
+
+function delete_appointment(){
+	appointment_id_local = document.getElementById("inserttitleappointment").className;
+	
+	$.ajax({
+		url: "http://localhost:8081/delete-appointment",
+        type: 'POST',
+		data: JSON.stringify({ id: appointment_id_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			alert('Afspraak ' + result[0].title + ' uit gameid ' + result[0].gameid + ' verwijderd.')
+			close_span_appointment()
+			location.reload()
+		},
+        error: function(data) {
+			alert('Afspraak verwijderen mislukt.')
+        }
+	});		
+}
+
+
+function close_span_appointment(){
+	var modalap = document.getElementById('deleteappointmentmodal');
+	modalap.style.display = 'none';
+	var modalap = document.getElementById('newappointmentmodal');
+	modalap.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -528,12 +472,12 @@ function RetrieveUsers(){
 function ProcessUsers(data){
 	for (user in data){
 		var maindiv  = document.createElement("div");
-		maindiv.setAttribute("class", "user")
+		maindiv.setAttribute("class", "user");
 		var seconddiv = document.createElement("div");
-		seconddiv.setAttribute("id", user.id);
+		seconddiv.setAttribute("id", data[user].id);
 		seconddiv.setAttribute("class", "name");
 		seconddiv.setAttribute("onclick", "delete_user_popup(innerHTML)");
-		seconddiv.innerHTML = user.username;
+		seconddiv.innerHTML = data[user].username;
 		maindiv.appendChild(seconddiv);
 		document.getElementById("usercontainer").appendChild(maindiv);
 	}
@@ -588,11 +532,14 @@ function ProcessAnnouncements(data){
 		var deleteimage = document.createElement("img");
 		deleteimage.setAttribute("src", "delete.png");
 		deleteimage.setAttribute("onclick", "delete_announcement_popup(this.parentElement.parentElement)");
+		deleteimage.setAttribute("onmouseover", "");
+		deleteimage.setAttribute("style", "cursor: pointer;");
 		
 		var editimage = document.createElement("img");
 		editimage.setAttribute("src", "edit.png");
 		
-		iconsdiv.appendChild(deleteimage, editimage);
+		iconsdiv.appendChild(deleteimage);
+		iconsdiv.appendChild(editimage);
 		maindiv.appendChild(seconddiv);
 		maindiv.appendChild(timediv);
 		maindiv.appendChild(titlediv);
@@ -600,6 +547,64 @@ function ProcessAnnouncements(data){
 		maindiv.appendChild(readdiv);
 		maindiv.appendChild(iconsdiv);
 		document.getElementById("announcementcontainer").appendChild(maindiv);
+	}
+}
+
+function RetrieveAppointments(){
+	gameid_local = 12;
+    $.ajax({
+       url: "http://localhost:8081/retrieve-appointments",
+       type: 'POST',
+	   data: JSON.stringify({ gameid: gameid_local}),
+	   contentType: "application/json; charset=utf-8",
+       dataType: 'json',
+       async: true,
+       success: function(data) {
+		  ProcessAppointments(data);
+	   },
+	   error: function() {
+		  alert('Afspraken kunnen niet geladen worden door een servererror.');
+       },
+    });
+}
+
+function ProcessAppointments(data){
+	for (appointment in data){
+		var maindiv  = document.createElement("div");
+		maindiv.setAttribute("class", data[appointment].type);
+		
+		var timediv = document.createElement("div");
+		timediv.setAttribute("class", "time");
+		timediv.innerHTML = data[appointment].times;
+		
+		var titlediv = document.createElement("div");
+		titlediv.setAttribute("class", "title");
+		titlediv.innerHTML = data[appointment].title;
+		
+		var descriptiondiv = document.createElement("div");
+		descriptiondiv.setAttribute("class", "description");
+		descriptiondiv.innerHTML = data[appointment].description;
+		
+		var iconsdiv = document.createElement("div");
+		iconsdiv.setAttribute("class", "icons");
+		
+		var deleteimage = document.createElement("img");
+		deleteimage.setAttribute("src", "delete.png");
+		deleteimage.setAttribute("id", data[appointment].id);
+		deleteimage.setAttribute("onclick", "delete_appointment_popup(this.id)")
+		deleteimage.setAttribute("onmouseover", "");
+		deleteimage.setAttribute("style", "cursor: pointer;");
+		
+		var editimage = document.createElement("img");
+		editimage.setAttribute("src", "edit.png");
+		
+		iconsdiv.appendChild(deleteimage);
+		iconsdiv.appendChild(editimage);
+		maindiv.appendChild(timediv);
+		maindiv.appendChild(titlediv);
+		maindiv.appendChild(descriptiondiv);
+		maindiv.appendChild(iconsdiv);
+		document.getElementById("eventscontainer").appendChild(maindiv);
 	}
 }
 </script>

@@ -318,6 +318,31 @@ def announcement_title(db):
         announcements = db.fetchall()
         return json.dumps(announcements)
 
+@post('/delete-appointment')
+def delete_appointment(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['id']))
+        appointment = db.fetchall()
+        db.execute("DELETE FROM appointments WHERE id=?", (item['id']))
+        return json.dumps(appointment)
+
+@post('/appointment-title')
+def appointment_title(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['id']))
+        appointments = db.fetchall()
+        return json.dumps(appointments)
+
+@post('/retrieve-appointments')
+def retrieve_appointments(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE gameid=?", (item['gameid'],))
+        appointments = db.fetchall()
+        return json.dumps(appointments)
+
 # ERRORS
 
 # @error(404)
