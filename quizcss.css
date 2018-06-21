@@ -43,6 +43,14 @@ h3 {
     margin-top: 0;
 }
 
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -93,6 +101,7 @@ p {
 
 button {
     margin-top: 10px;
+    margin-bottom: 10px;
     width: 200px;
     padding: 12px;
     border: none;
@@ -109,7 +118,7 @@ p {
     display: inline;
 }
 
-input[type=text] {
+input[type=text], input[type=time] {
     width: 80%;
 	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
 	font-size: 23px;

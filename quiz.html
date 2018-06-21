@@ -19,32 +19,71 @@
     <body>
         <div id="content">
         <div class="titleimg"><img src="klassetourwit.png"> </div>
-        <h1 id="quiz_title">Quiz Title</h1>
-        <h3 id="quiz_time">(13.00-17.00)</h3>
-            <input type="image" alt="Add question" id="button" src="Add.png"><br>
-            <div id="modal" class="modal">
-                <div class="modal-content">
-                    <form id="form_fields">
-                        <span class="close">&times;</span><br>
-                        <label for="title">Vraag titel:</label><br>
-                        <input type="text" id="title" required><br>
-                        <label for="question">Vraag:</label><br>
-                        <input type="text" id="question" required><br>
-                        <label for="image">Afbeelding:</label> <p> (Optional)</p> <br>
-                        <input type="file" id="image" accept="image/*" onchange="preview_image(event)">
-                        <img id="output_image"/> <br> <br>
-                        <button id="submit" onclick="submitquestion()">Vroeg vraag toe</button>
-                    </form>
+        <form id="titleForm">
+            <label for="quiztitle">Quiz titel:</label> <br>
+            <input type="text" id="quiztitle" oninput="this.className = ''" name="tname"> <br>
+            <label for="quiztime">Quiz tijd:</label> <br>
+            <input type="text" oninput="this.className = ''" id="quiztime" name="time">
+            <button id="gegevens" onclick="submitGegevens()">Ga verder</button>
+        </form>
+        
+        <div id="hide" class="hide">
+            <h1 id="quiz_title">Quiz Title</h1>
+            <h3 id="quiz_time">(13.00-17.00)</h3>
+                <input type="image" alt="Add question" id="button" src="Add.png"><br>
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <form id="form_fields">
+                            <span class="close">&times;</span><br>
+                            <label for="title">Vraag titel:</label><br>
+                            <input type="text" id="title" required><br>
+                            <label for="question">Vraag:</label><br>
+                            <input type="text" id="question" required><br>
+                            <label for="image">Afbeelding:</label> <p> (Optional)</p> <br>
+                            <input type="file" id="image" accept="image/*" onchange="preview_image(event)">
+                            <img id="output_image"/> <br> <br>
+                            <button id="submit" onclick="submitquestion()">Vroeg vraag toe</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <hr noshade="noshade">
-            <div class="note">
-                <p>Geen vragen beschikbaar</p>
-            </div>
-            <div id="questions">
+                <hr noshade="noshade">
+                <div class="note">
+                    <p>Geen vragen beschikbaar</p>
+                </div>
+                <div id="questions">
+                </div>
             </div>
         </div>
         <script>
+            function submitGegevens() {
+                var quiz_title = document.getElementById("quiztitle").value;
+	            var time = document.getElementById("quiztime").value;
+	
+	            if (quiz_title == ""){
+		            alert('Geef de quiz een titel.')
+	            } else if (time == ""){
+		            alert('Geef de quiz een tijd.')
+	            } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:8081/new-quiz",
+                        data: JSON.stringify({ gameid: '12', type: '1', description: 'quiz', title: quiz_title,  times: time }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        async: true,
+                        success: function(result) {
+                            alert('test');
+                            alert(result);
+                            document.getElementById('hide').className = 'show';
+                        },
+                        error: function(data) {
+                            alert(data);
+                        }
+                    });
+	            }
+            }
+        
+
             // Get the modal
             var modal = document.getElementById('modal');
             // Get the button that opens the modal
@@ -74,15 +113,16 @@
             });
 
             function submitquestion() {
-                gameid = getQueryVariable('gameid');
-                title = getQueryVariable('title');
-                question_title = document.getElementById('title').value;
-                question = document.getElementById('question').value;
-                image = document.getElementById('image').value;        
+                quiz_gameid = getQueryVariable('gameid');
+                quiz_title = getQueryVariable('title');
+                alert(quiz_gameid);
+                quiz_question_title = document.getElementById('title').value;
+                quiz_question = document.getElementById('question').value;
+                quiz_image = document.getElementById('image').value;        
                 $.ajax({
-                    url: "http://localhost:5000/update-quiz",
+                    url: "http://localhost:8081/update-quiz",
                     type: 'POST',
-                    data: JSON.stringify({ 'gameid': gameid, 'title': title,  'question_title': question_title, 'question': question, 'image': image }),
+                    data: JSON.stringify({ gameid: quiz_gameid, title: quiz_title,  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
                     contentType: "application/json; charset=utf-8",
         			dataType: "json",
 			        async: true,
