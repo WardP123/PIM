@@ -252,6 +252,9 @@ window.onclick = function(event) {
 function new_announcement(){
 	var announcementtitle_local = document.getElementById("antitleintext").value;
 	var announcementdescription_local = document.getElementById("announcementdescription").value;
+	gameid_local = '12';
+	date = new Date();
+	date_local = date.toLocaleString();
 	
 	if (announcementtitle_local == "" && announcementdescription_local == ""){
 		alert('Geef de announcement een titel en inhoud.')
@@ -267,7 +270,7 @@ function new_announcement(){
 		$.ajax({
 			url: "http://localhost:8081/new-announcement",
 			type: 'POST',
-			data: JSON.stringify({ gameid: '12', announcementtitle: announcementtitle_local, announcementdescription: announcementdescription_local }),
+			data: JSON.stringify({ gameid: gameid_local, announcementtitle: announcementtitle_local, announcementdescription: announcementdescription_local, date: date_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -576,6 +579,8 @@ function RetrieveAnnouncements(){
 }
 
 function ProcessAnnouncements(data){
+	data.reverse();
+	
 	for (announcement in data){
 		var maindiv  = document.createElement("div");
 		maindiv.setAttribute("class", "announcement");
@@ -598,7 +603,7 @@ function ProcessAnnouncements(data){
 		
 		var readdiv = document.createElement("div");
 		readdiv.setAttribute("class", "readed");
-		readdiv.innerHTML = "Gelezen door 6 groepsleden";
+		readdiv.innerHTML = "Melding aangemaakt op: " + data[announcement].date;
 		
 		var iconsdiv = document.createElement("div");
 		iconsdiv.setAttribute("class", "iconsan");
@@ -646,6 +651,10 @@ function RetrieveAppointments(){
 }
 
 function ProcessAppointments(data){
+	data.sort(function (a, b) {
+		return new Date('1970/01/01 ' + a.times) - new Date('1970/01/01 ' + b.times);
+	});
+	
 	for (appointment in data){
 		var maindiv  = document.createElement("div");
 		maindiv.setAttribute("class", data[appointment].type);
@@ -715,11 +724,13 @@ function update_announcement(){
 	id_local = document.getElementById('updatedantitle').className;
 	title_local = document.getElementById('updatedantitle').value;
 	description_local = document.getElementById('updatedannouncementdescription').value;
+	date = new Date();
+	date_local = date.toLocaleString();
 	
 	$.ajax({
 		url: "http://localhost:8081/update-announcement",
         type: 'POST',
-		data: JSON.stringify({ id: id_local, title: title_local, description: description_local}),
+		data: JSON.stringify({ id: id_local, title: title_local, description: description_local, date: date_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,

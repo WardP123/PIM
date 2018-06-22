@@ -97,7 +97,8 @@ class WtDbPlugin(object):
                     (id INTEGER PRIMARY KEY,
                     gameid INTEGER NOT NULL,
                     announcementtitle CHAR(300) NOT NULL,
-                    announcementdecription CHAR(500) NOT NULL)
+                    announcementdecription CHAR(500) NOT NULL,
+                    date CHAR(100) NOT NULL)
             """);
             db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='quiz'")

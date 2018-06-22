@@ -82,7 +82,7 @@ def new_announcement(db):
 		for user in all_users:
 			new_unreadmessages =  (user['unreadannouncements'] + 1)
 			db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
-		db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription']))
+		db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription, date) VALUES (?, ?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription'], item['date'],))
 		return(item['gameid'])
 
 @post('/new-appointment')
@@ -351,6 +351,7 @@ def update_announcement(db):
     if item is not None:
         db.execute("UPDATE announcements SET announcementtitle=? WHERE id=?", (item['title'], item['id'],))
         db.execute("UPDATE announcements SET announcementdecription=? WHERE id=?", (item['description'], item['id'],))
+        db.execute("UPDATE announcements SET date=? WHERE id=?", (item['date'], item['id'],))
         return json.dumps(item)
 
 @post('/update-appointment')
