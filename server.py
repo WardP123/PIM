@@ -202,9 +202,17 @@ def check_name(db):
             return_string = {"exists": "no"}
             print(return_string)
             return json.dumps(return_string)
-        return_string = {"exists": "yes"}
-        print(return_string)
-        return json.dumps(return_string)
+        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
+        games = db.fetchall()
+        game = games[0]
+        if game['lockstatus'] == "unlocked":
+            return_string = {"exists": "yes"}
+            print(return_string)
+            return json.dumps(return_string)
+        else:
+            return_string = {"exists": "locked"}
+            print(return_string)
+            return json.dumps(return_string)
     return "ERRORORORRrx"
 
 @post('/check_username')

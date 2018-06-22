@@ -10,7 +10,7 @@
 	function check_gameid() {
         	var gameid = document.getElementById("gameidintext").value;
             $.ajax({
-                url: "http://84.28.82.98:8081/check_gameid",
+                url: "http://localhost:8081/check_gameid",
                 type: 'POST',
 				data: JSON.stringify({ gameid: gameid}),
 				contentType: "application/json; charset=utf-8",
@@ -20,8 +20,12 @@
 					$.each(result, function(i, item){
 					if (item == "yes" ){
 						window.location.href = "logingroup.html?gameid=12";
-					}else{
-						alert("Group number does not exist!")
+					}
+					else if (item == "locked"){
+						alert("Deze groep is gesloten, toetreden niet mogelijk.")
+					}
+					else {
+						alert("Deze groep bestaat niet.")
 					}
         		});
 				},
