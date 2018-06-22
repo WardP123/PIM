@@ -43,7 +43,7 @@ def make_new_game(db):
            db.execute("SELECT * FROM games WHERE gameid=?", (gamecode_str,))
            if not db.fetchall():
                break
-       db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (gamecode_str, item['groupname']))
+       db.execute("INSERT INTO games (gameid, groupname, lockstatus) VALUES (?, ?, ?)", (gamecode_str, item['groupname'], "unlocked"))
        db.execute("INSERT INTO admins (gameid, groupname, adminpass) VALUES (?, ?, ?)", (gamecode_str, item['groupname'], item['adminpass']))
    data = {}
    data['gameid'] = gamecode_str
@@ -52,7 +52,7 @@ def make_new_game(db):
 
 @get('/make-test-group/groupid=<groupid>&groupname=<groupname>')
 def make_test_group(db, groupid, groupname):
-    db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (groupid, groupname))
+    db.execute("INSERT INTO games (gameid, groupname, lockstatus) VALUES (?, ?, ?)", (groupid, groupname, "unlocked"))
 
 @get('/all-gamecodes')
 def get_all_gamecodes(db):
@@ -362,6 +362,22 @@ def update_appointment(db):
         db.execute("UPDATE appointments SET times=? WHERE id=?", (item['time'], item['id'],))
         return json.dumps(item)
 
+@post('/lock-group')
+def lock_group(db):
+    item = request.json
+    if item is not None:
+        db.execute("UPDATE games SET lockstatus=? WHERE gameid=?", (item['lockstatus'], item['gameid'],))
+        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
+        game = db.fetchall()
+        return json.dumps(game)
+
+@post('/check-lock')
+def check_lock(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
+        game = db.fetchall()
+        return json.dumps(game)
 
 # ERRORS
 

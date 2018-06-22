@@ -7,13 +7,13 @@
 <link href="desktopcss.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
-<body onload="RetrieveUsers(); RetrieveAnnouncements(); RetrieveAppointments();">
+<body onload="RetrieveUsers(); RetrieveAnnouncements(); RetrieveAppointments(); CheckGameLock();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
 	<div class="container">
 		<div class = "users" id="usercontainer">
-			<div class = "usertitle"> Groepsleden </div>
+			<div class = "usertitle"> Groepsleden <img onclick="lock_group_popup()" onmouseover="" style="cursor: pointer;" class="lockicon" id="lockicon"></div>
 			<div class = "total"><span id="usercounter"></span> Groepsleden totaal </div>
 		<div class = "user">
 			<div class = "name" onclick="delete_user_popup(innerHTML)"> Matthijs Blaauw </div>
@@ -123,7 +123,7 @@
 	  <!-- Modal content -->
 	  <div class="modal-content">
 		<span class="closeap" onclick="close_span_user()">&times;</span>
-		<div class="title">Groepslid verwijderen</div>
+		<div class="title">Groepslid Verwijderen</div>
 			<form>
 				<div>Weet u zeker dat u <span id="insertname"></span> wil verwijderen?</div><br>
 				<input type="button" id="deleteuserbutton" value="Ja" onclick="delete_user()">
@@ -137,7 +137,7 @@
 	  <!-- Modal content -->
 	  <div class="modal-content">
 		<span class="closeap" onclick="close_span_announcement()">&times;</span>
-		<div class="title">Melding verwijderen</div>
+		<div class="title">Melding Verwijderen</div>
 			<form>
 				<div>Weet u zeker dat u de melding "<span id="inserttitle"></span>" wil verwijderen?</div><br>
 				<input type="button" id="deleteannouncementbutton" value="Ja" onclick="delete_announcement()">
@@ -151,7 +151,7 @@
 	  <!-- Modal content -->
 	  <div class="modal-content">
 		<span class="closeap" onclick="close_span_appointment()">&times;</span>
-		<div class="title">Afspraak verwijderen</div>
+		<div class="title">Afspraak Verwijderen</div>
 			<form>
 				<div>Weet u zeker dat u de afspraak "<span id="inserttitleappointment"></span>" wil verwijderen?</div><br>
 				<input type="button" id="deleteappointmentbutton" value="Ja" onclick="delete_appointment()">
@@ -160,6 +160,19 @@
 	  </div>
 	</div>
 	
+	<div id="lockmodal" class="modal">
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="closeap" onclick="close_span_lock()">&times;</span>
+		<div class="title">Groep Vergrendelen</div>
+			<form>
+				<div id="lockvariabletext"></div><br>
+				<input type="button" id="grouplockbutton" value="Ja" onclick="lock_group()">
+				<input type="button" value="Nee" onclick="close_span_lock()">
+			</form>
+	  </div>
+	</div>
 <script>
 // Get the modal
 var modalan = document.getElementById('newannouncementmodal');
@@ -481,6 +494,7 @@ window.onclick = function(event) {
 	var modalap5 = document.getElementById('updateannouncementmodal');
 	var modalap6 = document.getElementById('newannouncementmodal');
 	var modalap7 = document.getElementById('updateappointmentmodal');
+	var modalap8 = document.getElementById('lockmodal');
 	
     if (event.target == modalap) {
         modalap.style.display = "none";
@@ -502,6 +516,9 @@ window.onclick = function(event) {
 	}
 	if (event.target == modalap7) {
 		modalap7.style.display = "none";
+	}
+	if (event.target == modalap8) {
+		modalap8.style.display = "none";
 	}
 }
 
@@ -756,6 +773,84 @@ function update_appointment(){
 			location.reload();
 		},
         error: function(data) {
+        }
+	});
+}
+
+function lock_group_popup(){
+	locktextdiv = document.getElementById('lockvariabletext');
+	
+	if (locktextdiv.className == "unlocked"){
+		locktextdiv.innerHTML = "Weet u zeker dat u deze groep wil vergrendelen? Er kunnen dan geen nieuwe groepsleden meer toetreden.";
+	}
+	if (locktextdiv.className == "locked"){
+		locktextdiv.innerHTML = "Weet u zeker dat u deze groep open wil stellen? Er kunnen dan nieuwe groepsleden toetreden.";
+	}
+	
+	var modalap = document.getElementById('lockmodal');
+	modalap.style.display = "block";	
+}
+
+function close_span_lock(){
+	var modalap = document.getElementById('lockmodal');
+	modalap.style.display = "none";
+}
+
+function lock_group(){
+	gameid_local = 12;
+	lock_status_local = "";
+	lockdiv = document.getElementById('lockvariabletext');
+	
+	if (lockdiv.className == "unlocked"){
+		lock_status_local = "locked";
+	}
+	if (lockdiv.className == "locked"){
+		lock_status_local = "unlocked";
+	}
+	
+	$.ajax({
+		url: "http://localhost:8081/lock-group",
+        type: 'POST',
+		data: JSON.stringify({ gameid: gameid_local, lockstatus: lock_status_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			document.getElementById('lockvariabletext').setAttribute("class", lock_status_local);
+			if (result[0].lockstatus == "locked"){
+				document.getElementById('lockicon').setAttribute("src", "locked.png");
+			}
+			if (result[0].lockstatus == "unlocked"){
+				document.getElementById('lockicon').setAttribute("src", "unlocked.png");
+			}
+			close_span_lock();
+		},
+        error: function(data) {
+        }
+	});
+}
+
+function CheckGameLock(){
+	gameid_local = 12;
+		
+	$.ajax({
+		url: "http://localhost:8081/check-lock",
+        type: 'POST',
+		data: JSON.stringify({ gameid: gameid_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			document.getElementById('lockvariabletext').setAttribute("class", result[0].lockstatus);
+			if (result[0].lockstatus == "locked"){
+				document.getElementById('lockicon').setAttribute("src", "locked.png");
+			}
+			if (result[0].lockstatus == "unlocked"){
+				document.getElementById('lockicon').setAttribute("src", "unlocked.png");
+			}
+		},
+        error: function(data) {
+			alert("Vergrendelstatus van groep kan niet geladen worden door een server error.")
         }
 	});
 }

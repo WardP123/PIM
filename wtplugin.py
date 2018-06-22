@@ -73,7 +73,8 @@ class WtDbPlugin(object):
             CREATE TABLE IF NOT EXISTS games
                     (id INTEGER PRIMARY KEY,
                      gameid INTEGER NOT NULL,
-                     groupname CHAR(100) NOT NULL)
+                     groupname CHAR(100) NOT NULL,
+                     lockstatus CHAR(20) NOT NULL)
             """);
             db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name='admins'")
