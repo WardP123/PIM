@@ -13,7 +13,7 @@
 	  if (match) return match[2];
 	}
 	var authkey_local = getCookie("account");
-//	var authkey_local = "271743223681190786073801387463456770291"	
+//	var authkey_local = "66825558619349652789156781890226481025"	
 	$( document ).ready(function() {
 		if (authkey_local) {
 		$.ajax({
@@ -26,8 +26,6 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-						alert("already login");
-						
 					}else{
 						window.location.href = "loginnew.html";
 					}
@@ -47,6 +45,9 @@
 			async: true,
 			success: function(result) {
 				var list = '';
+				result.sort(function (a, b) {
+					return new Date('1970/01/01 ' + a.times) - new Date('1970/01/01 ' + b.times);
+				});
 				$.each(result, function(i, item){
 					if (item.type == "appointment"){
 						list += '<a href="appointment.html?id=' + item.id + '">';
@@ -109,59 +110,59 @@
         			}
 		});
 	})
-
-function RetrieveAppointments(){
-	gameid_local = 12;
-    $.ajax({
-       url: "http://localhost:8081/retrieve-appointments",
-       type: 'POST',
-	   data: JSON.stringify({ gameid: gameid_local}),
-	   contentType: "application/json; charset=utf-8",
-       dataType: 'json',
-       async: true,
-       success: function(data) {
-		  ProcessAppointments(data);
-	   },
-	   error: function() {
-		  alert('Afspraken kunnen niet geladen worden door een servererror.');
-       },
-    });
-}
-
-function ProcessAppointments(data){
-	data.sort(function (a, b) {
-		return new Date('1970/01/01 ' + a.times) - new Date('1970/01/01 ' + b.times);
-	});
-	
-	for (appointment in data){
-		var maindiv  = document.createElement("div");
-		maindiv.setAttribute("class", data[appointment].type);
-		
-		var timediv = document.createElement("div");
-		timediv.setAttribute("class", "time");
-		timediv.innerHTML = data[appointment].times;
-		
-		var titlediv = document.createElement("div");
-		titlediv.setAttribute("class", "title");
-		titlediv.innerHTML = data[appointment].title;
-		
-		var descriptiondiv = document.createElement("div");
-		descriptiondiv.setAttribute("class", "description");
-		descriptiondiv.innerHTML = data[appointment].description;
-		
-		maindiv.appendChild(timediv);
-		maindiv.appendChild(titlediv);
-		maindiv.appendChild(descriptiondiv);
-		document.getElementById("appointmentscontainer").appendChild(maindiv);
-	}
-}
+//
+//function RetrieveAppointments(){
+//	gameid_local = 12;
+//    $.ajax({
+//       url: "http://localhost:8081/retrieve-appointments",
+//       type: 'POST',
+//	   data: JSON.stringify({ gameid: gameid_local}),
+//	   contentType: "application/json; charset=utf-8",
+//       dataType: 'json',
+//       async: true,
+//       success: function(data) {
+//		  ProcessAppointments(data);
+//	   },
+//	   error: function() {
+//		  alert('Afspraken kunnen niet geladen worden door een servererror.');
+//       },
+//    });
+//}
+//
+//function ProcessAppointments(data){
+//	data.sort(function (a, b) {
+//		return new Date('1970/01/01 ' + a.times) - new Date('1970/01/01 ' + b.times);
+//	});
+//	
+//	for (appointment in data){
+//		var maindiv  = document.createElement("div");
+//		maindiv.setAttribute("class", data[appointment].type);
+//		
+//		var timediv = document.createElement("div");
+//		timediv.setAttribute("class", "time");
+//		timediv.innerHTML = data[appointment].times;
+//		
+//		var titlediv = document.createElement("div");
+//		titlediv.setAttribute("class", "title");
+//		titlediv.innerHTML = data[appointment].title;
+//		
+//		var descriptiondiv = document.createElement("div");
+//		descriptiondiv.setAttribute("class", "description");
+//		descriptiondiv.innerHTML = data[appointment].description;
+//		
+//		maindiv.appendChild(timediv);
+//		maindiv.appendChild(titlediv);
+//		maindiv.appendChild(descriptiondiv);
+//		document.getElementById("appointmentscontainer").appendChild(maindiv);
+//	}
+//}
 	
              
 
 </script>
 </head>
 
-<body onload="RetrieveAppointments();">
+<body>
 	<div id="container"> 
 	<div class="staticheader">
 	<div id="header">

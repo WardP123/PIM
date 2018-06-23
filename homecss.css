@@ -112,7 +112,7 @@ li {
 }
 .appointment .title {
 	color:white;
-	width: 65%;
+	width: 45%;
 	text-align: right;
 	padding-top:10px;
 	font-size: 25px;
@@ -120,13 +120,15 @@ li {
 	padding-right:10px;
 }
 .appointment .description {
+	width: 50%;
 	color: #3C6688;
+	text-align: right;
 	float: right;
 	padding-right:10px;
 }
 .appointment .time {
 	color: white;
-	width: 25%;
+	width: 40%;
 	text-align: left;
 	font-size: 40px;
 	float: left;
