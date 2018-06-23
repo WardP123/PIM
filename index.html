@@ -19,7 +19,7 @@
                 success: function(result) {
 					$.each(result, function(i, item){
 					if (item == "yes" ){
-						window.location.href = "logingroup.html?gameid=12";
+						window.location.href = "logingroup.html?gameid=" + gameid;
 					}
 					else if (item == "locked"){
 						alert("Deze groep is gesloten, toetreden niet mogelijk.")
