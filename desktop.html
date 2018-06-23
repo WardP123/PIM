@@ -188,11 +188,33 @@ function getQueryVariable(variable){
    return("NO VALID LINK");
 }
 
-
 	var authkey_local = getCookie("accountadmin");
 //	var authkey_local = "22382501515988406712833970318497649872"
 	var gameid_local = getQueryVariable("id");
 	
+	$( document ).ready(function() {
+			if (authkey_local) {
+		$.ajax({
+                url: "http://84.28.82.98:8081/check_authkeyadmin",
+                type: 'POST',
+				data: JSON.stringify({"authkey": authkey_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						
+					}else{
+						window.location.href = "loginteachers.html";
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+		} else {
+			window.location.href = "loginteachers.html";
+		};
+	});
 	
 // Get the modal
 var modalan = document.getElementById('newannouncementmodal');
