@@ -14,7 +14,7 @@
 	<div class="container">
 		<div class = "users" id="usercontainer">
 			<div class = "usertitle"> Groepsleden </div>
-			<div class = "total"> x Groepsleden totaal </div>
+			<div class = "total"><span id="usercounter"></span> Groepsleden totaal </div>
 		<div class = "user">
 			<div class = "name" onclick="delete_user_popup(innerHTML)"> Matthijs Blaauw </div>
 		</div>
@@ -45,10 +45,27 @@
 				<input type="text" id="antitleintext"> <br>
 				Inhoud: <br>
 				<textarea rows="4" cols="50" name="comment" id="announcementdescription" form="usrform"></textarea> <br>
-				<input type="button" id="announcementsendbutton" value="Submit" onclick="new_announcement()">
+				<input type="button" id="announcementsendbutton" value="Melding plaatsen" onclick="new_announcement()">
 			</form>
 	  </div>
 	</div>
+	
+	<div id="updateannouncementmodal" class="modal">
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="closean" onclick="close_span_announcement()">&times;</span>
+		<div class="title">Melding Aanpassen</div>
+			<form>
+				Titel: <br>
+				<input type="text" id="updatedantitle"> <br>
+				Inhoud: <br>
+				<textarea rows="4" cols="50" id="updatedannouncementdescription"></textarea> <br>
+				<input type="button" id="announcementsendbutton" value="Melding aanpassen" onclick="update_announcement()">
+			</form>
+	  </div>
+	</div>
+	
 	<div id="newappointmentmodal" class="modal">
 
 	  <!-- Modal content -->
@@ -56,15 +73,31 @@
 		<span class="closeap" onclick="close_span_appointment()">&times;</span>
 		<div class="title">Nieuwe Afspraak</div>
 			<form>
-				Type: <br>
-				<input type="text" id="aptype"> <br>
 				Titel: <br>
 				<input type="text" id="aptitleintext"> <br>
 				Inhoud: <br>
-				<input type="text" id="apdescription"> <br>
+				<textarea rows="4" cols="50" id="apdescription"></textarea> <br>
 				Tijd: <br>
 				<input type="time" name="comment" id="appointmenttime"><br>
-				<input type="button" id="appointmentsendbutton" value="Submit" onclick="new_appointment()">
+				<input type="button" id="appointmentsendbutton" value="Afspraak plaatsen" onclick="new_appointment()">
+			</form>
+	  </div>
+	</div>
+	
+	<div id="updateappointmentmodal" class="modal">
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="closeap" onclick="close_span_appointment()">&times;</span>
+		<div class="title">Afspraak Aanpassen</div>
+			<form>
+				Titel: <br>
+				<input type="text" id="updatedaptitle"> <br>
+				Inhoud: <br>
+				<textarea rows="4" cols="50" id="updatedapdescription"></textarea> <br>
+				Tijd: <br>
+				<input type="time" id="updatedappointmenttime"><br>
+				<input type="button" id="appointmentsendbutton" value="Afspraak aanpassen" onclick="update_appointment()">
 			</form>
 	  </div>
 	</div>
@@ -80,7 +113,7 @@
 				  <input type="text" id="quiztitleintext"> <br>
 				  Tijd: <br>
 				  <input type="time" name="comment" id="quiztime"><br>
-				  <input type="button" id="quizsendbutton" value="Submit" onclick="new_quiz()">
+				  <input type="button" id="quizsendbutton" value="Quiz plaatsen" onclick="new_quiz()">
 			  </form>
 		</div>
 	  </div>
@@ -238,14 +271,11 @@ function new_announcement(){
 }
 
 function new_appointment(){
-	var appointmenttype_local = document.getElementById("aptype").value;
 	var appointmentlocation_local = document.getElementById("aptitleintext").value;
 	var appointmentdescription_local = document.getElementById("apdescription").value;
 	var appointmenttime_local = document.getElementById("appointmenttime").value;
 	
-	if (appointmenttype_local == ""){
-		alert('Kies een type afspraak: appointment of quiz.')
-	}
+
 	if (appointmentlocation_local == "" && appointmenttime_local == ""){
 		alert('Geef de afspraak een titel en tijd.')
 	}
@@ -260,7 +290,7 @@ function new_appointment(){
 		$.ajax({
 			url: "http://localhost:8081/new-appointment",
 			type: 'POST',
-			data: JSON.stringify({ 'gameid': '12', 'type': appointmenttype_local, 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
+			data: JSON.stringify({ 'gameid': '12', 'type': 'appointment', 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -385,6 +415,8 @@ function close_span_announcement(){
 	modalap.style.display = "none";
 	var modalap = document.getElementById('newannouncementmodal');
 	modalap.style.display = "none";
+	var modalap = document.getElementById('updateannouncementmodal');
+	modalap.style.display = "none";
 }
 
 function delete_appointment_popup(id){
@@ -436,17 +468,40 @@ function close_span_appointment(){
 	modalap.style.display = 'none';
 	var modalap = document.getElementById('newappointmentmodal');
 	modalap.style.display = "none";
+	var modalap = document.getElementById('updateappointmentmodal');
+	modalap.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
 	var modalap = document.getElementById('deleteannouncementmodal');
 	var modalap2 = document.getElementById('deleteusermodal');
+	var modalap3 = document.getElementById('deleteappointmentmodal');
+	var modalap4 = document.getElementById('newappointmentmodal');
+	var modalap5 = document.getElementById('updateannouncementmodal');
+	var modalap6 = document.getElementById('newannouncementmodal');
+	var modalap7 = document.getElementById('updateappointmentmodal');
+	
     if (event.target == modalap) {
         modalap.style.display = "none";
     }
 	if (event.target == modalap2) {
 		modalap2.style.display = "none";
+	}
+	if (event.target == modalap3) {
+		modalap3.style.display = "none";
+	}
+	if (event.target == modalap4) {
+		modalap4.style.display = "none";
+	}
+	if (event.target == modalap5) {
+		modalap5.style.display = "none";
+	}
+	if (event.target == modalap6) {
+		modalap6.style.display = "none";
+	}
+	if (event.target == modalap7) {
+		modalap7.style.display = "none";
 	}
 }
 
@@ -469,7 +524,9 @@ function RetrieveUsers(){
 }
 
 function ProcessUsers(data){
+	usercounter = 0;
 	for (user in data){
+		usercounter += 1;
 		var maindiv  = document.createElement("div");
 		maindiv.setAttribute("class", "user");
 		var seconddiv = document.createElement("div");
@@ -480,6 +537,7 @@ function ProcessUsers(data){
 		maindiv.appendChild(seconddiv);
 		document.getElementById("usercontainer").appendChild(maindiv);
 	}
+	document.getElementById("usercounter").innerHTML = usercounter;
 }
 
 function RetrieveAnnouncements(){
@@ -536,6 +594,9 @@ function ProcessAnnouncements(data){
 		
 		var editimage = document.createElement("img");
 		editimage.setAttribute("src", "edit.png");
+		editimage.setAttribute("onclick", "update_announcement_popup(this.parentElement.parentElement)");
+		editimage.setAttribute("onmouseover", "");
+		editimage.setAttribute("style", "cursor: pointer;");
 		
 		iconsdiv.appendChild(deleteimage);
 		iconsdiv.appendChild(editimage);
@@ -590,12 +651,16 @@ function ProcessAppointments(data){
 		var deleteimage = document.createElement("img");
 		deleteimage.setAttribute("src", "delete.png");
 		deleteimage.setAttribute("id", data[appointment].id);
-		deleteimage.setAttribute("onclick", "delete_appointment_popup(this.id)")
+		deleteimage.setAttribute("onclick", "delete_appointment_popup(this.id)");
 		deleteimage.setAttribute("onmouseover", "");
 		deleteimage.setAttribute("style", "cursor: pointer;");
 		
 		var editimage = document.createElement("img");
 		editimage.setAttribute("src", "edit.png");
+		editimage.setAttribute("id", data[appointment].id);
+		editimage.setAttribute("onclick", "update_appointment_popup(this.id)");
+		editimage.setAttribute("onmouseover", "");
+		editimage.setAttribute("style", "cursor: pointer;");
 		
 		iconsdiv.appendChild(deleteimage);
 		iconsdiv.appendChild(editimage);
@@ -605,6 +670,94 @@ function ProcessAppointments(data){
 		maindiv.appendChild(iconsdiv);
 		document.getElementById("eventscontainer").appendChild(maindiv);
 	}
+}
+
+function update_announcement_popup(parentdiv){
+	id_local = parentdiv.id;
+	
+	$.ajax({
+		url: "http://localhost:8081/announcement-title",
+        type: 'POST',
+		data: JSON.stringify({ id: id_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			document.getElementById('updatedantitle').value = result[0].announcementtitle;
+			document.getElementById('updatedannouncementdescription').value = result[0].announcementdecription;
+			document.getElementById("updatedantitle").setAttribute("class", result[0].id);
+			var modalap = document.getElementById('updateannouncementmodal');
+	        modalap.style.display = "block";
+		},
+        error: function(data) {
+        }
+	});		
+}
+
+function update_announcement(){
+	id_local = document.getElementById('updatedantitle').className;
+	title_local = document.getElementById('updatedantitle').value;
+	description_local = document.getElementById('updatedannouncementdescription').value;
+	
+	$.ajax({
+		url: "http://localhost:8081/update-announcement",
+        type: 'POST',
+		data: JSON.stringify({ id: id_local, title: title_local, description: description_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			close_span_announcement();
+			location.reload();
+		},
+        error: function(data) {
+        }
+	});
+}
+
+function update_appointment_popup(id){
+	id_local = id;
+	
+	$.ajax({
+		url: "http://localhost:8081/appointment-title",
+        type: 'POST',
+		data: JSON.stringify({ id: id_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			document.getElementById('updatedaptitle').value = result[0].title;
+			document.getElementById('updatedapdescription').value = result[0].description;
+			document.getElementById('updatedappointmenttime').value = result[0].times;
+			document.getElementById("updatedaptitle").setAttribute("class", result[0].id);
+			var modalap = document.getElementById('updateappointmentmodal');
+	        modalap.style.display = "block";
+		},
+        error: function(data) {
+        }
+	});	
+}
+
+function update_appointment(){
+	id_local = document.getElementById('updatedaptitle').className;
+	title_local = document.getElementById('updatedaptitle').value;
+	description_local = document.getElementById('updatedapdescription').value;
+	time_local = document.getElementById('updatedappointmenttime').value;
+	
+	$.ajax({
+		url: "http://localhost:8081/update-appointment",
+        type: 'POST',
+		data: JSON.stringify({ id: id_local, title: title_local, description: description_local, time: time_local}),
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+        async: true,
+        success: function(result) {
+			close_span_appointment();
+			location.reload();
+		},
+        error: function(data) {
+        }
+	});
 }
 </script>
 </body>

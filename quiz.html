@@ -47,17 +47,67 @@
                     </div>
                 </div>
                 <hr noshade="noshade">
+                <h2> Vragen </h2>
                 <div id="note">
                     <p>Geen vragen beschikbaar</p>
                 </div>
                 <div id="questions">
                 </div>
+                <div class="modal-update" id="modal-update">
+                    <div class="modal-update-content">
+                        <span class="close" onclick="close_span_quiz()">&times;</span>
+                        <form>
+                            <span class="close">&times;</span><br>
+                            <label for="title">Vraag titel:</label><br>
+                            <input type="text" id="update-title" required><br>
+                            <label for="question">Vraag:</label><br>
+                            <input type="text" id="update-question" required><br>
+                            <label for="image">Afbeelding:</label> <p> (Optional)</p> <br>
+                            <input type="file" id="update-image" accept="image/*" onchange="preview_image(event)">
+                            <img id="output_image"/> <br> <br>
+                            <input type="button" id="submit" value="Voeg vraag toe" onclick="update_announcement_popup(this.id)">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-delete" id="modal-delete">
+                    <div class="modal-delete-content">
+                        <span class="close" onclick="close_span_quiz()">&times;</span>
+                        <div class="title">Vraag verwijderen</div>
+                            <form>
+                                <div>Weet u zeker dat u deze vraag wil verwijderen?</div><br>
+                                <input type="button" id="deletequizbutton" value="Ja" onclick="delete_question(this.id)">
+                                <input type="button" value="Nee" onclick="close_span_quiz()">
+                            </form>
+                    </div>  
+                </div>
             </div>
         </div>
         <script>
+            function update_question_popup(parentdiv){
+                id_local = parentdiv.id;
+                
+                $.ajax({
+                    url: "http://localhost:8081/update-question",
+                    type: 'POST',
+                    data: JSON.stringify({ id: id_local}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    success: function(result) {
+                        document.getElementById('update-title').value = result[0].question_title;
+                        document.getElementById('update-question').value = result[0].question;
+                        document.getElementById('update-image').value = result[0].image;
+                        document.getElementById("update-title").setAttribute("class", result[0].id);
+                        var modalup = document.getElementById('modal-update');
+                        modalup.style.display = "block";
+                    },
+                    error: function(data) {
+                    }
+                });		
+            }
+
             function submitGegevens() {
                 window.titel = document.getElementById("quiztitle").value;
-                window.id = 12;
 	            var tijd = document.getElementById("quiztime").value;
 	
 	            if (window.titel == ""){
@@ -75,6 +125,8 @@
                         dataType: "json",
                         async: true,
                         success: function(result) {
+                            window.id = "12";
+                            alert(result);
                             document.getElementById('hide').className = 'show';
                             document.getElementById('titleForm').className = 'hide';
                             updateData(window.id, window.titel, tijd);
@@ -99,14 +151,15 @@
                     $.ajax({
                         url: "http://localhost:8081/add-question",
                         type: 'POST',
-                        data: JSON.stringify({ gameid: window.gameid, title: window.titel,  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
+                        data: JSON.stringify({ quizid: '12',  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,
                         success: function(result) {
                             alert("Vraag toegevoegd");
                             document.getElementById("note").innerHTML = "";
-                            updateQuestions();
+                            document.getElementById("modal").style.display = "none";
+                            updateQuestions();                        
                         }, 
                         error: function(data) {
                             alert(data);
@@ -118,6 +171,7 @@
 
             // Get the modal
             var modal = document.getElementById('modal');
+            var modal_delete = document.getElementById('modal-content');
             // Get the button that opens the modal
             var btn = document.getElementById("button");
             // Get the <span> element that closes the modal
@@ -126,15 +180,40 @@
             btn.onclick = function() {
                 modal.style.display = "block";
             }
+
             // When the user clicks on <span> (x), close the modal
             span.onclick = function() {
                 modal.style.display = "none";
+                modal_delete.style.display = "none";
             }
             // When the user clicks anywhere outside of the modal, close it
             window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
+                    modal_delete.style.display = "none";
                 }
+            }
+
+            function close_span_quiz() {
+                document.getElementById("modal-delete").style.display = "none";
+            }
+
+            function delete_question(id) {
+                var questionid = id;
+                $.ajax({
+                    url: "http://localhost:8081/delete-question",
+                    type: 'POST',
+                    data: JSON.stringify({ id: questionid}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    success: function(result) {
+                        alert('Vraag verwijderd.');
+                    },
+                    error: function(data) {
+                        alert('Vraag verwijderen mislukt.')
+                    }
+                });		
             }
 
             function updateData(gameid, title, time) { 
@@ -143,48 +222,51 @@
             }
 
             function updateQuestions() {
-                $.ajax({
-                    url: "http://localhost:8081/retrieve-question-title",
-                    type: 'POST',
-                    data: JSON.stringify({ gameid: window.id, title: window.title}),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: 'json',
-                    async: true,
-                    succes: function(data) {
-                        alert('ok');
-                        process_titles(data);
-                    },
-                    error: function() {
-                        alert("Er is iets fout gegaan");
-                    },
-                });
+                $.get("http://localhost:8081/retrieve-question-title/id=" + window.id, function(data) {
+                    process_titles(data);
+                })
             }
 
             function process_titles(data) {
-                alert('test2');
-                for (title in data) {
+                data = JSON.parse(data);
+                for (i = 0; i < data.length; i++) {
                     var maindiv = document.createElement("div");
                     maindiv.setAttribute("class", "question_title");
-                    maindiv.innerHTML = title + ". " + data[title].question_title;
+                    var title = data[i]['question_title']
+                    maindiv.innerHTML = "<p>" + (i + 1) + ". " + title + "</p>";
+
+                    var iconsdiv = document.createElement("div");
+                    iconsdiv.setAttribute("class", "iconsan");
+                    
+                    var deleteimage = document.createElement("img");
+                    deleteimage.setAttribute("src", "delete.png");
+                    deleteimage.setAttribute("id", data[i].id);
+                    deleteimage.setAttribute("onclick", "delete_question_popup(this.id)");
+                    deleteimage.setAttribute("onmouseover", "");
+                    deleteimage.setAttribute("style", "cursor: pointer;");
+                    
+                    var editimage = document.createElement("img");
+                    editimage.setAttribute("src", "edit.png");
+                    editimage.setAttribute("onclick", "update_question_popup(this.parentElement.parentElement)");
+                    editimage.setAttribute("onmouseover", "");
+                    editimage.setAttribute("style", "cursor: pointer;");
+                    
+                    iconsdiv.appendChild(deleteimage);
+                    iconsdiv.appendChild(editimage);
+                    maindiv.appendChild(iconsdiv);
+
                     document.getElementById("questions").appendChild(maindiv);
-                    alert(ok);
                 }
             }
 
             $(document).ready(function(){
-                title = getQueryVariable('title');
-                gameid = getQueryVariable('id');
-                $.getJSON("http://localhost:5000/getquestions/id=" + gameid + "&title=" + title, function(result) {
-                    $.each(result, function(i, item) {
-                        var p = '';
-                        p += '<p class=items>';
-                        p += i + '. ';
-                        p += item.title;
-                        p += '</p>';
-                        ($("questions")).append(p);
-                    });
-                });
+               
             })
+
+            function delete_question_popup(id) {
+                document.getElementById("modal-delete").style.display = "block";
+                document.getElementById("deletequizbutton").id = id;
+            }
             
             // https://css-tricks.com/snippets/javascript/get-url-variables/
             function getQueryVariable(variable) {

@@ -51,7 +51,25 @@ h3 {
     display: block;
 }
 
-.modal {
+#questions p {
+    display: inline;
+    color: black;
+    font-size: 20px;
+}
+
+#questions img {
+    margin-left: 5px;
+    background-color: black;
+    max-width: 20px;
+    max-height: 20px;
+    display: inline;
+}
+
+.iconsan {
+    display: inline;
+}
+
+.modal, .modal-delete, .modal-update {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -65,7 +83,7 @@ h3 {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-.modal-content {
+.modal-content, .modal-delete-content, .modal-update-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;

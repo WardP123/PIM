@@ -162,8 +162,7 @@ class WtDbPlugin(object):
             c.executescript("""
             CREATE TABLE IF NOT EXISTS quizzes
                     (id INTEGER PRIMARY KEY,
-                    gameid INTEGER NOT NULL,
-                    title CHAR(300) NOT NULL,
+                    quizid INTEGER NOT NULL,
                     question_title CHAR(300) NOT NULL,
                     question CHAR(300) NOT NULL,
                     image CHAR(300))
