@@ -174,26 +174,6 @@
 	  </div>
 	</div>
 <script>
-	window.getCookie = function(name) {
-  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  if (match) return match[2];
-}
-function getQueryVariable(variable){
-   var query = window.location.search.substring(1);
-   var vars = query.split("&");
-   for (var i=0;i<vars.length;i++) {
-		   var pair = vars[i].split("=");
-		   if(pair[0] == variable){return pair[1];}
-   }
-   return("NO VALID LINK");
-}
-
-
-//		var authkey_local = getCookie("accountadmin");
-	var authkey_local = "22382501515988406712833970318497649872"
-	var gameid_local = getQueryVariable(id);
-	
-	
 // Get the modal
 var modalan = document.getElementById('newannouncementmodal');
 
@@ -269,12 +249,12 @@ window.onclick = function(event) {
     }
 }
 
-
-	
+//		var authkey_local = getCookie("accountadmin");
+		var authkey_local = "22382501515988406712833970318497649872"
 function new_announcement(){
 	var announcementtitle_local = document.getElementById("antitleintext").value;
 	var announcementdescription_local = document.getElementById("announcementdescription").value;
-	
+	gameid_local = '12';
 	date = new Date();
 	date_local = date.toLocaleString();
 	
@@ -290,9 +270,9 @@ function new_announcement(){
 	
 	else {
 		$.ajax({
-			url: "http://84.28.82.98:8081/new-announcement",
+			url: "http://localhost:8081/new-announcement",
 			type: 'POST',
-			data: JSON.stringify({ gameid: gameid_local, authkey: authkey_local, announcementtitle: announcementtitle_local, announcementdescription: announcementdescription_local, date: date_local }),
+			data: JSON.stringify({ gameid: gameid_local, announcementtitle: announcementtitle_local, announcementdescription: announcementdescription_local, date: date_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -326,9 +306,9 @@ function new_appointment(){
 	
 	else {
 		$.ajax({
-			url: "http://84.28.82.98:8081/new-appointment",
+			url: "http://localhost:8081/new-appointment",
 			type: 'POST',
-			data: JSON.stringify({ 'authkey': authkey_local, 'gameid': gameid_local, 'type': 'appointment', 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
+			data: JSON.stringify({ 'gameid': '12', 'type': 'appointment', 'title': appointmentlocation_local, 'description': appointmentdescription_local, 'time': appointmenttime_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -356,8 +336,8 @@ function new_quiz() {
 	} else {
 		$.ajax({
 			type: "POST",
-			url: "http://84.28.82.98:8081/new-quiz",
-			data: JSON.stringify({authkey: authkey_local, gameid: gameid_local, type: 'quiz', description: 'quiz', title: quiz_title,  times: time }),
+			url: "http://localhost:8081/new-quiz",
+			data: JSON.stringify({ gameid: '12', type: 'quiz', description: 'quiz', title: quiz_title,  times: time }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -387,11 +367,12 @@ function close_span_user(){
 
 function delete_user(){
 	name = document.getElementById("insertname").innerHTML;
+	gameid = 12;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/delete-user",
+		url: "http://localhost:8081/delete-user",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local, username: name}),
+		data: JSON.stringify({ gameid: gameid, username: name}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -408,9 +389,9 @@ function delete_announcement_popup(parentdiv){
 	id_local = parentdiv.id;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/announcement-title",
+		url: "http://localhost:8081/announcement-title",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, id: id_local}),
+		data: JSON.stringify({ id: id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -430,9 +411,9 @@ function delete_announcement(){
 	announcement_id_local = document.getElementById("inserttitle").className;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/delete-announcement",
+		url: "http://localhost:8081/delete-announcement",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, id: announcement_id_local}),
+		data: JSON.stringify({ id: announcement_id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -460,9 +441,9 @@ function delete_appointment_popup(id){
 	id_local = id;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/appointment-title",
+		url: "http://localhost:8081/appointment-title",
         type: 'POST',
-		data: JSON.stringify({authkey: authkey_local, id: id_local}),
+		data: JSON.stringify({ id: id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -482,9 +463,9 @@ function delete_appointment(){
 	appointment_id_local = document.getElementById("inserttitleappointment").className;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/delete-appointment",
+		url: "http://localhost:8081/delete-appointment",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, id: appointment_id_local}),
+		data: JSON.stringify({ id: appointment_id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -547,10 +528,11 @@ window.onclick = function(event) {
 }
 
 function RetrieveUsers(){
+	gameid_local = '12';
     $.ajax({
-       url: "http://84.28.82.98:8081/retrieve-users",
+       url: "http://localhost:8081/retrieve-users",
        type: 'POST',
-	   data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local}),
+	   data: JSON.stringify({ gameid: gameid_local}),
 	   contentType: "application/json; charset=utf-8",
        dataType: 'json',
        async: true,
@@ -581,10 +563,11 @@ function ProcessUsers(data){
 }
 
 function RetrieveAnnouncements(){
+	gameid_local = 12;
     $.ajax({
-       url: "http://84.28.82.98:8081/retrieve-announcements",
+       url: "http://localhost:8081/retrieve-announcements",
        type: 'POST',
-	   data: JSON.stringify({authkey: authkey_local, gameid: gameid_local}),
+	   data: JSON.stringify({ gameid: gameid_local}),
 	   contentType: "application/json; charset=utf-8",
        dataType: 'json',
        async: true,
@@ -652,10 +635,11 @@ function ProcessAnnouncements(data){
 }
 
 function RetrieveAppointments(){
+	gameid_local = 12;
     $.ajax({
-       url: "http://84.28.82.98:8081/retrieve-appointments",
+       url: "http://localhost:8081/retrieve-appointments",
        type: 'POST',
-	   data: JSON.stringify({authkey: authkey_local, gameid: gameid_local}),
+	   data: JSON.stringify({ gameid: gameid_local}),
 	   contentType: "application/json; charset=utf-8",
        dataType: 'json',
        async: true,
@@ -720,9 +704,9 @@ function update_announcement_popup(parentdiv){
 	id_local = parentdiv.id;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/announcement-title",
+		url: "http://localhost:8081/announcement-title",
         type: 'POST',
-		data: JSON.stringify({authkey: authkey_local, id: id_local}),
+		data: JSON.stringify({ id: id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -746,9 +730,9 @@ function update_announcement(){
 	date_local = date.toLocaleString();
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/update-announcement",
+		url: "http://localhost:8081/update-announcement",
         type: 'POST',
-		data: JSON.stringify({authkey: authkey_local, id: id_local, title: title_local, description: description_local, date: date_local}),
+		data: JSON.stringify({ id: id_local, title: title_local, description: description_local, date: date_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -765,9 +749,9 @@ function update_appointment_popup(id){
 	id_local = id;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/appointment-title",
+		url: "http://localhost:8081/appointment-title",
         type: 'POST',
-		data: JSON.stringify({authkey: authkey_local, id: id_local}),
+		data: JSON.stringify({ id: id_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -791,9 +775,9 @@ function update_appointment(){
 	time_local = document.getElementById('updatedappointmenttime').value;
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/update-appointment",
+		url: "http://localhost:8081/update-appointment",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, id: id_local, title: title_local, description: description_local, time: time_local}),
+		data: JSON.stringify({ id: id_local, title: title_local, description: description_local, time: time_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -826,6 +810,7 @@ function close_span_lock(){
 }
 
 function lock_group(){
+	gameid_local = 12;
 	lock_status_local = "";
 	lockdiv = document.getElementById('lockvariabletext');
 	
@@ -837,9 +822,9 @@ function lock_group(){
 	}
 	
 	$.ajax({
-		url: "http://84.28.82.98:8081/lock-group",
+		url: "http://localhost:8081/lock-group",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local, lockstatus: lock_status_local}),
+		data: JSON.stringify({ gameid: gameid_local, lockstatus: lock_status_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,
@@ -859,11 +844,12 @@ function lock_group(){
 }
 
 function CheckGameLock(){
+	gameid_local = 12;
 		
 	$.ajax({
-		url: "http://84.28.82.98:8081/check-lock",
+		url: "http://localhost:8081/check-lock",
         type: 'POST',
-		data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local}),
+		data: JSON.stringify({ gameid: gameid_local}),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
         async: true,

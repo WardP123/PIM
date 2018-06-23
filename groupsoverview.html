@@ -12,7 +12,7 @@
 	  if (match) return match[2];
 	}
 //		var authkey_local = getCookie("accountadmin");
-		var authkey_local = "79417601443096504959540185103137637126"
+		var authkey_local = "22382501515988406712833970318497649872"
 		$( document ).ready(function() {
 			if (authkey_local) {
 		$.ajax({
@@ -49,7 +49,7 @@
 			success: function(result) {
 				var list = '';
 				$.each(result, function(i, item){
-					list += '<div class="delete"> </div><a href="desktop.html?id=' + item.id + '">';
+					list += '<div class="delete" onclick=deleteGroup('+ item.gameid + ')> <img src="deleteicon.png"> </div><a href="desktop.html?id=' + item.gameid + '">';
 					list += '<div class="group">';
 					list += '<div class="groupnumber">' + item.gameid + '</div>';
 					list += '<div class="groupname">' + item.groupname + '</div>';
@@ -90,12 +90,33 @@
              });
 			}
 		};
+		function deleteGroup(id){
+			$.ajax({
+                url: "http://84.28.82.98:8081/group",
+                type: 'DELETE',
+				data: JSON.stringify({"authkey": authkey_local, "gameid": id}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					updatelist()
+				},
+        		error: function(data) {
+					updatelist()
+        			}
+             });
+			};
 		function show_delete(){
 			$('.group').css({'width': '80%'});
 			$('.group').css({'transform': 'translate(47px, 0px)'});
 			$('.delete').css({'display': 'block'});
 			$('.delete').css({'opacity': '100'});
-			
+		}
+		function not_show_delete(){
+			$('.group').css({'width': '90%'});
+			$('.group').css({'transform': 'translate(0px, 0px)'});
+			$('.delete').css({'display': 'none'});
+			$('.delete').css({'opacity': '0'});
 		}
 	</script>
 </head>
@@ -108,9 +129,9 @@
 		<div class="welcom"> Welkom <span class="name">Matthijs Blaauw</span></div>
 	<div class="allgroups">
 	</div>
+		<div id = "deletegroup" class="deletegroup" onclick="show_delete()"> Verwijder groep <br> <span class="plusannouncement"> - </span> </div>
 		<div id = "newgroup" class="newgroup"> Nieuwe groep <br> <span class="plusannouncement"> + </span> </div>
 	</div>
-	<button value="klik" onclick="show_delete()">klik hier</button>
 	<div id="newgroupmodal" class="modal">
 
 	  <!-- Modal content -->
@@ -127,6 +148,7 @@
 	  </div>
 	</div>
 	<script>
+
 		// Get the modal
 		var modal = document.getElementById('newgroupmodal');
 

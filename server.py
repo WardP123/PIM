@@ -77,6 +77,10 @@ def get_announcement_by_gameid(db, gameid):
 def new_announcement(db):
 	if request.json is not None:
 		item = request.json
+        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
+        currentadmin = db.fetchall()
+        if not currentadmin:
+            return 'error no login'
 		db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid'],))
 		all_users = db.fetchall()
 		for user in all_users:
@@ -89,9 +93,13 @@ def new_announcement(db):
 def new_appointment(db):
 	if request.json is not None:
 		item = request.json
+        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
+        currentadmin = db.fetchall()
+        if not currentadmin:
+            return 'error no login'
 		db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (item['gameid'], "appointment", item['title'], item['description'], item['time']))
 		return json.dumps(item['gameid'])
-		
+
 ## acutually delete
 @get('/DELETE-ALL')
 def delete_all_games(db):
@@ -101,6 +109,10 @@ def delete_all_games(db):
 def new_quiz(db):
     if request.json is not None:
         item = request.json
+        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
+        currentadmin = db.fetchall()
+        if not currentadmin:
+            return 'error no login'
         db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (item['gameid'], "quiz" , item['title'],  item['time']))
         return json.dumps(item['gameid'])
 
@@ -288,7 +300,7 @@ def delete_user(db):
     if item is not None:
         db.execute("DELETE FROM users WHERE gameid=? AND username=?", (item['gameid'], item['username']))
 	return json.dumps(item)
-		
+
 @get('/all-appointments')
 def get_all_appointments(db):
 	db.execute("SELECT * FROM appointments")
