@@ -11,8 +11,8 @@
 	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
 	  if (match) return match[2];
 	}
-		var authkey_local = getCookie("accountadmin");
-//		var authkey_local = "79417601443096504959540185103137637126"
+//		var authkey_local = getCookie("accountadmin");
+		var authkey_local = "79417601443096504959540185103137637126"
 		$( document ).ready(function() {
 			if (authkey_local) {
 		$.ajax({
@@ -49,7 +49,7 @@
 			success: function(result) {
 				var list = '';
 				$.each(result, function(i, item){
-					list += '<a href="desktop.html?id=' + item.id + '">';
+					list += '<div class="delete"> </div><a href="desktop.html?id=' + item.id + '">';
 					list += '<div class="group">';
 					list += '<div class="groupnumber">' + item.gameid + '</div>';
 					list += '<div class="groupname">' + item.groupname + '</div>';
@@ -60,7 +60,7 @@
 					} else {
 						list += '<div class="groupusers">' + item.joinedusers + 'deelnemers</div>'
 					};
-						list += '<span class="deletegroup">&times;</span><i class="rightarrow"></i></div></a>'
+						list += '<i class="rightarrow"></i></div></a>'
 				});
 			$(".allgroups").append(list);
 			},
@@ -68,7 +68,7 @@
 				alert("foutje")
 				}
              });
-		}
+		};
 		function new_group(){
 			var groupname_local = document.getElementById("titleintext").value
 			if (groupname_local == null) {
@@ -89,6 +89,13 @@
         			}
              });
 			}
+		};
+		function show_delete(){
+			$('.group').css({'width': '80%'});
+			$('.group').css({'transform': 'translate(47px, 0px)'});
+			$('.delete').css({'display': 'block'});
+			$('.delete').css({'opacity': '100'});
+			
 		}
 	</script>
 </head>
@@ -103,6 +110,7 @@
 	</div>
 		<div id = "newgroup" class="newgroup"> Nieuwe groep <br> <span class="plusannouncement"> + </span> </div>
 	</div>
+	<button value="klik" onclick="show_delete()">klik hier</button>
 	<div id="newgroupmodal" class="modal">
 
 	  <!-- Modal content -->
@@ -115,6 +123,7 @@
 				 <br>
 				<input type="button" id="announcementsendbutton" value="Submit" onclick="new_group()">
 			</form>
+		  
 	  </div>
 	</div>
 	<script>
