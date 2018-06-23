@@ -11,8 +11,8 @@
 	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
 	  if (match) return match[2];
 	}
-//		var authkey_local = getCookie("accountadmin");
-		var authkey_local = "22382501515988406712833970318497649872"
+		var authkey_local = getCookie("accountadmin");
+//		var authkey_local = "22382501515988406712833970318497649872"
 		$( document ).ready(function() {
 			if (authkey_local) {
 		$.ajax({
