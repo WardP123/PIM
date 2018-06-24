@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Quiz invullen</title>
+<link href="userquizcss.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	function LoadQuestions(){
+	}
+	
+	function expand_question(id){
+		var div = document.getElementById(id);
+		div.setAttribute("class", "openedquestion");
+		div.setAttribute("onclick", "close_question(this.id)");
+		
+		var descriptiondiv = document.createElement('div');
+		descriptiondiv.innerHTML = "Maak een foto met het melkmeisje";
+		descriptiondiv.setAttribute("id", "descriptiondiv" +id);
+		descriptiondiv.setAttribute("class", "description");
+		div.appendChild(descriptiondiv);
+		
+		var breakdiv = document.createElement('br');
+		breakdiv.setAttribute("id", "breakdiv" +id);
+		div.appendChild(breakdiv);
+		
+		var answerdiv = document.createElement('input');
+		answerdiv.setAttribute("type", "text");
+		answerdiv.setAttribute("id", "inputfield" +id);
+		answerdiv.setAttribute("class", "input");
+		div.appendChild(answerdiv);
+	}
+	
+	function close_question(id){
+		var div = document.getElementById(id);
+		var inputdiv = document.getElementById('inputfield' +id);
+		var descriptiondiv = document.getElementById('descriptiondiv' +id);
+		var breakdiv = document.getElementById('breakdiv' +id);
+		
+		div.removeChild(inputdiv);
+		div.removeChild(descriptiondiv);
+		div.removeChild(breakdiv);
+		
+		div.setAttribute("class", "question");
+		div.setAttribute("onclick", "expand_question(this.id)");
+	}
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body onload="LoadQuestions();">
+	<h1 class="QuizTitle">Welkom bij <span id="quiztitle">Quiz1</span></h1>
+	<br>
+	<div class="question" id="1" onclick="expand_question(this.id)">
+		<div class="title"> Vraag 1
+		</div>
+	</div>
+	<div class="question" id="2" onclick="expand_question(this.id)">
+		<div class="title"> Vraag 2
+		</div>
+	</div>
+	<div class="question" id="3" onclick="expand_question(this.id)">
+		<div class="title"> Vraag 3
+		</div>
+	</div>
+	<div class="question" id="4" onclick="expand_question(this.id)">
+		<div class="title"> Vraag 4
+		</div>
+	</div>
+</body>
+
+</html>
