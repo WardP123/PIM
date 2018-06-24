@@ -24,7 +24,8 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-						
+						user = result.user;
+						document.getElementById('adminname').innerHTML = user.username;
 					}else{
 						window.location.href = "loginteachers.html";
 					}
