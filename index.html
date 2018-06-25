@@ -19,9 +19,13 @@
                 success: function(result) {
 					$.each(result, function(i, item){
 					if (item == "yes" ){
-						window.location.href = "logingroup.html?gameid=12";
-					}else{
-						alert("Group number does not exist!")
+						window.location.href = "logingroup.html?gameid=" + gameid;
+					}
+					else if (item == "locked"){
+						alert("Deze groep is gesloten, toetreden niet mogelijk.")
+					}
+					else {
+						alert("Deze groep bestaat niet.")
 					}
         		});
 				},

@@ -1,0 +1,70 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+	max-width: 1000px;
+	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+}
+
+.QuizTitle {
+	font-size: 40px;
+	padding: 15px 0;
+	color: white;
+	height: 80px;
+	max-height: 10%;
+    background: -webkit-linear-gradient(left, #f7b733, #f79933);
+    background: -o-linear-gradient(left, #f7b733, #f79933);
+    background: linear-gradient(to right, #f7b733, #f79933); 
+	text-align: center;
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+
+.question {
+	height: 80px;
+	max-height: 10%;
+    background: -webkit-linear-gradient(to right, #4abdac, #4abddd);
+    background: -o-linear-gradient(to right, #4abdac, #4abddd);
+    background: linear-gradient(to right, #4abdac, #4abddd);
+	text-align: center;
+	border-radius: 10px;
+	margin-bottom: 10px;
+	color: #0b2133
+}
+
+.question .title {
+	color: white;
+	width: 45%;
+	padding: 20px 0;
+	font-size: 30px;
+	text-align: center;	
+}
+
+.openedquestion {
+	height: 150px;
+	max-height: 10%;
+    background: -webkit-linear-gradient(to right, #4abdac, #4abddd);
+    background: -o-linear-gradient(to right, #4abdac, #4abddd);
+    background: linear-gradient(to right, #4abdac, #4abddd);
+	text-align: center;
+	border-radius: 10px;
+	margin-bottom: 10px;
+	color: #0b2133
+}
+
+.openedquestion .title {
+	color: white;
+	width: 45%;
+	padding: 20px 0;
+	font-size: 30px;
+	text-align: center;	
+}
+
+.openedquestion .description {
+	color: white;
+	font-size: 20px;
+}

@@ -19,15 +19,8 @@
     <body>
         <div id="content">
         <div class="titleimg"><img src="klassetourwit.png"> </div>
-        <form id="titleForm">
-            <label for="quiztitle">Quiz titel:</label> <br>
-            <input type="text" id="quiztitle" oninput="this.className = ''" name="tname"> <br>
-            <label for="quiztime">Quiz tijd:</label> <br>
-            <input type="time" oninput="this.className = ''" id="quiztime" name="time">
-            <input type="button" id="gegevens" value="Ga verder" onclick="submitGegevens()">
-        </form>
         
-        <div id="hide" class="hide">
+        <div id="hide" class="show">
             <h1 id="quiz_title"></h1>
             <h3 id="quiz_time"></h3>
                 <input type="image" alt="Add question" id="button" src="Add.png"><br>
@@ -49,7 +42,6 @@
                 <hr noshade="noshade">
                 <h2> Vragen </h2>
                 <div id="note">
-                    <p>Geen vragen beschikbaar</p>
                 </div>
                 <div id="questions">
                 </div>
@@ -62,7 +54,7 @@
                             <input type="text" id="update-title" required><br>
                             <label for="question">Vraag:</label><br>
                             <input type="text" id="update-question" required><br>                            
-                            <input type="button" id="submit" value="Voeg vraag toe" onclick="update_announcement_popup(this.id)">
+                            <input type="button" id="submit" value="Wijzig vraag" onclick="update_question(this.id)">
                         </form>
                     </div>
                 </div>
@@ -100,36 +92,25 @@
                 });		
             }
 
-            function submitGegevens() {
-                window.titel = document.getElementById("quiztitle").value;
-	            var tijd = document.getElementById("quiztime").value;
-	
-	            if (window.titel == ""){
-		            alert('Geef de quiz een titel.');
-	            } 
-                else if (tijd == ""){
-		            alert('Geef de quiz een tijd.');
-	            } 
-                else {
-                    $.ajax({
-                        url: "http://localhost:8081/new-quiz",
+            function update_question(id) {
+                title = document.getElementById('update-title').value;
+                question = document.getElementById('update-question').value;
+                $.ajax({
+                        url: "http://localhost:8081/update-quiz",
                         type: 'POST',
-                        data: JSON.stringify({ gameid: '12', type: "quiz", title: window.titel,  time: tijd }),
+                        data: JSON.stringify({ id: id, question_title: title, question: question }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,
                         success: function(result) {
-                            window.id = "12";
-                            alert(result);
-                            document.getElementById('hide').className = 'show';
-                            document.getElementById('titleForm').className = 'hide';
-                            updateData(window.id, window.titel, tijd);
-                        },
+                            alert("Vraag gewijzigd");
+                            location.reload();                        
+                        }, 
                         error: function(data) {
                             alert(data);
+                            alert("Er is iets fout gegaan");
                         }
                     });
-	            }
             }
         
             function submitquestion() {
@@ -165,10 +146,12 @@
 
             // Get the modal
             var modal = document.getElementById('modal');
+            var modal_delete = document.getElementById('modal-delete');
             // Get the button that opens the modal
             var btn = document.getElementById("button");
             // Get the <span> element that closes the modal
             var span = document.getElementsByClassName("close")[0];
+           
             // When the user clicks the button, open the modal 
             btn.onclick = function() {
                 modal.style.display = "block";
@@ -177,12 +160,13 @@
             // When the user clicks on <span> (x), close the modal
             span.onclick = function() {
                 modal.style.display = "none";
-                modal_delete.style.display = "none";
             }
+
             // When the user clicks anywhere outside of the modal, close it
             window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
+                    modal_delete.style.display = "none";
                 }
             }
 
@@ -202,6 +186,7 @@
                     async: true,
                     success: function(result) {
                         alert('Vraag verwijderd.');
+                        location.reload();
                         close_span_quiz();
                         updateQuestions();
                     },
@@ -211,14 +196,24 @@
                 });		
             }
 
-            function updateData(gameid, title, time) { 
+            function updateData(data) { 
+                title = data[0].title;
+                alert(title);
+                time = data[0].time;
                 document.getElementById('quiz_title').innerHTML = title;
                 document.getElementById('quiz_time').innerHTML = time;
             }
 
             function updateQuestions() {
+                window.id = getQueryVariable("id");
                 $.get("http://localhost:8081/retrieve-question-title/id=" + window.id, function(data) {
                     process_titles(data);
+                })
+            }
+
+            function updateTitle() {
+                $.get("http://localhost:8081/retrieve-quiz-title/id=" + window.id, function(data) {
+                    updateData(data);
                 })
             }
 
@@ -255,13 +250,11 @@
                 }
             }
 
-            window.onload = function () {
-                if (document.getElementById('quiz_title').innerHTML == "" || document.getElementById('quiz_times').innerHTML == "") {
-                    localStorage.setItem("hasCodeRunBefore", true);
-                } else {
-                    window.location("http://localhost:5000/quiznew.html");
-                }
-            }
+            $(document).ready(function(){
+               updateQuestions();
+               updateTitle();
+            })
+
             function delete_question_popup(id) {
                 document.getElementById("modal-delete").style.display = "block";
                 document.getElementById("deletequizbutton").id = id;
@@ -270,14 +263,8 @@
             // https://css-tricks.com/snippets/javascript/get-url-variables/
             function getQueryVariable(variable) {
                 var query = window.location.search.substring(1);
-                var vars = query.split("&");
-                for (var i=0;i<vars.length;i++) {
-                    var pair = vars[i].split("=");
-                    if(pair[0] == variable){
-                        return pair[1];
-                    }
-                }
-                return(false);
+                var pair = query.split("=");
+                return pair[0];
             }
         </script>
     </body>

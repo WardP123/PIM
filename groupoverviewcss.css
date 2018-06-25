@@ -72,8 +72,8 @@ a{
     background: linear-gradient(to right, #0f7780, #21656b);
 	margin-left: auto;
 	margin-right: auto;
-	padding-bottom: 10px;
 	border-radius: 10px;
+	padding-bottom: 125px;
 }
 .rightarrow {
 	border: solid black;
@@ -93,6 +93,22 @@ a{
 	padding-top: 10px;
 	color: white;
 }
+.delete{
+	background-color:red;
+	width: 10%;
+	height: 80px;
+	display:none;
+	float: left;
+	margin-left: 40px;
+	border-radius: 20px;
+	opacity: 0;
+	transition: all 1s;
+}
+.delete img{
+	width:  40px;
+	margin-left: 28px;
+	margin-top: 18px;
+}
 .group {
 	width: 90%;
 	background-color: white;
@@ -102,6 +118,7 @@ a{
 	margin-right: auto;
 	height: 80px;
 	border-radius: 20px;
+	transition: all 2s;	
 }
 .groupnumber {
 	background-color: darkgray;
@@ -131,10 +148,30 @@ a{
 	border-style: solid;
 	border-width: 7px;
 	border-radius: 20px;
-	width: 80%;
+	width: 70%;
+	margin-left: 30px;
 	margin-top: 20px;
-	margin-left: auto;
-	margin-right: auto;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align: center;
+	margin-bottom: 20px;
+	background-color: none;
+	-webkit-transition: color 0.25s; /* Safari */
+    transition: color 0.25s;
+	-webkit-transition: background-color 0.25s; /* Safari */
+    transition: background-color 0.25s;
+	float:left;
+
+}
+.deletegroup {
+	float:left;
+	color: white;
+	border-style: solid;
+	border-width: 7px;
+	border-radius: 20px;
+	width: 20%;
+	margin-left: 20px;
+	margin-top: 20px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	text-align: center;
@@ -147,8 +184,12 @@ a{
 
 }
 .newgroup:hover {
+	border-color: white;
 	color: #0f7780;
 	background-color: white;
+}
+.deletegroup:hover {
+	background-color: red;
 }
 .plusannouncement {
 	font-size: 25px;

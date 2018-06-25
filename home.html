@@ -13,7 +13,7 @@
 	  if (match) return match[2];
 	}
 	var authkey_local = getCookie("account");
-//	var authkey_local = "271743223681190786073801387463456770291"	
+//	var authkey_local = "66825558619349652789156781890226481025"	
 	$( document ).ready(function() {
 		if (authkey_local) {
 		$.ajax({
@@ -26,8 +26,6 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-						alert("already login");
-						
 					}else{
 						window.location.href = "loginnew.html";
 					}
@@ -47,6 +45,9 @@
 			async: true,
 			success: function(result) {
 				var list = '';
+				result.sort(function (a, b) {
+					return new Date('1970/01/01 ' + a.times) - new Date('1970/01/01 ' + b.times);
+				});
 				$.each(result, function(i, item){
 					if (item.type == "appointment"){
 						list += '<a href="appointment.html?id=' + item.id + '">';
@@ -64,10 +65,12 @@
 						list += '</a>';
 					};
 					if (item.type == "quiz"){
+						list += '<a href="userquiz.html?id=' + item.id + '">';
 						list += '<div class="quiz">';
 						list += '<div class="time">' + item.times + '</div>';
 						list += '<div class="title">' + item.title + '</div>';
 						list += '</div>';
+						list += '</a>';
 					};
 				});
 			$(".allevents").append(list);
@@ -109,7 +112,6 @@
         			}
 		});
 	})
-						
              
 
 </script>
@@ -123,87 +125,8 @@
 		<div class="announcementscontainer">
 		</div>
 	</div>
-	<div class="allevents">
-	<div class="appointment">
-		<div class="time">
-			9:00
-		</div>
-		<div class="title">
-			Vertrek bus
-		</div><br>
-		<div class="description">
-			Hoorn busstation
-		</div>
-	</div>
-	<div class="appointment">
-		<div class="time">
-			10:30
-		</div>
-		<div class="title">
-			Verzamelen
-		</div>
-		<div class="description">
-			Garderobe
-		</div>
-		</div>
-	<div class="appointment">
-		<div class="time">
-			11:00
-		</div>
-		<div class="title">
-			Start rondleiding
-		</div>
-		<div class="description">
-			rijksmuseum
-		</div>
-	</div>
-	<div class="quiz">
-		<div class="time">
-			13:00
-		</div>
-		<div class="title">
-			Quiz 1
-		</div>
-	</div>
-	<div class="appointment">
-		<div class="time">
-			14:00
-		</div>
-		<div class="title">
-			Lunch
-		</div>
-		<div class="description">
-			Openbare kantine bij aula
-		</div>
-	</div>
-	<div class="quiz">
-		<div class="time">
-			15:00
-		</div>
-		<div class="title">
-			Quiz 2
-		</div>
-	</div>
-	<div class="quiz">
-		<div class="time">
-			16:00
-		</div>
-		<div class="title">
-			Quiz 3
-		</div>
-	</div>
-	<div class="appointment">
-		<div class="time">
-			14:00
-		</div>
-		<div class="title">
-			Vertrek
-		</div>
-		<div class="description">
-			Openbare kantine bij aula
-		</div>
-	</div>
-		</div>
+<div class="allevents" id=appointmentscontainer>
+</div>
 		<br><br>
 	<div class="footer">
 		<div class="gamenumber">

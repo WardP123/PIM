@@ -91,15 +91,15 @@ h3 {
     width: 65%;
 }
 
-.close {
+.close, .close_delete, .close_update {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close_delete:hover, .close_update:hover,
+.close:focus, .close_delete:focus, .close_update:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
