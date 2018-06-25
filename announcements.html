@@ -25,9 +25,12 @@
 			async: true,
 			success: function(result) {
 				var list = '';
+				result.sort(function (a, b) {
+					return new Date('1970/01/01 ' + a.date) - new Date('1970/01/01 ' + b.date);
+				})
 				$.each(result, function(i, item){
 					list += '<div class="announcement">';
-					list += '<div class="time">' + '1h geleden' + '</div>';
+					list += '<div class="time">' + item.date + '</div>';
 					list += '<div class="title">' + item.announcementtitle + '</div>';
 					list += '<div class="description">' + item.announcementdecription + '</div>';
 					list += '</div>';
@@ -35,8 +38,6 @@
 			$(".allevents").append(list);
 			},
 			error: function(data) {
-				alert("foutje")
-				alert(data)
 				}
              });
 		if (authkey_local) {
@@ -49,9 +50,7 @@
 				dataType: "json",
                 async: true,
                 success: function(result) {
-					if (result.valid == "yes" ){
-						alert("already login");
-						
+					if (result.valid == "yes" ){						
 					}else{
 						window.location.href = "loginnew.html";
 					}
@@ -92,48 +91,6 @@
 		<img src="klassetourzwart.png">
 	</div>
 	<div class="allevents">
-	<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula quis urna sed efficitur. Praesent ac justo erat. Pellentesque et nunc id metus finibus pretium. Duis id malesuada neque. Cras vestibulum augue luctus dolor imperdiet consectetur. Mauris vel lorem at arcu blandit vulputate. Sed ac mauris sagittis, elementum eros id, porta mauris. 
-			
-		</div>
-	</div>
-		<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula 
-			</div>
-			</div>
-			<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. 
-		</div>
-		</div>
-		<div class="announcement">
-		<div class="new"></div>
-		<div class="time">1h geleden</div>
-		<div class="title">
-			Vergeet niet te doen!
-		</div>
-		<div class="description">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet cursus diam. Pellentesque sed felis accumsan, blandit nibh sit amet, mattis lacus. Vestibulum vehicula quis urna sed efficitur. Praesent ac justo erat. Pellentesque et nunc id metus finibus pretium. Duis id malesuada neque. Cras vestibulum augue luctus dolor imperdiet consectetur. Mauris vel lorem at arcu blandit vulputate. Sed ac mauris sagittis, elementum eros id, porta mauris. 
-			
-		</div>
-	</div>
 	</div>
 	<div class="footer">
 		<div class="gamenumber">

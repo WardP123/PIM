@@ -183,6 +183,7 @@ a{
     transition: background-color 0.25s;
 
 }
+
 .newgroup:hover {
 	border-color: white;
 	color: #0f7780;
@@ -194,7 +195,39 @@ a{
 .plusannouncement {
 	font-size: 25px;
 }
+
 .titlemodal {
 	font-size:30px;
 	margin-bottom: 10px;
+}
+.footer {
+	background-color: lightgray;
+	height: 50px;
+	position: fixed;
+	width: 100%;
+	left: 0;
+	bottom:0;
+	
+}
+.footer .code {
+	font-size: 100%;
+	background-color: grey;
+	padding: 2px;
+	padding-left: 5px;
+	padding-right: 6px;
+	border-radius: 4px;
+	color: white;
+}
+.footer .gamenumber{
+	float:left;
+	font-size: 140%;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.footer .username {
+	margin-top: 10px;
+	font-size: 140%;
+	float: right;
+	margin-right: 12px;
 }

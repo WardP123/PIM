@@ -11,8 +11,8 @@
 	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
 	  if (match) return match[2];
 	}
-		var authkey_local = getCookie("accountadmin");
-//		var authkey_local = "22382501515988406712833970318497649872"
+//		var authkey_local = getCookie("accountadmin");
+		var authkey_local = "173224453209867194815934272294398947581"
 		$( document ).ready(function() {
 			if (authkey_local) {
 		$.ajax({
@@ -24,8 +24,7 @@
                 async: true,
                 success: function(result) {
 					if (result.valid == "yes" ){
-						user = result.user;
-						document.getElementById('adminname').innerHTML = user.username;
+						getName()
 					}else{
 						window.location.href = "loginteachers.html";
 					}
@@ -38,6 +37,23 @@
 		};
 		updatelist()
 		});
+		function getName(){
+			$.ajax({
+                url: "http://84.28.82.98:8081/get_admin_info",
+                type: 'POST',
+				data: JSON.stringify({"authkey": authkey_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					$.each(result, function(i, item){
+						$(".name").append(item.name)
+					});
+				},
+        		error: function(data) {
+        			}
+		})
+		}
 		function updatelist(){
 			$(".allgroups").empty();
 			$.ajax({
@@ -59,7 +75,7 @@
 					} else if (item.joinedusers == 1 ){
 						list += '<div class="groupusers"> 1 deelnemer</div>'
 					} else {
-						list += '<div class="groupusers">' + item.joinedusers + 'deelnemers</div>'
+						list += '<div class="groupusers">' + item.joinedusers + ' deelnemers</div>'
 					};
 						list += '<i class="rightarrow"></i></div></a>'
 				});
@@ -107,17 +123,27 @@
         			}
              });
 			};
+		var show = false;
 		function show_delete(){
-			$('.group').css({'width': '80%'});
-			$('.group').css({'transform': 'translate(47px, 0px)'});
-			$('.delete').css({'display': 'block'});
-			$('.delete').css({'opacity': '100'});
+			if (show==false) {
+				$('.group').css({'width': '80%'});
+				$('.group').css({'transform': 'translate(47px, 0px)'});
+				$('.delete').css({'display': 'block'});
+				$('.delete').css({'opacity': '100'});
+				show = true;
+			} else {
+				not_show_delete();
+				show = false;
+			}
 		}
 		function not_show_delete(){
 			$('.group').css({'width': '90%'});
 			$('.group').css({'transform': 'translate(0px, 0px)'});
 			$('.delete').css({'display': 'none'});
 			$('.delete').css({'opacity': '0'});
+		}
+		function logoff(){
+			document.cookie = account+'=; Max-Age=-99999999;';
 		}
 	</script>
 </head>
@@ -127,7 +153,7 @@
 		<img src="klassetourzwart.png">
 	</div>
 	<div class="container">
-		<div class="welcom"> Welkom <span class="name" id="adminname"></span></div>
+		<div class="welcom"> Welkom <span class="name"></span></div>
 	<div class="allgroups">
 	</div>
 		<div id = "deletegroup" class="deletegroup" onclick="show_delete()"> Verwijder groep <br> <span class="plusannouncement"> - </span> </div>
@@ -147,6 +173,15 @@
 			</form>
 		  
 	  </div>
+	</div>
+	<div class="footer">
+	<div class="gamenumber">
+			Welkom <span class="name"> </span>
+		</div>
+		
+		<div class="username" onclick="logoff()">
+			Uitloggen
+		</div>
 	</div>
 	<script>
 
