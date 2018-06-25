@@ -127,8 +127,8 @@ def update_quiz(db):
 def add_question(db):
     if request.json is not None:
         item = request.json
-        db.execute("INSERT INTO quizzes (quizid, question_title, question, image, answer_type) VALUES (?, ?, ?, ?)", (item['quizid'], item['question_title'], item['question'], item['image'], item['answer_type']))
-        db.execute("SELECT id FROM quizzes WHERE quizid=? AND question_title=?", (item['quizid'], item['question_title']))
+        db.execute("INSERT INTO quizzes (quizid, question_title, question, image, answer_type) VALUES (?, ?, ?, ?, ?)", (item['quizid'], item['question_title'], item['question'], item['image'], item['answer_type'],))
+        db.execute("SELECT id FROM quizzes WHERE quizid=? AND question_title=?", (item['quizid'], item['question_title'],))
         question = db.fetchall()
         return json.dumps(question)
 

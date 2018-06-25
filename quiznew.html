@@ -6,14 +6,7 @@
         <!-- http://talkerscode.com/webtricks/upload%20image%20to%20database%20and%20server%20using%20HTML,PHP%20and%20MySQL.php -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type='text/javascript'>
-            function preview_image(event) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    var output = document.getElementById('output_image');
-                    output.src = reader.result;
-                }
-                reader.readAsDataURL(event.target.files[0]);
-            }
+      
         </script>
     </head>
     <body>
@@ -100,6 +93,8 @@
                 title = document.getElementById('update-title').value;
                 question = document.getElementById('update-question').value;
                 answer_type = document.getElementById('answer_type').value;
+                
+
                 if (title == "") {
                     alert("Vul een quiz titel in");
                 } else if (question == "") {
@@ -117,7 +112,6 @@
                                 location.reload();                    
                             }, 
                             error: function(data) {
-                                alert(data);
                                 alert("Er is iets fout gegaan");
                             }
                         });
@@ -128,7 +122,7 @@
                 quiz_question_title = document.getElementById('title').value;
                 quiz_question = document.getElementById('question').value;
                 quiz_image = document.getElementById('image').value;
-                quiz_answer_type = document.getElementById('answer_type')
+                quiz_answer_type = document.getElementById('answer_type').value;
                 
                 if (quiz_question_title == "") {
                     alert("Vul een quiz titel in");
@@ -147,7 +141,6 @@
                             location.reload();
                         }, 
                         error: function(data) {
-                            alert(data);
                             alert("Er is iets fout gegaan");
                         }
                     });
@@ -264,6 +257,10 @@
             }
 
             $(document).ready(function(){
+                windowid = getQueryVariable("id");
+                if (windowid == "") {
+                    window.location.replace("http://localhost:5000/quiz.html");
+                }
                 updateQuestions();
                 updateTitle();
             })
@@ -278,6 +275,15 @@
                 var query = window.location.search.substring(1);
                 var pair = query.split("=");
                 return pair[0];
+            }
+
+            function preview_image(event) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var output = document.getElementById('output_image');
+                    output.src = reader.result;
+                }
+                reader.readAsDataURL(event.target.files[0]);
             }
         </script>
     </body>
