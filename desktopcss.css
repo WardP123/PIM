@@ -81,12 +81,17 @@ body {
 	
 }
 .container {
-	width: 90%;
+	width: 1275px;
 	margin-left: auto;
 	margin-right: auto;
+	height: 10px;
 }
 /*089ad0*/
-.users {
+.leftcontainer {
+	width: 350px;
+	float:left;
+}
+.groupsnumber {
 	background: -webkit-linear-gradient(to right, #0f7780, #21656b);
     background: -o-linear-gradient(to right, #0f7780, #21656b);
     background: linear-gradient(to right, #0f7780, #21656b);
@@ -94,7 +99,30 @@ body {
 	margin-top: 40px;
 	border-radius: 10px;
 	padding: 20px;
-	float:left;
+	margin-right: 20px;
+	color: white;
+	font-size: 25px;
+}
+.gameid {
+	background-color: lightgray;
+	color: black;
+	padding: 5px;
+	font-size: 30px;
+	border-radius: 8px;
+	margin-left: 10px;
+	
+}
+.gamename {
+	color: lightgray;
+}
+.users {
+	background: -webkit-linear-gradient(to right, #0f7780, #21656b);
+    background: -o-linear-gradient(to right, #0f7780, #21656b);
+    background: linear-gradient(to right, #0f7780, #21656b);
+	background-color: #007dab;
+	margin-top: 20px;
+	border-radius: 10px;
+	padding: 20px;
 	margin-right: 20px;
 	color: lightgray;
 }
@@ -151,6 +179,7 @@ body {
     transition: color 0.25s;
 	-webkit-transition: background-color 0.25s; /* Safari */
     transition: background-color 0.25s;
+	border-color: white;
 
 }
 .newannouncement:hover {

@@ -11,6 +11,22 @@
 	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
 	  if (match) return match[2];
 	}
+	function checkEnter(linkto) {
+		var code;
+    if(!e) var e = window.event;
+    if(e.keyCode){
+        code = e.keyCode;
+    }else if(e.which){
+        code = e.which;
+    }
+    if(code == 13){
+		if (linkto == "login") {
+			login();
+		} else if (linkto == "newaccount") {
+			showMakeNewAccount();
+		}
+    }
+	}
 	$( document ).ready(function() {
 		authkey = getCookie("accountadmin");
 		if (authkey) {
@@ -64,6 +80,13 @@
 			var password_local = document.getElementById("passwordintextnew").value;
 			var email_local = document.getElementById("emailintextnew").value;
 			var name_local = document.getElementById("nameintextnew").value;
+			if (/\s/.test(name_local)) {
+			if (/^ *$/.test(name_local)) {
+				alert("vul uw volledige naam in.")
+			} else {
+				var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				if (re.test(email_local)) {
+					
             $.ajax({
                 url: "http://84.28.82.98:8081/createnewadmin",
                 type: 'POST',
@@ -82,8 +105,12 @@
         		error: function(data) {
 					alert("foutje")
         			}
-             });
-        }
+             });}
+				else { alert("vult een geldig email adres in.")}
+        }}else {
+			alert("vul uw volledige naam in.")
+		}
+	}
 	
 </script>
 </head>
@@ -93,24 +120,24 @@
 		<div class="titleimg"><img src="klassetourwit.png"> </div>
 		<div class="secondtitle"> Login voor leraren </div>
 		<div id="firstform">
-		<form>
+		<form onSubmit="return false;">
 			<input type="button" value="Maak een nieuw Account" onclick="showMakeNewAccount()">
 		</form>
 			<div class="line"> </div>
 		<div class="welcome">Of <span class ="groupname">Login</span> </div>
 		<div class="groupnumbeform">
-		<form>
+		<form onSubmit="return false;">
 			<input type="text" id="emailintext" placeholder="E-Mail"><br>
-			<input type="password" id="passwordintext" placeholder="Wachtwoord"><br>
+			<input type="password" id="passwordintext" placeholder="Wachtwoord" onkeypress="checkEnter('login')"><br>
 			<input type="button" id="userButton" value="Login" onclick="login()">
 		</form>
 		</div>
 		</div>
-		<div id="secondform">
+		<div id="secondform" onSubmit="return false;">
 		<form>
 			<input type="text" id="nameintextnew" placeholder="Volledige Naam">
 			<input type="text" id="emailintextnew" placeholder="E-Mail"><br>
-			<input type="password" id="passwordintextnew" placeholder="Wachtwoord"><br>
+			<input type="password" id="passwordintextnew" placeholder="Wachtwoord" onkeypress="checkEnter('newaccount')"><br>
 			<input type="button" id="userButton2" value="Maak nieuw account" onclick="makeNewAccount()">
 		</form>
 		</div>

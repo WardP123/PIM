@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Desktop</title>
 <link href="desktopcss.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -12,10 +11,14 @@
 		<img src="klassetourzwart.png"></div>
 	</div>
 	<div class="container">
+		<div class="leftcontainer">
+		<div class="groupsnumber">
+			Groepsnummer: <span class="gameid"> </span><br>
+			<span class="gamename"></span>
+		</div>
 		<div class = "users" id="usercontainer">
 			<div class = "usertitle"> Groepsleden <img onclick="lock_group_popup()" onmouseover="" style="cursor: pointer;" class="lockicon" id="lockicon"></div>
 			<div class = "total"><span id="usercounter"></span> Groepsleden totaal </div>
-		<div class = "user">
 		</div>
 		</div>
 		<div class="announcements" id="announcementcontainer">
@@ -187,8 +190,8 @@ function getQueryVariable(variable){
    return("NO VALID LINK");
 }
 
-//	var authkey_local = getCookie("accountadmin");
-	var authkey_local = "173224453209867194815934272294398947581"
+	var authkey_local = getCookie("accountadmin");
+//	var authkey_local = "173224453209867194815934272294398947581"
 	var gameid_local = getQueryVariable("id");
 	
 	
@@ -214,7 +217,23 @@ function getQueryVariable(variable){
 		} else {
 			window.location.href = "loginteachers.html";
 		};
-	});
+		$.ajax({
+                url: "http://84.28.82.98:8081/get_group_info",
+                type: 'POST',
+				data: JSON.stringify({"gameid": gameid_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					$.each(result, function(i, item){
+					$('.gameid').append(item.gameid);
+					$('.gamename').append(item.groupname);
+					});
+				},
+        		error: function(data) {
+        			}
+             });
+		});
 	
 // Get the modal
 var modalan = document.getElementById('newannouncementmodal');
