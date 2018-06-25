@@ -118,8 +118,8 @@ def update_question(db):
 def update_quiz(db):
     if request.json is not None:
         item = request.json
-        db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id']))
-        db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id']))
+        db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id'],))
+        db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id'],))
         return json.dumps(item['id'])
 
 @post('/add-question')

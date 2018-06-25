@@ -48,7 +48,6 @@
                     <div class="modal-update-content">
                         <span class="close_update" onclick="close_span_quiz()">&times;</span>
                         <form>
-                            <span class="close">&times;</span><br>
                             <label for="title">Vraag titel:</label><br>
                             <input type="text" id="update-title" required><br>
                             <label for="question">Vraag:</label><br>
@@ -225,6 +224,7 @@
                     
                     var deleteimage = document.createElement("img");
                     deleteimage.setAttribute("src", "deleteblack.png");
+                    deleteimage.setAttribute("class", "delete-image");
                     deleteimage.setAttribute("id", data[i].id);
                     deleteimage.setAttribute("onclick", "delete_question_popup(this.id)");
                     deleteimage.setAttribute("onmouseover", "");
@@ -232,6 +232,7 @@
                     
                     var editimage = document.createElement("img");
                     editimage.setAttribute("src", "editblack.png");
+                    editimage.setAttribute("class", "edit-image");
                     editimage.setAttribute("id", data[i].id);
                     editimage.setAttribute("onclick", "update_question_popup(this.id)");
                     editimage.setAttribute("onmouseover", "");

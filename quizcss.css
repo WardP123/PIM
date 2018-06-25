@@ -57,11 +57,18 @@ h3 {
     font-size: 20px;
 }
 
-#questions img {
-    margin-left: 10px;
+.edit-image {
+    margin-right: 5px;
     max-width: 18px;
     max-height: 18px;
-    display: inline;
+    float: right;
+}
+
+.delete-image {
+    margin-right: 10px;
+    max-width: 18px;
+    max-height: 18px;
+    float: right;
 }
 
 .iconsan {
