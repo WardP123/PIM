@@ -15,6 +15,8 @@
 		<div class = "users" id="usercontainer">
 			<div class = "usertitle"> Groepsleden <img onclick="lock_group_popup()" onmouseover="" style="cursor: pointer;" class="lockicon" id="lockicon"></div>
 			<div class = "total"><span id="usercounter"></span> Groepsleden totaal </div>
+		<div class = "user">
+		</div>
 		</div>
 		<div class="announcements" id="announcementcontainer">
 			<div class="announcementstitle"> Meldingen </div>
@@ -185,9 +187,10 @@ function getQueryVariable(variable){
    return("NO VALID LINK");
 }
 
-	var authkey_local = getCookie("accountadmin");
-//	var authkey_local = "22382501515988406712833970318497649872"
+//	var authkey_local = getCookie("accountadmin");
+	var authkey_local = "173224453209867194815934272294398947581"
 	var gameid_local = getQueryVariable("id");
+	
 	
 	$( document ).ready(function() {
 			if (authkey_local) {
@@ -415,9 +418,7 @@ function delete_user(){
 		dataType: "json",
         async: true,
         success: function(result) {
-			alert('Groepslid ' + result.username + ' uit gameid ' + result.gameid + ' verwijderd.');
-			close_span_user();
-			location.reload();
+			alert('Groepslid ' + result.username + ' uit gameid ' + result.gameid + ' verwijderd.')
 		},
         error: function(data) {
 			alert('Groepslid verwijderen mislukt.')
@@ -708,8 +709,14 @@ function ProcessAppointments(data){
 		
 		var descriptiondiv = document.createElement("div");
 		descriptiondiv.setAttribute("class", "description");
+		var description = data[appointment].description
+		var short_description = description.substring(0, 30);
+		if (description.length < 31) {
 		descriptiondiv.innerHTML = data[appointment].description;
-		
+		} else {
+			var short_description = description.substring(0, 30);
+			descriptiondiv.innerHTML = '<div class="description">' + short_description + '...' + '</div>';
+		}
 		var iconsdiv = document.createElement("div");
 		iconsdiv.setAttribute("class", "icons");
 		

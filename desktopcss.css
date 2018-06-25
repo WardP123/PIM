@@ -130,6 +130,7 @@ body {
 	border-bottom-style: solid;
 	margin-bottom: 14px;
 	float:left;
+	width: 100%;
 }
 .newannouncement {
 	color: white;
