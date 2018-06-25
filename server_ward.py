@@ -120,13 +120,14 @@ def update_quiz(db):
         item = request.json
         db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id'],))
         db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id'],))
+        db.execute("UPDATE quizzes SET answer_type=? WHERE id=?", (item['answer_type'], item['id'],))
         return json.dumps(item['id'])
 
 @post('/add-question')
 def add_question(db):
     if request.json is not None:
         item = request.json
-        db.execute("INSERT INTO quizzes (quizid, question_title, question, image) VALUES (?, ?, ?, ?)", (item['quizid'], item['question_title'], item['question'], item['image']))
+        db.execute("INSERT INTO quizzes (quizid, question_title, question, image, answer_type) VALUES (?, ?, ?, ?)", (item['quizid'], item['question_title'], item['question'], item['image'], item['answer_type']))
         db.execute("SELECT id FROM quizzes WHERE quizid=? AND question_title=?", (item['quizid'], item['question_title']))
         question = db.fetchall()
         return json.dumps(question)

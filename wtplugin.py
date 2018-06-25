@@ -167,7 +167,8 @@ class WtDbPlugin(object):
                     quizid INTEGER NOT NULL,
                     question_title CHAR(300) NOT NULL,
                     question CHAR(300) NOT NULL,
-                    image CHAR(300))
+                    image CHAR(300),
+                    answer_type CHAR(300) NOT NULL)
             """);
             db.commit()
 
