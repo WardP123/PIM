@@ -34,6 +34,9 @@
                             <label for="image">Afbeelding:</label> <p> (Optional)</p> <br>
                             <input type="file" id="image" accept="image/*" onchange="preview_image(event)">
                             <img id="output_image"/> <br> <br>
+                            <p>Kies wat voor type antwoord u wil:</p> <br>
+                            <input type="radio" id="answer_type" name="question_type" value="text"> Text
+                            <input type='radio' id="answer_type" name="question_type" value="file"> File <br>
                             <input type="button" id="submit" value="Voeg vraag toe" onclick="submitquestion()">
                         </form>
                     </div>
@@ -51,7 +54,10 @@
                             <label for="title">Vraag titel:</label><br>
                             <input type="text" id="update-title" required><br>
                             <label for="question">Vraag:</label><br>
-                            <input type="text" id="update-question" required><br>                            
+                            <input type="text" id="update-question" required><br>     
+                            <p>Kies wat voor type antwoord u wil:</p> <br>
+                            <input type="radio" id="update_answer_type" name="question_type" value="text"> Text
+                            <input type='radio' id="update_answer_type" name="question_type" value="file"> File <br>                       
                             <input type="button" id="submit" value="Wijzig vraag" onclick="update_question(this.id)">
                         </form>
                     </div>
@@ -93,28 +99,36 @@
             function update_question(id) {
                 title = document.getElementById('update-title').value;
                 question = document.getElementById('update-question').value;
-                $.ajax({
-                        url: "http://localhost:8081/update-quiz",
-                        type: 'POST',
-                        data: JSON.stringify({ id: id, question_title: title, question: question }),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        async: true,
-                        success: function(result) {
-                            alert("Vraag gewijzigd");
-                            location.reload();                    
-                        }, 
-                        error: function(data) {
-                            alert(data);
-                            alert("Er is iets fout gegaan");
-                        }
-                    });
+                answer_type = document.getElementById('answer_type').value;
+                if (title == "") {
+                    alert("Vul een quiz titel in");
+                } else if (question == "") {
+                    alert("Vul een vraag in");
+                } else {
+                    $.ajax({
+                            url: "http://localhost:8081/update-quiz",
+                            type: 'POST',
+                            data: JSON.stringify({ id: id, question_title: title, question: question, answer_type: answer_type }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: true,
+                            success: function(result) {
+                                alert("Vraag gewijzigd");
+                                location.reload();                    
+                            }, 
+                            error: function(data) {
+                                alert(data);
+                                alert("Er is iets fout gegaan");
+                            }
+                        });
+                }
             }
         
             function submitquestion() {
                 quiz_question_title = document.getElementById('title').value;
                 quiz_question = document.getElementById('question').value;
-                quiz_image = document.getElementById('image').value;    
+                quiz_image = document.getElementById('image').value;
+                quiz_answer_type = document.getElementById('answer_type')
                 
                 if (quiz_question_title == "") {
                     alert("Vul een quiz titel in");
@@ -124,7 +138,7 @@
                     $.ajax({
                         url: "http://localhost:8081/add-question",
                         type: 'POST',
-                        data: JSON.stringify({ quizid: window.id,  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
+                        data: JSON.stringify({ quizid: window.id,  question_title: quiz_question_title, question: quiz_question, image: quiz_image, answer_type: quiz_answer_type}),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,

@@ -7,7 +7,116 @@
 <link href="userquizcss.css" rel="stylesheet" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+	function getQueryVariable(variable){
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+		   var pair = vars[i].split("=");
+		   if(pair[0] == variable){return pair[1];}
+		}
+		return("NO VALID LINK");
+	}
+	
+	var quizappointmentid_local = getQueryVariable("quizid");
+	
 	function LoadQuestions(){
+		$.ajax({
+			url: "http://localhost:8081/retrieve-questions",
+			type: 'POST',
+			data: JSON.stringify({ quizid: quizappointmentid_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(data) {
+				process_questions(data);
+			},
+			error: function(data) {
+				alert("Vragen laden mislukt.");
+			}
+		});
+	}
+	
+	function LoadQuizTitle(){
+		$.ajax({
+			url: "http://localhost:8081/quiz-title",
+			type: 'POST',
+			data: JSON.stringify({ quizid: quizappointmentid_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(data) {
+				document.getElementById("quiztitle").innerHTML = data[0].title;
+			},
+			error: function(data) {
+				alert("Vragen laden mislukt.");
+			}
+		});
+	}
+	
+	function process_questions(data){
+		var question_counter = 0;
+		for (question in data){
+			question_counter += 1;
+			
+			var maindiv = document.createElement('div');
+			maindiv.setAttribute("class", "question");
+			maindiv.setAttribute("id", data[question].id);
+			maindiv.setAttribute("onclick", "expand_question(this.id)");
+			
+			var titlediv = document.createElement('div');
+			titlediv.setAttribute("class", "title");
+			titlediv.innerHTML = "Vraag " + question_counter + ": ";
+			
+			var namespan = document.createElement('span');
+			namespan.innerHTML = data[question].question_title;
+			
+			var formdiv = document.createElement('form');
+			formdiv.setAttribute("id", 'formdiv' +data[question].id);
+			formdiv.setAttribute("class", "invisible");
+		
+			var descriptiondiv = document.createElement('div');
+			descriptiondiv.innerHTML = data[question].question;
+			descriptiondiv.setAttribute("class", "description");
+			formdiv.appendChild(descriptiondiv);
+		
+			var breakdiv = document.createElement('br');
+			formdiv.appendChild(breakdiv);
+			
+			if (data[question].image){
+				alert(data[question].image);
+			}
+			
+			if (data[question].answer_type == "text"){
+				var answerdiv = document.createElement('textarea');
+				answerdiv.setAttribute("rows", "4");
+				answerdiv.setAttribute("cols", "50");
+				answerdiv.setAttribute("id", "imageinput" +data[question].id);
+				answerdiv.setAttribute("class", "input");
+				formdiv.appendChild(answerdiv);
+			}
+			else{
+				var answerdiv = document.createElement('input');
+				answerdiv.setAttribute("type", "file");
+				answerdiv.setAttribute("accept", "image/*");
+				answerdiv.setAttribute("id", "inputfield" +data[question].id);
+				formdiv.appendChild(answerdiv);
+			}
+		
+			var breakdiv2 = document.createElement('br');
+			formdiv.appendChild(breakdiv2);
+		
+			var submitbutton = document.createElement('input');
+			submitbutton.setAttribute("type", "button");
+			submitbutton.setAttribute("value", "Antwoord indienen");
+			submitbutton.setAttribute("id", data[question].id);
+			submitbutton.setAttribute("onclick", "process_answer(this.id)");
+			formdiv.appendChild(submitbutton);
+			
+			titlediv.appendChild(namespan);
+			maindiv.appendChild(titlediv);
+			maindiv.appendChild(formdiv);
+			document.getElementById("questioncontainer").appendChild(maindiv);
+		}
 	}
 	
 	function expand_question(id){
@@ -15,58 +124,62 @@
 		div.setAttribute("class", "openedquestion");
 		div.setAttribute("onclick", "close_question(this.id)");
 		
-		var descriptiondiv = document.createElement('div');
-		descriptiondiv.innerHTML = "Maak een foto met het melkmeisje";
-		descriptiondiv.setAttribute("id", "descriptiondiv" +id);
-		descriptiondiv.setAttribute("class", "description");
-		div.appendChild(descriptiondiv);
-		
-		var breakdiv = document.createElement('br');
-		breakdiv.setAttribute("id", "breakdiv" +id);
-		div.appendChild(breakdiv);
-		
-		var answerdiv = document.createElement('input');
-		answerdiv.setAttribute("type", "text");
-		answerdiv.setAttribute("id", "inputfield" +id);
-		answerdiv.setAttribute("class", "input");
-		div.appendChild(answerdiv);
+		var formdiv = document.getElementById("formdiv" +id);
+		formdiv.setAttribute("class", "visible");
 	}
 	
 	function close_question(id){
 		var div = document.getElementById(id);
-		var inputdiv = document.getElementById('inputfield' +id);
-		var descriptiondiv = document.getElementById('descriptiondiv' +id);
-		var breakdiv = document.getElementById('breakdiv' +id);
-		
-		div.removeChild(inputdiv);
-		div.removeChild(descriptiondiv);
-		div.removeChild(breakdiv);
-		
 		div.setAttribute("class", "question");
 		div.setAttribute("onclick", "expand_question(this.id)");
+		
+		var formdiv = document.getElementById("formdiv" +id);
+		formdiv.setAttribute("class", "invisible");
+	}
+	
+	function process_answer(id){
+	var question_id_local = id;
+	var quiz_id_local = quizappointmentid_local;
+	var username_local = "Test User";
+	var gameid_local = 12;
+	var answerfield = document.getElementById("inputfield" +id);
+	var imagefield = document.getElementById("imageinput" +id);
+	if (answerfield != null){
+		var answer_local = answerfield.value;
+	}
+	else {
+		var answer_local = null;
+	}
+	if (imagefield != null){
+		var image_local = imagefield.value;
+	}
+	else{
+		var image_local = null;
+	}
+	
+	$.ajax({
+			url: "http://localhost:8081/answer-question",
+			type: 'POST',
+			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local, answerimage: image_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(data) {
+				alert("Antwoord ingediend.");
+			},
+			error: function(data) {
+				alert("Vragen laden mislukt.");
+			}
+		});
 	}
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
-<body onload="LoadQuestions();">
-	<h1 class="QuizTitle">Welkom bij <span id="quiztitle">Quiz1</span></h1>
+<body onload="LoadQuestions(); LoadQuizTitle();">
+	<h1 class="QuizTitle">Welkom bij <span id="quiztitle"></span></h1>
 	<br>
-	<div class="question" id="1" onclick="expand_question(this.id)">
-		<div class="title"> Vraag 1
-		</div>
-	</div>
-	<div class="question" id="2" onclick="expand_question(this.id)">
-		<div class="title"> Vraag 2
-		</div>
-	</div>
-	<div class="question" id="3" onclick="expand_question(this.id)">
-		<div class="title"> Vraag 3
-		</div>
-	</div>
-	<div class="question" id="4" onclick="expand_question(this.id)">
-		<div class="title"> Vraag 4
-		</div>
+	<div id="questioncontainer">
 	</div>
 </body>
 
