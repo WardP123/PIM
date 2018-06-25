@@ -20,6 +20,7 @@
        }
 	}
 	gameid_local = getQueryVariable("gameid");
+	
 	$( document ).ready(function() {
 		authkey = getCookie("account");
 		if (authkey) {
@@ -60,11 +61,30 @@
              });
 		
 	});
-	
+	function checkEnter(linkto) {
+		var code;
+    if(!e) var e = window.event;
+    if(e.keyCode){
+        code = e.keyCode;
+    }else if(e.which){
+        code = e.which;
+    }
+    if(code == 13){
+		if(linkto == "newaccount")
+        	check_usernamenew();
+		if(linkto == "pinnewaccount")
+			create_account();
+		if(linkto == "pinexistingaccount")
+        	check_existing_login();
+    }
+	}
 	
 	function check_usernamenew() {
 			username_local = document.getElementById("usernameintext").value;
-
+			if (/\s/.test(username_local)) {
+			if (/^ *$/.test(username_local)) {
+				alert("vul je volledige naam in.")
+			} else {
             $.ajax({
 				
                 url: "http://84.28.82.98:8081/check_username",
@@ -75,13 +95,14 @@
                 async: true,
                 success: function(result) {
 					if (result.gamenumber_exists == "no" ){
-						alert("Gamenumber does not exist!");
-						
+						alert("Dit groepsnummer bestaat niet meer.");
+					}else if (result.lockstatus == "locked" ) {
+						alert("Deze groep is vergrendeld")	
 					}else{
 						if (result.username_exists == "no"){
 							showPasswordnew();
 						} else {
-						alert("Username already exists!");
+						alert("Deze gebruikersnaam bestaat al.");
 						}
 					}
 				},
@@ -90,10 +111,16 @@
         			}
              });
 
-        }
+        }}else {
+			alert("vul je volledige naam in.")
+		}
+	}
 	function check_usernameexists() {
-			username_local = document.getElementById("usernameintext").value;
-
+		username_local = document.getElementById("usernameintext").value;
+		if (/\s/.test(username_local)) {
+			if (/^ *$/.test(username_local)) {
+				alert("vul je volledige naam in.")
+			} else {
             $.ajax({
 				
                 url: "http://84.28.82.98:8081/check_username",
@@ -104,11 +131,12 @@
                 async: true,
                 success: function(result) {
 					if (result.gamenumber_exists == "no" ){
-						alert("Gamenumber does not exist!");
-						
+						alert("Dit groepsnummer bestaat niet meer.");
+					}else if (result.lockstatus == "locked" ) {
+						alert("Deze groep is vergrendeld")	
 					}else{
 						if (result.username_exists == "no"){
-							alert("Username does not exist!");
+							alert("Deze gebruikersnaam bestaat niet.");
 						} else {
 							showPasswordexists();
 						
@@ -119,6 +147,10 @@
 					alert("foutje")
         			}
              });
+			}
+		}else {
+			alert("Vul je volledige naam in.")
+		}
 
         }
 		function showPasswordnew() {
@@ -138,7 +170,8 @@
 				$(".name").append(username_local);
 			}
 	function create_account() {
-			var pin_local = document.getElementById("pinintext").value;
+		var pin_local = document.getElementById("pinintext").value;
+		if ((/^\d+$/.test(pin_local)) && pin_local.length == 5) {
             $.ajax({
                 url: "http://84.28.82.98:8081/login",
                 type: 'POST',
@@ -149,12 +182,16 @@
                 success: function(result) {
 					document.cookie = ("account="+result);
 					window.location.href = "rules.html";
+					
 				},
         		error: function(data) {
 					alert("foutje")
         			}
              });
-        }
+        } else {
+			alert("Je pincode moet 5 cijfers lang zijn en alleen nummers bevatten!");
+		}
+	}
 	function check_existing_login() {
 		var pin_local = document.getElementById("pinintextexists").value;
 		$.ajax({
@@ -170,7 +207,7 @@
 						document.cookie = ("account="+result.authkey);
 						window.location.href = "rules.html";
 					}else{
-						alert("wrong password or username");
+						alert("Deze PIN is fout.");
 					}
 				},
         		error: function(data) {
@@ -187,28 +224,30 @@
 		<div class="welcome">Welkom bij groep <span class ="groupname"></span> </div>
 		<div class="info"> Wat is je volledige naam? </div>
 		<div class="groupnumbeform">
-		<form>
-			<input type="text" id="usernameintext"><br>
+		<form onSubmit="return false;">
+			<input type="text" id="usernameintext" onkeypress="checkEnter('newaccount')"><br>
 			<input type="button" id="userButton" value="Maak een nieuw account" onclick="check_usernamenew()">
 		</form>
 		</div>
-		<form>
+		<form onSubmit="return false;">
 			<input type="button" value="Ik heb al een account" onclick="check_usernameexists()">
 		</form>
 		</div>
 		<div id="pinformnew">
-		<form id="pin">
+		<form id="pin" onSubmit="return false;">
 			<div class="pintext">Hoi <span class="name"></span>! <br>
-				Vul je PINcode In ( 5 cijfers) new:</div>
-			<input type="password" id="pinintext" >
-			<input type="button" value="Login" onclick="create_account()">
+				Vul een nieuwe PINcode in ( 5 cijfers)</div>
+			<input type="password" id="pinintext" onkeypress="checkEnter('pinnewaccount')" >
+			<input type="button" value="Login" onclick="create_account()" >
+			</form>
 		</div>
 		<div id="pinformexists">
-		<form id="pin">
+		<form id="pin" onSubmit="return false;">
 			<div class="pintext">Hoi <span class="name"></span>! <br>
-				Vul je PINcode In ( 5 cijfers) old:</div>
-			<input type="password" id="pinintextexists"><br>
+				Vul je PINcode in ( 5 cijfers):</div>
+			<input type="password" id="pinintextexists" onkeypress="checkEnter('pinexistingaccount')"><br>
 			 <input type="button" value="Login" onclick="check_existing_login()">
+			</form>
 		</div>
 		</div>
 </body>

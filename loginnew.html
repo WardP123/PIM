@@ -7,6 +7,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+	function checkEnter() {
+		var code;
+    if(!e) var e = window.event;
+    if(e.keyCode){
+        code = e.keyCode;
+    }else if(e.which){
+        code = e.which;
+    }
+    if(code == 13){
+        check_gameid();
+    }
+	}
 	function check_gameid() {
         	var gameid = document.getElementById("gameidintext").value;
             $.ajax({
@@ -20,14 +32,24 @@
 					$.each(result, function(i, item){
 					if (item == "yes" ){
 						window.location.href = "logingroup.html?gameid=" + gameid;
-					}else{
-						alert("Group number does not exist!")
 					}
-        		});
+					else if (item == "locked"){
+//						alert("Deze groep is gesloten, toetreden niet mogelijk.")
+						var x = document.getElementById("errormessage1");
+						var y = document.getElementById("errormessage2");
+						x.style.display = "block";
+						y.style.display = "none";
+					}
+					else {
+//						alert("Deze groep bestaat niet.")
+						var x = document.getElementById("errormessage1");
+						var y = document.getElementById("errormessage2");
+						x.style.display = "none";
+						y.style.display = "block";
+					}
+					});
 				},
         		error: function(data) {
-					alert("foutje")
-        			alert(data)
         			}
              });
 		};
@@ -39,9 +61,12 @@
 		<div class="titleimg"><img src="klassetourwit.png"> </div>
 		
 		<div class="groupnumberform">Wat is je groepsnummer? </div>
-		<form>
-			<input type="text" id="gameidintext"><br>
-			<input type="button" value="Oké"  onclick="check_gameid()">
+		<form onSubmit="return false;">
+			<input type="text" id="gameidintext" onkeypress="checkEnter()"><br>
+			<div id="errormessage1"> Deze groep is gesloten,<br>
+				toetreden is niet meer mogelijk! </div>
+			<div id="errormessage2"> Dit groepsnummer bestaat niet!</div>
+			<input type="button" id="send" value="Oké" onclick="check_gameid()">
 		</form>
 		<div class="teacher"> <a href="teacherinfo.html"> Ik ben een leraar </a> </div>
 	</div>
