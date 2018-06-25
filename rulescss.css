@@ -4,6 +4,8 @@ body {
 	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
 	background-color: black;
 	margin: 0px;
+	height: 100%;
+	width: 100%;
 }
 .internal1{
 	width: 100%;
