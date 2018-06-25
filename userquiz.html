@@ -65,6 +65,10 @@
 			var breakdiv = document.createElement('br');
 			formdiv.appendChild(breakdiv);
 			
+			if (data[question].image){
+				alert(data[question].image);
+			}
+			
 			if (data[question].answer_type == "text"){
 				var answerdiv = document.createElement('textarea');
 				answerdiv.setAttribute("rows", "4");
