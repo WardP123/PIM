@@ -40,6 +40,8 @@
                 </div>
                 <div id="questions">
                 </div>
+                <div id="check">
+                </div>
                 <div class="modal-update" id="modal-update">
                     <div class="modal-update-content">
                         <span class="close_update" onclick="close_span_quiz()">&times;</span>
@@ -50,8 +52,8 @@
                             <input type="text" id="update-question" required><br>     
                             <p>Kies wat voor type antwoord u wil:</p> <br>
                             <input type="radio" id="update_answer_type" name="question_type" value="text"> Text
-                            <input type='radio' id="update_answer_type" name="question_type" value="file"> File <br>                       
-                            <input type="button" id="submit" value="Wijzig vraag" onclick="update_question(this.id)">
+                            <input type='radio' id="update_answer_type" name="question_type" value="file"> File <br>
+                            <input type="button" id="update-submit" value="Wijzig vraag" onclick="update_question(this.id)">
                         </form>
                     </div>
                 </div>
@@ -81,6 +83,7 @@
                         document.getElementById('update-title').value = result[0].question_title;
                         document.getElementById('update-question').value = result[0].question;
                         document.getElementById("update-title").setAttribute("class", result[0].id);
+                        document.getElementById("update-submit").id = result[0].id;
                         var modalup = document.getElementById('modal-update');
                         modalup.style.display = "block";
                     },
@@ -93,7 +96,6 @@
                 title = document.getElementById('update-title').value;
                 question = document.getElementById('update-question').value;
                 answer_type = document.getElementById('answer_type').value;
-                
 
                 if (title == "") {
                     alert("Vul een quiz titel in");
@@ -250,6 +252,7 @@
                     maindiv.appendChild(iconsdiv);
 
                     document.getElementById("questions").appendChild(maindiv);
+
                 }
                 if (data.length == 0) {
                         document.getElementById("note").innerHTML = "<p>Geen vragen beschikbaar</p>";

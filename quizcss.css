@@ -68,6 +68,10 @@ h3 {
     max-height: 100px;
 }
 
+.multiple-choice {
+    display: none;
+}
+
 #form_fields p {
     color: black;
 }
