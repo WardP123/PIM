@@ -751,6 +751,14 @@ def answer_question(db):
         db.execute("INSERT INTO answers (question_id, quiz_id, username, gameid, answer, answerimage) VALUES (?, ?, ?, ?, ?, ?)", (item['question_id'], item['quiz_id'], item['username'], item['gameid'], item['answer'], item['answerimage']))
         return json.dumps(item)
 
+@post('/quiz-title')
+def retrieve_title(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['quizid'],))
+        quiz = db.fetchall()
+        return json.dumps(quiz)
+
 # MAIN LOOP
 
 if __name__ == "__main__":

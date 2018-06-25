@@ -36,6 +36,23 @@
 		});
 	}
 	
+	function LoadQuizTitle(){
+		$.ajax({
+			url: "http://localhost:8081/quiz-title",
+			type: 'POST',
+			data: JSON.stringify({ quizid: quizappointmentid_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(data) {
+				document.getElementById("quiztitle").innerHTML = data[0].title;
+			},
+			error: function(data) {
+				alert("Vragen laden mislukt.");
+			}
+		});
+	}
+	
 	function process_questions(data){
 		var question_counter = 0;
 		for (question in data){
@@ -130,8 +147,14 @@
 	if (answerfield != null){
 		var answer_local = answerfield.value;
 	}
+	else {
+		var answer_local = null;
+	}
 	if (imagefield != null){
 		var image_local = imagefield.value;
+	}
+	else{
+		var image_local = null;
 	}
 	
 	$.ajax({
@@ -153,8 +176,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
-<body onload="LoadQuestions();">
-	<h1 class="QuizTitle">Welkom bij <span id="quiztitle">Quiz1</span></h1>
+<body onload="LoadQuestions(); LoadQuizTitle();">
+	<h1 class="QuizTitle">Welkom bij <span id="quiztitle"></span></h1>
 	<br>
 	<div id="questioncontainer">
 	</div>
