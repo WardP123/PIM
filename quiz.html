@@ -30,7 +30,7 @@
 	            } 
                 else {
                     $.ajax({
-                        url: "http://localhost:8081/new-quiz",
+                        url: "http://84.28.82.98:8081/new-quiz",
                         type: 'POST',
                         data: JSON.stringify({ gameid: '12', type: "quiz", title: window.titel,  time: tijd }),
                         contentType: "application/json; charset=utf-8",
@@ -38,7 +38,7 @@
                         async: true,
                         success: function(result) {
                             window.id = result[0].id;
-                            window.location.replace("http://localhost:5000/quiznew.html?" + window.id);
+                            window.location.replace("http://84.28.82.98:8081/quiznew.html?" + window.id);
                         },
                         error: function(data) {
                             alert(data);

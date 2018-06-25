@@ -73,7 +73,7 @@
         <script>
             function update_question_popup(id){
                 $.ajax({
-                    url: "http://localhost:8081/update-question",
+                    url: "http://84.28.82.98:8081/update-question",
                     type: 'POST',
                     data: JSON.stringify({ id: id}),
                     contentType: "application/json; charset=utf-8",
@@ -103,7 +103,7 @@
                     alert("Vul een vraag in");
                 } else {
                     $.ajax({
-                            url: "http://localhost:8081/update-quiz",
+                            url: "http://84.28.82.98:8081/update-quiz",
                             type: 'POST',
                             data: JSON.stringify({ id: id, question_title: title, question: question, answer_type: answer_type }),
                             contentType: "application/json; charset=utf-8",
@@ -132,7 +132,7 @@
                     alert("Vul een vraag in");
                 } else {
                     $.ajax({
-                        url: "http://localhost:8081/add-question",
+                        url: "http://84.28.82.98:8081/add-question",
                         type: 'POST',
                         data: JSON.stringify({ quizid: window.id,  question_title: quiz_question_title, question: quiz_question, image: quiz_image, answer_type: quiz_answer_type}),
                         contentType: "application/json; charset=utf-8",
@@ -183,7 +183,7 @@
             function delete_question(id) {
                 var questionid = id;
                 $.ajax({
-                    url: "http://localhost:8081/delete-question",
+                    url: "http://84.28.82.98:8081/delete-question",
                     type: 'POST',
                     data: JSON.stringify({ id: questionid}),
                     contentType: "application/json; charset=utf-8",
@@ -209,13 +209,13 @@
 
             function updateQuestions() {
                 window.id = getQueryVariable("id");
-                $.get("http://localhost:8081/retrieve-question-title/id=" + window.id, function(data) {
+                $.get("http://84.28.82.98:8081/retrieve-question-title/id=" + window.id, function(data) {
                     process_titles(data);
                 })
             }
 
             function updateTitle() {
-                $.get("http://localhost:8081/retrieve-quiz-title/id=" + window.id, function(data) {
+                $.get("http://84.28.82.98:8081/retrieve-quiz-title/id=" + window.id, function(data) {
                     updateData(data);
                 })
             }
@@ -262,7 +262,7 @@
             $(document).ready(function(){
                 windowid = getQueryVariable("id");
                 if (windowid == "") {
-                    window.location.replace("http://localhost:5000/quiz.html");
+                    window.location.replace("http://84.28.82.98:8081/quiz.html");
                 }
                 updateQuestions();
                 updateTitle();

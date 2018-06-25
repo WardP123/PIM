@@ -21,7 +21,7 @@
 	
 	function LoadQuestions(){
 		$.ajax({
-			url: "http://localhost:8081/retrieve-questions",
+			url: "http://84.28.82.98:8081/retrieve-questions",
 			type: 'POST',
 			data: JSON.stringify({ quizid: quizappointmentid_local }),
 			contentType: "application/json; charset=utf-8",
@@ -38,7 +38,7 @@
 	
 	function LoadQuizTitle(){
 		$.ajax({
-			url: "http://localhost:8081/quiz-title",
+			url: "http://84.28.82.98:8081/quiz-title",
 			type: 'POST',
 			data: JSON.stringify({ quizid: quizappointmentid_local }),
 			contentType: "application/json; charset=utf-8",
@@ -158,7 +158,7 @@
 	}
 	
 	$.ajax({
-			url: "http://localhost:8081/answer-question",
+			url: "http://84.28.82.98:8081/answer-question",
 			type: 'POST',
 			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local, answerimage: image_local }),
 			contentType: "application/json; charset=utf-8",
