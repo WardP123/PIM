@@ -32,7 +32,7 @@
                     $.ajax({
                         url: "http://84.28.82.98:8081/new-quiz",
                         type: 'POST',
-                        data: JSON.stringify({ gameid: '12', type: "quiz", title: window.titel,  time: tijd }),
+                        data: JSON.stringify({ gameid: window.id, type: "quiz", title: window.titel,  time: tijd }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,
@@ -45,6 +45,20 @@
                         }
                     });
 	            }
+            }
+
+             $(document).ready(function(){
+                window.id = getQueryVariable("id");
+                if (windowid == "") {
+                    window.location.replace("http://84.28.82.98:8081/desktop.html");
+                }
+            })
+
+
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var pair = query.split("=");
+                return pair[0];
             }
         </script>
     </body>
