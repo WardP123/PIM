@@ -748,7 +748,7 @@ def retrieve_questions(db):
 def answer_question(db):
     item = request.json
     if item is not None:
-        db.execute("INSERT INTO answers (question_id, quiz_id, username, gameid, answer) VALUES (?, ?, ?, ?, ?)", (item['question_id'], item['quiz_id'], item['username'], item['gameid'], item['answer']))
+        db.execute("INSERT INTO answers (question_id, quiz_id, username, gameid, answer, answerimage) VALUES (?, ?, ?, ?, ?, ?)", (item['question_id'], item['quiz_id'], item['username'], item['gameid'], item['answer'], item['answerimage']))
         return json.dumps(item)
 
 # MAIN LOOP

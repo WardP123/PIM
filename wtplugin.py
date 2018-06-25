@@ -181,7 +181,8 @@ class WtDbPlugin(object):
                     quiz_id INTEGER NOT NULL,
                     username CHAR(300) NOT NULL,
                     gameid INTEGER NOT NULL,
-                    answer CHAR(300) NOT NULL)
+                    answer CHAR(300),
+                    answerimage BLOB)
             """);
             db.commit()
 

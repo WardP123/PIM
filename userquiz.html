@@ -73,7 +73,7 @@
 				var answerdiv = document.createElement('textarea');
 				answerdiv.setAttribute("rows", "4");
 				answerdiv.setAttribute("cols", "50");
-				answerdiv.setAttribute("id", "inputfield" +data[question].id);
+				answerdiv.setAttribute("id", "imageinput" +data[question].id);
 				answerdiv.setAttribute("class", "input");
 				formdiv.appendChild(answerdiv);
 			}
@@ -125,12 +125,19 @@
 	var quiz_id_local = quizappointmentid_local;
 	var username_local = "Test User";
 	var gameid_local = 12;
-	var answer_local = document.getElementById("inputfield" +id).value;
+	var answerfield = document.getElementById("inputfield" +id);
+	var imagefield = document.getElementById("imageinput" +id);
+	if (answerfield != null){
+		var answer_local = answerfield.value;
+	}
+	if (imagefield != null){
+		var image_local = imagefield.value;
+	}
 	
 	$.ajax({
 			url: "http://localhost:8081/answer-question",
 			type: 'POST',
-			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local }),
+			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local, answerimage: image_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
