@@ -736,6 +736,20 @@ def change_brand(db, id, newimage):
 # def error500(error):
 #     return "Something went wrong on our server, our apologies for your discomfort :( \n Error code: 500"
 
+@post('/retrieve-questions')
+def retrieve_questions(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM quizzes WHERE quizid=?", (item['quizid'],))
+        quiz = db.fetchall()
+        return json.dumps(quiz)
+
+@post('/answer-question')
+def answer_question(db):
+    item = request.json
+    if item is not None:
+        db.execute("INSERT INTO answers (question_id, quiz_id, username, gameid, answer) VALUES (?, ?, ?, ?, ?)", (item['question_id'], item['quiz_id'], item['username'], item['gameid'], item['answer']))
+        return json.dumps(item)
 
 # MAIN LOOP
 
