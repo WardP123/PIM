@@ -43,7 +43,7 @@ def make_new_game(db):
            db.execute("SELECT * FROM games WHERE gameid=?", (gamecode_str,))
            if not db.fetchall():
                break
-       db.execute("INSERT INTO games (gameid, groupname, lockstatus) VALUES (?, ?, ?)", (gamecode_str, item['groupname'], "unlocked"))
+       db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (gamecode_str, item['groupname']))
        db.execute("INSERT INTO admins (gameid, groupname, adminpass) VALUES (?, ?, ?)", (gamecode_str, item['groupname'], item['adminpass']))
    data = {}
    data['gameid'] = gamecode_str
@@ -52,7 +52,7 @@ def make_new_game(db):
 
 @get('/make-test-group/groupid=<groupid>&groupname=<groupname>')
 def make_test_group(db, groupid, groupname):
-    db.execute("INSERT INTO games (gameid, groupname, lockstatus) VALUES (?, ?, ?)", (groupid, groupname, "unlocked"))
+    db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (groupid, groupname))
 
 @get('/all-gamecodes')
 def get_all_gamecodes(db):
@@ -77,29 +77,21 @@ def get_announcement_by_gameid(db, gameid):
 def new_announcement(db):
 	if request.json is not None:
 		item = request.json
-        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
-        currentadmin = db.fetchall()
-        if not currentadmin:
-            return 'error no login'
 		db.execute("SELECT * FROM users WHERE gameid=?", (item['gameid'],))
 		all_users = db.fetchall()
 		for user in all_users:
 			new_unreadmessages =  (user['unreadannouncements'] + 1)
 			db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
-		db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription, date) VALUES (?, ?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription'], item['date'],))
+		db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (item['gameid'], item['announcementtitle'], item['announcementdescription']))
 		return(item['gameid'])
 
 @post('/new-appointment')
 def new_appointment(db):
 	if request.json is not None:
 		item = request.json
-        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
-        currentadmin = db.fetchall()
-        if not currentadmin:
-            return 'error no login'
 		db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (item['gameid'], "appointment", item['title'], item['description'], item['time']))
 		return json.dumps(item['gameid'])
-
+		
 ## acutually delete
 @get('/DELETE-ALL')
 def delete_all_games(db):
@@ -109,14 +101,18 @@ def delete_all_games(db):
 def new_quiz(db):
     if request.json is not None:
         item = request.json
-        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
-        currentadmin = db.fetchall()
-        if not currentadmin:
-            return 'error no login'
         db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (item['gameid'], "quiz" , item['title'],  item['time']))
         db.execute("SELECT id FROM appointments WHERE gameid=? AND title=?", (item['gameid'], item['title']))
         title = db.fetchall()
         return json.dumps(title)
+
+@post('/update-question')
+def update_question(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("SELECT * FROM quizzes WHERE id=?", (item['id'],))
+        question = db.fetchall()
+        return json.dumps(question)
 
 @post('/update-quiz')
 def update_quiz(db):
@@ -124,8 +120,7 @@ def update_quiz(db):
         item = request.json
         db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id']))
         db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id']))
-        db.execute("UPDATE quizzes SET image=? WHERE id=?", (item['image'], item['id']))
-        return json.dumps(item)
+        return json.dumps(item['id'])
 
 @post('/add-question')
 def add_question(db):
@@ -136,18 +131,26 @@ def add_question(db):
         question = db.fetchall()
         return json.dumps(question)
 
-@get('/retrieve-question-title/id=<id>')
-def retrieve_question_title(db, id):
-    db.execute("SELECT * FROM quizzes")
+@get('/retrieve-question-title/id=<quesid>')
+def retrieve_question_title(db, quesid):
+    questionid = quesid
+    db.execute("SELECT * FROM quizzes WHERE id=?", (int(questionid),))
+    titles = db.fetchall()
+    return json.dumps(titles)
+
+@get('/retrieve-quiz-title/id=<gameid>')
+def retrieve_quiz_title(db, gameid):
+    temp = gameid
+    db.execute("SELECT * FROM appointments WHERE id=?", (int(temp),))
     titles = db.fetchall()
     return json.dumps(titles)
 
 @post('delete-quizzes')
-def delete_quizzes():
+def delete_quizzes(db):
     db.execute("DELETE * from quizzes")
 
-@post('delete-question')
-def delete_question():
+@post('/delete-question')
+def delete_question(db):
     if request.json is not None:
         item = request.json
         db.execute("DELETE FROM quizzes WHERE id=?", (item['id'],))
@@ -240,17 +243,9 @@ def check_name(db):
             return_string = {"exists": "no"}
             print(return_string)
             return json.dumps(return_string)
-        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
-        games = db.fetchall()
-        game = games[0]
-        if game['lockstatus'] == "unlocked":
-            return_string = {"exists": "yes"}
-            print(return_string)
-            return json.dumps(return_string)
-        else:
-            return_string = {"exists": "locked"}
-            print(return_string)
-            return json.dumps(return_string)
+        return_string = {"exists": "yes"}
+        print(return_string)
+        return json.dumps(return_string)
     return "ERRORORORRrx"
 
 @post('/check_username')
@@ -326,7 +321,7 @@ def delete_user(db):
     if item is not None:
         db.execute("DELETE FROM users WHERE gameid=? AND username=?", (item['gameid'], item['username']))
 	return json.dumps(item)
-
+		
 @get('/all-appointments')
 def get_all_appointments(db):
 	db.execute("SELECT * FROM appointments")
@@ -397,7 +392,6 @@ def update_announcement(db):
     if item is not None:
         db.execute("UPDATE announcements SET announcementtitle=? WHERE id=?", (item['title'], item['id'],))
         db.execute("UPDATE announcements SET announcementdecription=? WHERE id=?", (item['description'], item['id'],))
-        db.execute("UPDATE announcements SET date=? WHERE id=?", (item['date'], item['id'],))
         return json.dumps(item)
 
 @post('/update-appointment')
@@ -409,22 +403,6 @@ def update_appointment(db):
         db.execute("UPDATE appointments SET times=? WHERE id=?", (item['time'], item['id'],))
         return json.dumps(item)
 
-@post('/lock-group')
-def lock_group(db):
-    item = request.json
-    if item is not None:
-        db.execute("UPDATE games SET lockstatus=? WHERE gameid=?", (item['lockstatus'], item['gameid'],))
-        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
-        game = db.fetchall()
-        return json.dumps(game)
-
-@post('/check-lock')
-def check_lock(db):
-    item = request.json
-    if item is not None:
-        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
-        game = db.fetchall()
-        return json.dumps(game)
 
 # ERRORS
 
