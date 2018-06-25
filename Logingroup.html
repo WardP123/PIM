@@ -96,7 +96,8 @@
                 success: function(result) {
 					if (result.gamenumber_exists == "no" ){
 						alert("Dit groepsnummer bestaat niet meer.");
-						
+					}else if (result.lockstatus == "locked" ) {
+						alert("Deze groep is vergrendeld")	
 					}else{
 						if (result.username_exists == "no"){
 							showPasswordnew();
@@ -131,7 +132,8 @@
                 success: function(result) {
 					if (result.gamenumber_exists == "no" ){
 						alert("Dit groepsnummer bestaat niet meer.");
-						
+					}else if (result.lockstatus == "locked" ) {
+						alert("Deze groep is vergrendeld")	
 					}else{
 						if (result.username_exists == "no"){
 							alert("Deze gebruikersnaam bestaat niet.");
