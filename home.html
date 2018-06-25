@@ -65,10 +65,12 @@
 						list += '</a>';
 					};
 					if (item.type == "quiz"){
+						list += '<a href="userquiz.html?quizid=?' + item.id + '">';
 						list += '<div class="quiz">';
 						list += '<div class="time">' + item.times + '</div>';
 						list += '<div class="title">' + item.title + '</div>';
 						list += '</div>';
+						list += '</a>';
 					};
 				});
 			$(".allevents").append(list);

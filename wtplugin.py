@@ -171,6 +171,20 @@ class WtDbPlugin(object):
                     answer_type CHAR(300) NOT NULL)
             """);
             db.commit()
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='answers'")
+        result = c.fetchone()
+        if not result or u'answers' not in result:
+            c.executescript("""
+            CREATE TABLE IF NOT EXISTS answers
+                    (id INTEGER PRIMARY KEY,
+                    question_id INTEGER NOT NULL,
+                    quiz_id INTEGER NOT NULL,
+                    username CHAR(300) NOT NULL,
+                    gameid INTEGER NOT NULL,
+                    answer CHAR(300),
+                    answerimage BLOB)
+            """);
+            db.commit()
 
     def apply(self, callback, context):
         '''Inject a database connection in routes

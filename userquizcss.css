@@ -45,7 +45,7 @@ body {
 }
 
 .openedquestion {
-	height: 150px;
+	height: 220px;
 	max-height: 10%;
     background: -webkit-linear-gradient(to right, #4abdac, #4abddd);
     background: -o-linear-gradient(to right, #4abdac, #4abddd);
@@ -67,4 +67,9 @@ body {
 .openedquestion .description {
 	color: white;
 	font-size: 20px;
+}
+
+.invisible {
+    display: none;
+    visibility: hidden;
 }
