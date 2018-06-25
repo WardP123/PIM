@@ -118,8 +118,8 @@ def update_question(db):
 def update_quiz(db):
     if request.json is not None:
         item = request.json
-        db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id']))
-        db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id']))
+        db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id'],))
+        db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id'],))
         return json.dumps(item['id'])
 
 @post('/add-question')
@@ -134,7 +134,7 @@ def add_question(db):
 @get('/retrieve-question-title/id=<quesid>')
 def retrieve_question_title(db, quesid):
     questionid = quesid
-    db.execute("SELECT * FROM quizzes WHERE id=?", (int(questionid),))
+    db.execute("SELECT * FROM quizzes WHERE quizid=?", (int(questionid),))
     titles = db.fetchall()
     return json.dumps(titles)
 

@@ -19,7 +19,6 @@
     <body>
         <div id="content">
         <div class="titleimg"><img src="klassetourwit.png"> </div>
-        
         <div id="hide" class="show">
             <h1 id="quiz_title"></h1>
             <h3 id="quiz_time"></h3>
@@ -49,7 +48,6 @@
                     <div class="modal-update-content">
                         <span class="close_update" onclick="close_span_quiz()">&times;</span>
                         <form>
-                            <span class="close">&times;</span><br>
                             <label for="title">Vraag titel:</label><br>
                             <input type="text" id="update-title" required><br>
                             <label for="question">Vraag:</label><br>
@@ -104,7 +102,7 @@
                         async: true,
                         success: function(result) {
                             alert("Vraag gewijzigd");
-                            location.reload();                        
+                            location.reload();                    
                         }, 
                         error: function(data) {
                             alert(data);
@@ -126,15 +124,13 @@
                     $.ajax({
                         url: "http://localhost:8081/add-question",
                         type: 'POST',
-                        data: JSON.stringify({ quizid: '12',  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
+                        data: JSON.stringify({ quizid: window.id,  question_title: quiz_question_title, question: quiz_question, image: quiz_image }),
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         async: true,
                         success: function(result) {
-                            alert("Vraag toegevoegd");
-                            document.getElementById("note").innerHTML = "";
-                            document.getElementById("modal").style.display = "none";
-                            updateQuestions();                        
+                            alert("Vraag toegevoegd");                     
+                            location.reload();
                         }, 
                         error: function(data) {
                             alert(data);
@@ -187,8 +183,6 @@
                     success: function(result) {
                         alert('Vraag verwijderd.');
                         location.reload();
-                        close_span_quiz();
-                        updateQuestions();
                     },
                     error: function(data) {
                         alert('Vraag verwijderen mislukt.')
@@ -196,12 +190,12 @@
                 });		
             }
 
-            function updateData(data) { 
+            function updateData(data) {
+                data = JSON.parse(data);
                 title = data[0].title;
-                alert(title);
-                time = data[0].time;
+                times = data[0].times;
                 document.getElementById('quiz_title').innerHTML = title;
-                document.getElementById('quiz_time').innerHTML = time;
+                document.getElementById('quiz_time').innerHTML = times;
             }
 
             function updateQuestions() {
@@ -229,14 +223,16 @@
                     iconsdiv.setAttribute("class", "iconsan");
                     
                     var deleteimage = document.createElement("img");
-                    deleteimage.setAttribute("src", "delete.png");
+                    deleteimage.setAttribute("src", "deleteblack.png");
+                    deleteimage.setAttribute("class", "delete-image");
                     deleteimage.setAttribute("id", data[i].id);
                     deleteimage.setAttribute("onclick", "delete_question_popup(this.id)");
                     deleteimage.setAttribute("onmouseover", "");
                     deleteimage.setAttribute("style", "cursor: pointer;");
                     
                     var editimage = document.createElement("img");
-                    editimage.setAttribute("src", "edit.png");
+                    editimage.setAttribute("src", "editblack.png");
+                    editimage.setAttribute("class", "edit-image");
                     editimage.setAttribute("id", data[i].id);
                     editimage.setAttribute("onclick", "update_question_popup(this.id)");
                     editimage.setAttribute("onmouseover", "");
@@ -248,11 +244,14 @@
 
                     document.getElementById("questions").appendChild(maindiv);
                 }
+                if (data.length == 0) {
+                        document.getElementById("note").innerHTML = "<p>Geen vragen beschikbaar</p>";
+                    }
             }
 
             $(document).ready(function(){
-               updateQuestions();
-               updateTitle();
+                updateQuestions();
+                updateTitle();
             })
 
             function delete_question_popup(id) {
