@@ -11,8 +11,8 @@
 	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
 	  if (match) return match[2];
 	}
-//		var authkey_local = getCookie("accountadmin");
-		var authkey_local = "173224453209867194815934272294398947581"
+		var authkey_local = getCookie("accountadmin");
+//		var authkey_local = "173224453209867194815934272294398947581"
 		$( document ).ready(function() {
 			if (authkey_local) {
 		$.ajax({
@@ -143,7 +143,7 @@
 			$('.delete').css({'opacity': '0'});
 		}
 		function logoff(){
-			document.cookie = "accountadmin"+'=; Max-Age=-99999999;';
+			document.cookie = "account"+'=; Max-Age=-99999999;';
 		}
 	</script>
 </head>
