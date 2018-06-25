@@ -25,9 +25,7 @@
 			async: true,
 			success: function(result) {
 				var list = '';
-				result.sort(function (a, b) {
-					return new Date('1970/01/01 ' + a.date) - new Date('1970/01/01 ' + b.date);
-				})
+				result.reverse();
 				$.each(result, function(i, item){
 					list += '<div class="announcement">';
 					list += '<div class="time">' + item.date + '</div>';
