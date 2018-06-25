@@ -435,7 +435,9 @@ function delete_user(){
 		dataType: "json",
         async: true,
         success: function(result) {
-			alert('Groepslid ' + result.username + ' uit gameid ' + result.gameid + ' verwijderd.')
+			alert('Groepslid ' + result.username + ' uit gameid ' + result.gameid + ' verwijderd.');
+			close_span_user();
+			location.reload();
 		},
         error: function(data) {
 			alert('Groepslid verwijderen mislukt.')
