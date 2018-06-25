@@ -64,13 +64,22 @@
 		
 			var breakdiv = document.createElement('br');
 			formdiv.appendChild(breakdiv);
-		
-			var answerdiv = document.createElement('textarea');
-			answerdiv.setAttribute("rows", "4");
-			answerdiv.setAttribute("cols", "50");
-			answerdiv.setAttribute("id", "inputfield" +data[question].id);
-			answerdiv.setAttribute("class", "input");
-			formdiv.appendChild(answerdiv);
+			
+			if (data[question].answer_type == "text"){
+				var answerdiv = document.createElement('textarea');
+				answerdiv.setAttribute("rows", "4");
+				answerdiv.setAttribute("cols", "50");
+				answerdiv.setAttribute("id", "inputfield" +data[question].id);
+				answerdiv.setAttribute("class", "input");
+				formdiv.appendChild(answerdiv);
+			}
+			else{
+				var answerdiv = document.createElement('input');
+				answerdiv.setAttribute("type", "file");
+				answerdiv.setAttribute("accept", "image/*");
+				answerdiv.setAttribute("id", "inputfield" +data[question].id);
+				formdiv.appendChild(answerdiv);
+			}
 		
 			var breakdiv2 = document.createElement('br');
 			formdiv.appendChild(breakdiv2);
@@ -110,8 +119,8 @@
 	function process_answer(id){
 	var question_id_local = id;
 	var quiz_id_local = quizappointmentid_local;
-	var username_local = ?;
-	var gameid_local = ?;
+	var username_local = "Test User";
+	var gameid_local = 12;
 	var answer_local = document.getElementById("inputfield" +id).value;
 	
 	$.ajax({
