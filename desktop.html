@@ -747,7 +747,12 @@ function ProcessAppointments(data){
 		var editimage = document.createElement("img");
 		editimage.setAttribute("src", "edit.png");
 		editimage.setAttribute("id", data[appointment].id);
-		editimage.setAttribute("onclick", "update_appointment_popup(this.id)");
+		if (data[appointment].type == "appointment"){
+			editimage.setAttribute("onclick", "update_appointment_popup(this.id)");
+		}
+		else{	
+			editimage.setAttribute("onlick", "update_quiz(this.id)");
+		}
 		editimage.setAttribute("onmouseover", "");
 		editimage.setAttribute("style", "cursor: pointer;");
 		
@@ -759,6 +764,10 @@ function ProcessAppointments(data){
 		maindiv.appendChild(iconsdiv);
 		document.getElementById("eventscontainer").appendChild(maindiv);
 	}
+}
+
+function update_quiz(id){
+	window.location.reload("http://localhost:5000/quiznew.html?" +id);
 }
 
 function update_announcement_popup(parentdiv){
