@@ -117,9 +117,61 @@ def new_appointment(db):
     db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (appointment['gameid'], "appointment", appointment['title'], appointment['description'], appointment['times']))
 
 @post('/new-quiz')
-def new_appointment(db):
-    appointment = request.json
-    db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (appointment['gameid'], "quiz", appointment['title'], appointment['times']))
+def new_quiz(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (item['gameid'], "quiz" , item['title'],  item['time']))
+        db.execute("SELECT id FROM appointments WHERE gameid=? AND title=?", (item['gameid'], item['title']))
+        title = db.fetchall()
+        return json.dumps(title)
+
+@post('/update-question')
+def update_question(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("SELECT * FROM quizzes WHERE id=?", (item['id'],))
+        question = db.fetchall()
+        return json.dumps(question)
+
+@post('/update-quiz')
+def update_quiz(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("UPDATE quizzes SET question_title=? WHERE id=?", (item['question_title'], item['id']))
+        db.execute("UPDATE quizzes SET question=? WHERE id=?", (item['question'], item['id']))
+        db.execute("UPDATE quizzes SET answer_type=? WHERE id=?", (item['answer_type'], item['id']))
+        return json.dumps(item)
+
+@post('/add-question')
+def add_question(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("INSERT INTO quizzes (quizid, question_title, question, image, answer_type) VALUES (?, ?, ?, ?, ?)", (item['quizid'], item['question_title'], item['question'], item['image'], item['answer_type'],))
+        db.execute("SELECT id FROM quizzes WHERE quizid=? AND question_title=?", (item['quizid'], item['question_title'],))
+        question = db.fetchall()
+        return json.dumps(question)
+
+
+@get('/retrieve-question-title/id=<quesid>')
+def retrieve_question_title(db, quesid):
+    questionid = quesid
+    db.execute("SELECT * FROM quizzes WHERE quizid=?", (int(questionid),))
+    titles = db.fetchall()
+    return json.dumps(titles)
+
+@get('/retrieve-quiz-title/id=<gameid>')
+def retrieve_quiz_title(db, gameid):
+    temp = gameid
+    db.execute("SELECT * FROM appointments WHERE id=?", (int(temp),))
+    titles = db.fetchall()
+    return json.dumps(titles)
+
+@post('/delete-question')
+def delete_question(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("DELETE FROM quizzes WHERE id=?", (item['id'],))
+        return json.dumps(item)
 
 @get('/getuserdata/authkey=<key>')
 def getuserinfo(db, key):
@@ -274,17 +326,6 @@ def new_appointment(db):
             return 'error no login'
     	db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (item['gameid'], "appointment", item['title'], item['description'], item['time']))
     	return json.dumps(item['gameid'])
-
-@post('/new-quiz')
-def new_quiz(db):
-    if request.json is not None:
-        item = request.json
-        db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
-        currentadmin = db.fetchall()
-        if not currentadmin:
-            return 'error no login'
-        db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (item['gameid'], "quiz" , item['title'],  item['time']))
-        return json.dumps(item['gameid'])
 
 @post('/delete-user')
 def delete_user(db):
