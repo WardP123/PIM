@@ -285,8 +285,6 @@ window.onclick = function(event) {
     }
 }
 
-var modalquiz = document.getElementById('newquizmodal');
-
 // Get the button that opens the modal
 var btnquiz = document.getElementById("newquiz");
 
@@ -295,7 +293,7 @@ var spanquiz = document.getElementsByClassName("closequiz")[0];
 
 // When the user clicks the button, open the modal 
 btnquiz.onclick = function() {
-    modalquiz.style.display = "block";
+    window.location.reload("http://localhost:5000/newquiz.html");
 }
 
 // When the user clicks on <span> (x), close the modal
