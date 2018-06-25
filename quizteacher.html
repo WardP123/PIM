@@ -2,18 +2,99 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Naamloos document</title>
+<title>Quiz nakijken</title>
 <link href="quizteacher.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+	window.getCookie = function(name) {
+		var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+		if (match) return match[2];
+	}
+	
+	function getQueryVariable(variable){
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+		   var pair = vars[i].split("=");
+		   if(pair[0] == variable){return pair[1];}
+		}
+		return("NO VALID LINK");
+	}
+
+	var authkey_local = getCookie("accountadmin");
+//	var authkey_local = "173224453209867194815934272294398947581"
+	var quizid_local = getQueryVariable("id");
+	var gameid_local = ?;
+	
+	function LoadUsers(){
+	    $.ajax({
+			url: "http://84.28.82.98:8081/retrieve-users",
+			type: 'POST',
+			data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local}),
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				ProcessUsers(data);
+			},
+			error: function() {
+				alert('Groepsleden kunnen niet geladen worden door een servererror.');
+			},
+		});
+	}
+	
+	function ProcessUsers(data){
+		for (user in data){
+			var maintr  = document.createElement("tr");
+			maintr.setAttribute("id", data[user].id);
+			
+			var nametd = document.createElement("td");
+			nametd.innerHTML = data[user].username;
+			maintr.appendChild(nametd);
+			
+			var goodtd = document.createElement("td");
+			goodtd.innerHTML = data[user].correctanswers;
+			maintr.appendChild(goodtd);
+			
+			var wrongtd = document.createElement("td");
+			wrongtd.innerHTML = data[user].wronganswers;
+			maintr.appendChild(wrongtd);
+			
+			var totaltd = document.createElement("td");
+			totaltd.innerHTML = data[user].correctanswers + data[user].wronganswers;
+			maintr.appendChild(totaltd);
+			
+			document.getElementById("usertable").appendChild(maintr);
+		}
+	}
+	
+	function LoadQuestions(){
+		$.ajax({
+			url: "http://84.28.82.98:8081/retrieve-questions",
+			type: 'POST',
+			data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local}),
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				ProcessUsers(data);
+			},
+			error: function() {
+				alert('Groepsleden kunnen niet geladen worden door een servererror.');
+			},
+		});
+	}
+</script>
 </head>
 
-<body>
+<body onload="LoadUsers(); LoadQuestions();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
 	<div class="container"> 
 		<div class="useroverview">
 			<div class="title"> Gebruikers </div>
-		<table>
+		<table id="usertable">
 			<tr>
 				<th> Gebruiker </th>
 				<th> Goede Vragen </th>
@@ -26,43 +107,7 @@
 				<td> 2 </td>
 				<td> 4 </td>
 			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
-			</table>
+		</table>
 		</div>
 		<div class="questionsanswers">
 			<div class="completequestion">
