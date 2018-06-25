@@ -173,6 +173,13 @@ def delete_question(db):
         db.execute("DELETE FROM quizzes WHERE id=?", (item['id'],))
         return json.dumps(item)
 
+@post('delete-quiz')
+def delete_quiz(db):
+    if request.json is not None:
+        item = request.json
+        db.execute("DELETE FROM appointments WHERE id=?", (item['id'],))
+        return json.dumps(item)
+
 @get('/getuserdata/authkey=<key>')
 def getuserinfo(db, key):
     # authentication = request.get_cookie("account",)
