@@ -134,7 +134,7 @@ def add_question(db):
 @get('/retrieve-question-title/id=<quesid>')
 def retrieve_question_title(db, quesid):
     questionid = quesid
-    db.execute("SELECT * FROM quizzes WHERE id=?", (int(questionid),))
+    db.execute("SELECT * FROM quizzes WHERE quizid=?", (int(questionid),))
     titles = db.fetchall()
     return json.dumps(titles)
 
