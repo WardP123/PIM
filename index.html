@@ -3,51 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Naamloos document</title>
-<link href="loginnewcss.css" rel="stylesheet" type="text/css">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-	function check_gameid() {
-        	var gameid = document.getElementById("gameidintext").value;
-            $.ajax({
-                url: "http://84.28.82.98:8081/check_gameid",
-                type: 'POST',
-				data: JSON.stringify({ gameid: gameid}),
-				contentType: "application/json; charset=utf-8",
-				dataType: "json",
-                async: true,
-                success: function(result) {
-					$.each(result, function(i, item){
-					if (item == "yes" ){
-						window.location.href = "logingroup.html?gameid=" + gameid;
-					}
-					else if (item == "locked"){
-						alert("Deze groep is gesloten, toetreden niet mogelijk.")
-					}
-					else {
-						alert("Deze groep bestaat niet.")
-					}
-        		});
-				},
-        		error: function(data) {
-					alert("foutje")
-        			alert(data)
-        			}
-             });
-		};
-</script>
+<meta http-equiv="refresh" content="0; url=loginnew.html" />
 </head>
-
 <body>
-	<div class="center">
-		<div class="titleimg"><img src="klassetourwit.png"> </div>
-		
-		<div class="groupnumberform">Wat is je groepsnummer? </div>
-		<form>
-			<input type="text" id="gameidintext"><br>
-			<input type="button" value="Oké"  onclick="check_gameid()">
-		</form>
-		<a href="teacherinfo.html"> <div class="teacher"> Ik ben een leraar </div></a>
-	</div>
 </body>
 </html>

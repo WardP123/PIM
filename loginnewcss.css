@@ -67,7 +67,7 @@ input[type=button] {
 	-webkit-transition: background-color 0.25s; /* Safari */
     transition: background-color 0.25s;
 }
-input[value=Ok]:hover {
+input[id=send]:hover {
 	background-color: #0f7780;
 
 }
@@ -96,4 +96,16 @@ input[value=Ok]:hover {
 
 .groupname {
 	font-weight: 1000;
+}
+
+#errormessage1 {
+	display: none;
+	color: red;
+	text-align: center;
+}
+
+#errormessage2 {
+	color: red;
+	text-align: center;
+	display: none;
 }
