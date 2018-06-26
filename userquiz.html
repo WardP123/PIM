@@ -112,9 +112,17 @@
 			submitbutton.setAttribute("onclick", "process_answer(this.id)");
 			formdiv.appendChild(submitbutton);
 			
+			var arrowup = document.createElement('img');
+			arrowup.setAttribute("src", "arrow_up.png");
+			arrowup.setAttribute("class", "invisible");
+			arrowup.setAttribute("id", "arrow" +data[question].id);
+			arrowup.setAttribute("onclick", "close_question(this.parentElement.id)");
+			arrowup.setAttribute("onmouseover", "");
+			
 			titlediv.appendChild(namespan);
 			maindiv.appendChild(titlediv);
 			maindiv.appendChild(formdiv);
+			maindiv.appendChild(arrowup);
 			document.getElementById("questioncontainer").appendChild(maindiv);
 		}
 	}
@@ -122,10 +130,12 @@
 	function expand_question(id){
 		var div = document.getElementById(id);
 		div.setAttribute("class", "openedquestion");
-		div.setAttribute("onclick", "close_question(this.id)");
+		div.setAttribute("onclick", "");
 		
 		var formdiv = document.getElementById("formdiv" +id);
 		formdiv.setAttribute("class", "visible");
+		var arrowdiv = document.getElementById("arrow" +id);
+		arrowdiv.setAttribute("class", "arrow");
 	}
 	
 	function close_question(id){

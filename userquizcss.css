@@ -73,3 +73,11 @@ body {
     display: none;
     visibility: hidden;
 }
+
+.arrow {
+	cursor: pointer;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}

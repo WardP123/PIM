@@ -28,8 +28,8 @@
                             <input type="file" id="image" accept="image/*" onchange="preview_image(event)">
                             <img id="output_image"/> <br> <br>
                             <p>Kies wat voor type antwoord u wil:</p> <br>
-                            <input type="radio" id="answer_type" name="question_type" value="text"> Text
-                            <input type='radio' id="answer_type" name="question_type" value="file"> File <br>
+                            <input type="radio" id="text_answer_type" name="question_type" value="text"> Text
+                            <input type='radio' id="file_answer_type" name="question_type" value="file"> File <br>
                             <input type="button" id="submit" value="Voeg vraag toe" onclick="submitquestion()">
                         </form>
                     </div>
@@ -51,8 +51,8 @@
                             <label for="question">Vraag:</label><br>
                             <input type="text" id="update-question" required><br>     
                             <p>Kies wat voor type antwoord u wil:</p> <br>
-                            <input type="radio" id="update_answer_type" name="question_type" value="text"> Text
-                            <input type='radio' id="update_answer_type" name="question_type" value="file"> File <br>
+                            <input type="radio" id="text_answer_type" name="question_type" value="text"> Text
+                            <input type='radio' id="file_answer_type" name="question_type" value="file"> File <br>
                             <input type="button" id="update-submit" value="Wijzig vraag" onclick="update_question(this.id)">
                         </form>
                     </div>
@@ -95,7 +95,13 @@
             function update_question(id) {
                 title = document.getElementById('update-title').value;
                 question = document.getElementById('update-question').value;
-                answer_type = document.getElementById('answer_type').value;
+                var radios = document.getElementsByName('question_type');
+
+                if (radios[1].checked) {
+                    quiz_answer_type = document.getElementById('file_answer_type').value;
+                } else {
+                    quiz_answer_type = document.getElementById('text_answer_type').value;
+                }
 
                 if (title == "") {
                     alert("Vul een quiz titel in");
@@ -105,7 +111,7 @@
                     $.ajax({
                             url: "http://84.28.82.98:8081/update-quiz",
                             type: 'POST',
-                            data: JSON.stringify({ id: id, question_title: title, question: question, answer_type: answer_type }),
+                            data: JSON.stringify({ id: id, question_title: title, question: question, answer_type: quiz_answer_type }),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             async: true,
@@ -124,7 +130,13 @@
                 quiz_question_title = document.getElementById('title').value;
                 quiz_question = document.getElementById('question').value;
                 quiz_image = document.getElementById('image').value;
-                quiz_answer_type = document.getElementById('answer_type').value;
+                var radios = document.getElementsByName('question_type');
+
+                if (radios[1].checked) {
+                    quiz_answer_type = document.getElementById('file_answer_type').value;
+                } else {
+                    quiz_answer_type = document.getElementById('text_answer_type').value;
+                }
                 
                 if (quiz_question_title == "") {
                     alert("Vul een quiz titel in");
@@ -215,6 +227,7 @@
             }
 
             function updateTitle() {
+                alert(window.id);
                 $.get("http://84.28.82.98:8081/retrieve-quiz-title/id=" + window.id, function(data) {
                     updateData(data);
                 })
@@ -260,8 +273,8 @@
             }
 
             $(document).ready(function(){
-                windowid = getQueryVariable("id");
-                if (windowid == "") {
+                window.id = getQueryVariable("id");
+                if (window.id == "") {
                     window.location.replace("http://84.28.82.98:8081/quiz.html");
                 }
                 updateQuestions();

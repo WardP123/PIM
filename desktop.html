@@ -699,6 +699,16 @@ function ProcessAppointments(data){
 		editimage.setAttribute("onmouseover", "");
 		editimage.setAttribute("style", "cursor: pointer;");
 		
+		if (data[appointment].type == "quiz"){
+			var gradeimage = document.createElement("img");
+			gradeimage.setAttribute("src", "checkmark.png");
+			gradeimage.setAttribute("id", data[appointment].id);
+			gradeimage.setAttribute("onclick", "grade_appointment(this.id)");
+			gradeimage.setAttribute("onmouseover", "");
+			editimage.setAttribute("style", "cursor: pointer;");
+			iconsdiv.appendChild(gradeimage);
+		}
+		
 		iconsdiv.appendChild(deleteimage);
 		iconsdiv.appendChild(editimage);
 		maindiv.appendChild(timediv);
@@ -880,6 +890,11 @@ function CheckGameLock(){
         }
 	});
 }
+
+function grade_appointment(quizid){
+	window.location.replace("quizteacher.html?id=" +quizid);
+}
+
 </script>
 </body>
 </html>
