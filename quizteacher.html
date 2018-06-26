@@ -72,17 +72,87 @@
 		$.ajax({
 			url: "http://84.28.82.98:8081/retrieve-questions",
 			type: 'POST',
-			data: JSON.stringify({ authkey: authkey_local, gameid: gameid_local}),
+			data: JSON.stringify({ quizid: quizid_local}),
 			contentType: "application/json; charset=utf-8",
 			dataType: 'json',
 			async: true,
 			success: function(data) {
-				ProcessUsers(data);
+				ProcessQuestions(data);
 			},
 			error: function() {
-				alert('Groepsleden kunnen niet geladen worden door een servererror.');
+				alert('Vragen kunnen niet geladen worden door een servererror.');
 			},
 		});
+	}
+	
+	function ProcessQuestions(data){
+		var question_counter = 0;
+		
+		for (question in data){
+			question_counter += 1;
+			
+			var maindiv = document.createElement("div");
+			maindiv.setAttribute("class", "completequestion");
+			maindiv.setAttribute("id", "question" +data[question].id);
+			
+			var seconddiv = document.createElement("div");
+			seconddiv.setAttribute("class", "question");
+			seconddiv.innerHTML = "Vraag " + question_counter + ": ";
+			
+			var questionspan = document.createElement("span");
+			questionspan.setAttribute("class", "questionnumber");
+			questionspan.innerHTML = data[question].question_title;
+			
+			seconddiv.appendChild(questionspan);
+			maindiv.appendChild(seconddiv);
+			document.getElementById("questioncontainer").appendChild(maindiv);
+			
+			RetrieveAnswers(data[question].id);
+		}		
+	}
+	
+	function RetrieveAnswers(questionid_local){
+		$.ajax({
+			url: "http://84.28.82.98:8081/retrieve-answers",
+			type: 'POST',
+			data: JSON.stringify({ questionid: questionid_local}),
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				ProcessAnswers(data);
+			},
+			error: function() {
+				alert('Antwoorden kunnen niet geladen worden door een servererror.');
+			},
+		});
+	}
+	
+	function ProcessAnswers(data){
+		for (answer in data){
+			var maindiv = document.createElement("div");
+			maindiv.setAttribute("class", "completeanswer");
+			
+			var correctimage = document.createElement("img");
+			correctimage.setAttribute("src", "correct.png");
+			
+			var wrongimage = document.createElement("img");
+			wrongimage.setAttribute("src", "wrong.png");
+			
+			var usernamespan = document.createElement("span");
+			usernamespan.setAttribute("class", "user");
+			usernamespan.innerHTML = data[answer].username + ": ";
+			
+			var answerspan = document.createElement("span");
+			answerspan.setAttribute("class", "answer");
+			answerspan.innerHTML = data[answer].answer;
+			
+			maindiv.appendChild(correctimage);
+			maindiv.appendChild(wrongimage);
+			maindiv.appendChild(usernamespan);
+			maindiv.appendChild(answerspan);
+			document.getElementById("question" +data[answer].question_id).appendChild(maindiv);
+		}
 	}
 </script>
 </head>
@@ -109,7 +179,7 @@
 			</tr>
 		</table>
 		</div>
-		<div class="questionsanswers">
+		<div class="questionsanswers" id="questioncontainer">
 			<div class="completequestion">
 				<div class="question"> <span class="questionnumber"> Vraag 1: </span> Welke boom is het grootst? </div>
 				<div class="completeanswer"><img src="correct.png"> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>

@@ -807,6 +807,14 @@ def retrieve_title(db):
         quiz = db.fetchall()
         return json.dumps(quiz)
 
+@post('/retrieve-answers')
+def retrieve_answers(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM answers WHERE question_id=?", (item['questionid'],))
+        answers = db.fetchall()
+        return json.dumps(answers)
+
 # MAIN LOOP
 
 if __name__ == "__main__":
