@@ -114,14 +114,14 @@
 			
 			var arrowup = document.createElement('img');
 			arrowup.setAttribute("src", "arrow_up.png");
-			arrowup.setAttribute("class", "arrow");
-			arrowup.setAttribute("id", data[question].id);
-			arrowup.setAttribute("onclick", "close_question(this.id)");
-			formdiv.appendChild(arrowup);
+			arrowup.setAttribute("class", "invisible");
+			arrowup.setAttribute("id", "arrow" +data[question].id);
+			arrowup.setAttribute("onclick", "close_question(this.parentElement.id)");
 			
 			titlediv.appendChild(namespan);
 			maindiv.appendChild(titlediv);
 			maindiv.appendChild(formdiv);
+			maindiv.appendChild(arrowup);
 			document.getElementById("questioncontainer").appendChild(maindiv);
 		}
 	}
@@ -133,6 +133,8 @@
 		
 		var formdiv = document.getElementById("formdiv" +id);
 		formdiv.setAttribute("class", "visible");
+		var arrowdiv = document.getElementById("arrow" +id);
+		arrowdiv.setAttribute("class", "arrow");
 	}
 	
 	function close_question(id){
