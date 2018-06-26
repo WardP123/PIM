@@ -103,22 +103,6 @@
 			</form>
 	  </div>
 	</div>
-
-	<div id="newquizmodal" class="modal">
-
-		<!-- Modal content -->
-		<div class="modal-content">
-		  <span class="closequiz">&times;</span>
-		  <div class="title">Nieuwe Quiz</div>
-			  <form>
-				  Quiz titel: <br>
-				  <input type="text" id="quiztitleintext"> <br>
-				  Tijd: <br>
-				  <input type="time" name="comment" id="quiztime"><br>
-				  <input type="button" id="quizsendbutton" value="Quiz plaatsen" onclick="new_quiz()">
-			  </form>
-		</div>
-	  </div>
 	
 	<div id="deleteusermodal" class="modal">
 
@@ -288,26 +272,10 @@ window.onclick = function(event) {
 // Get the button that opens the modal
 var btnquiz = document.getElementById("newquiz");
 
-// Get the <span> element that closes the modal
-var spanquiz = document.getElementsByClassName("closequiz")[0];
-
 // When the user clicks the button, open the modal 
 btnquiz.onclick = function() {
-    window.location.reload("http://84.28.82.98:8081/quiz.html?" +gameid_local);
+    window.location.replace("http://84.28.82.98:8081/quiz.html?" +gameid_local);
 }
-
-// When the user clicks on <span> (x), close the modal
-spanquiz.onclick = function() {
-    modalquiz.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modalquiz) {
-        modalquiz.style.display = "none";
-    }
-}
-
 
 	
 function new_announcement(){
@@ -769,7 +737,7 @@ function ProcessAppointments(data){
 }
 
 function update_quiz(id){
-	window.location.reload("http://84.28.82.98:8081/quiznew.html?" +id);
+	window.location.replace("http://84.28.82.98:8081/quiznew.html?" +id);
 }
 
 function update_announcement_popup(parentdiv){
