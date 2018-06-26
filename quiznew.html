@@ -111,7 +111,7 @@
                     $.ajax({
                             url: "http://84.28.82.98:8081/update-quiz",
                             type: 'POST',
-                            data: JSON.stringify({ id: id, question_title: title, question: question, answer_type: answer_type }),
+                            data: JSON.stringify({ id: id, question_title: title, question: question, answer_type: quiz_answer_type }),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             async: true,
@@ -131,7 +131,6 @@
                 quiz_question = document.getElementById('question').value;
                 quiz_image = document.getElementById('image').value;
                 var radios = document.getElementsByName('question_type');
-                alert(radios);
 
                 if (radios[1].checked) {
                     quiz_answer_type = document.getElementById('file_answer_type').value;
