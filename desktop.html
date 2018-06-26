@@ -274,7 +274,7 @@ var btnquiz = document.getElementById("newquiz");
 
 // When the user clicks the button, open the modal 
 btnquiz.onclick = function() {
-    window.location.replace("http://84.28.82.98:8081/quiz.html?" +gameid_local);
+    window.location.replace("quiz.html?id=" +gameid_local);
 }
 
 	
@@ -737,7 +737,7 @@ function ProcessAppointments(data){
 }
 
 function update_quiz(id){
-	window.location.replace("http://84.28.82.98:8081/quiznew.html?" +id);
+	window.location.replace("quiznew.html?id=" +id);
 }
 
 function update_announcement_popup(parentdiv){
