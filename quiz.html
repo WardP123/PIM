@@ -38,7 +38,7 @@
                         async: true,
                         success: function(result) {
                             window.id = result[0].id;
-                            window.location.replace("quiznew.html?" + window.id);
+                            window.location.replace("quiznew.html?id=" + window.id);
                         },
                         error: function(data) {
                             alert(data);
