@@ -95,7 +95,13 @@
             function update_question(id) {
                 title = document.getElementById('update-title').value;
                 question = document.getElementById('update-question').value;
-                answer_type = document.getElementById('answer_type').value;
+                var radios = document.getElementsByName('question_type');
+
+                if (radios[1].checked) {
+                    quiz_answer_type = document.getElementById('file_answer_type').value;
+                } else {
+                    quiz_answer_type = document.getElementById('text_answer_type').value;
+                }
 
                 if (title == "") {
                     alert("Vul een quiz titel in");
@@ -124,7 +130,13 @@
                 quiz_question_title = document.getElementById('title').value;
                 quiz_question = document.getElementById('question').value;
                 quiz_image = document.getElementById('image').value;
-                quiz_answer_type = document.getElementById('answer_type').value;
+                var radios = document.getElementsByName('question_type');
+
+                if (radios[1].checked) {
+                    quiz_answer_type = document.getElementById('file_answer_type').value;
+                } else {
+                    quiz_answer_type = document.getElementById('text_answer_type').value;
+                }
                 
                 if (quiz_question_title == "") {
                     alert("Vul een quiz titel in");
