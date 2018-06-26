@@ -22,7 +22,7 @@
 	function check_gameid() {
         	var gameid = document.getElementById("gameidintext").value;
             $.ajax({
-                url: "http://84.28.82.98:8081/check_gameid",
+                url: "https://84.28.82.98:8081/check_gameid",
                 type: 'POST',
 				data: JSON.stringify({ gameid: gameid}),
 				contentType: "application/json; charset=utf-8",
