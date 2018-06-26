@@ -351,35 +351,6 @@ function new_appointment(){
 	}
 }
 
-function new_quiz() {
-	alert('test');
-	var quiz_title = document.getElementById("quiztitleintext").value;
-	var time = document.getElementById("quiztime").value;
-
-	if (quiz_title == ""){
-		alert('Geef de quiz een titel.')
-	} else if (time == ""){
-		alert('Geef de quiz een tijd.')
-	} else {
-		$.ajax({
-			type: "POST",
-			url: "http://84.28.82.98:8081/new-quiz",
-			data: JSON.stringify({authkey: authkey_local, gameid: gameid_local, type: 'quiz', description: 'quiz', title: quiz_title,  times: time }),
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			async: true,
-			success: function(result) {
-				alert('test');
-				alert(result);
-				document.getElementById('hide').className = 'show';
-			},
-			error: function(data) {
-				alert(data);
-			}
-		});
-	}
-}
-
 function delete_user_popup(innerHTML){
 	document.getElementById("insertname").innerHTML = innerHTML;
 	var modalap = document.getElementById('deleteusermodal');
@@ -694,15 +665,17 @@ function ProcessAppointments(data){
 		titlediv.setAttribute("class", "title");
 		titlediv.innerHTML = data[appointment].title;
 		
-		var descriptiondiv = document.createElement("div");
-		descriptiondiv.setAttribute("class", "description");
-		var description = data[appointment].description
-		var short_description = description.substring(0, 30);
-		if (description.length < 31) {
-		descriptiondiv.innerHTML = data[appointment].description;
-		} else {
+		if (data[appointment].type == "appointment"){
+			var descriptiondiv = document.createElement("div");
+			descriptiondiv.setAttribute("class", "description");
+			var description = data[appointment].description
 			var short_description = description.substring(0, 30);
-			descriptiondiv.innerHTML = '<div class="description">' + short_description + '...' + '</div>';
+			if (description.length < 31) {
+			descriptiondiv.innerHTML = data[appointment].description;
+			} else {
+				var short_description = description.substring(0, 30);
+				descriptiondiv.innerHTML = '<div class="description">' + short_description + '...' + '</div>';
+			}
 		}
 		var iconsdiv = document.createElement("div");
 		iconsdiv.setAttribute("class", "icons");
@@ -730,7 +703,9 @@ function ProcessAppointments(data){
 		iconsdiv.appendChild(editimage);
 		maindiv.appendChild(timediv);
 		maindiv.appendChild(titlediv);
-		maindiv.appendChild(descriptiondiv);
+		if (data[appointment].type == "appointment"){
+			maindiv.appendChild(descriptiondiv);
+		}
 		maindiv.appendChild(iconsdiv);
 		document.getElementById("eventscontainer").appendChild(maindiv);
 	}
