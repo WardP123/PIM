@@ -272,8 +272,8 @@
             }
 
             $(document).ready(function(){
-                windowid = getQueryVariable("id");
-                if (windowid == "") {
+                window.id = getQueryVariable("id");
+                if (window.id == "") {
                     window.location.replace("http://84.28.82.98:8081/quiz.html");
                 }
                 updateQuestions();
