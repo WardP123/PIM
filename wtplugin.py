@@ -166,9 +166,7 @@ class WtDbPlugin(object):
                     (id INTEGER PRIMARY KEY,
                     quizid INTEGER NOT NULL,
                     question_title CHAR(300) NOT NULL,
-                    question CHAR(300) NOT NULL,
-                    image BLOB,
-                    answer_type CHAR(300) NOT NULL)
+                    question CHAR(300) NOT NULL)
             """);
             db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='answers'")
@@ -181,8 +179,7 @@ class WtDbPlugin(object):
                     quiz_id INTEGER NOT NULL,
                     username CHAR(300) NOT NULL,
                     gameid INTEGER NOT NULL,
-                    answer CHAR(300),
-                    answerimage BLOB)
+                    answer CHAR(300) NOT NULL)
             """);
             db.commit()
 

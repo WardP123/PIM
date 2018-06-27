@@ -83,25 +83,12 @@
 			var breakdiv = document.createElement('br');
 			formdiv.appendChild(breakdiv);
 			
-			if (data[question].image){
-				alert(data[question].image);
-			}
-			
-			if (data[question].answer_type == "text"){
-				var answerdiv = document.createElement('textarea');
-				answerdiv.setAttribute("rows", "4");
-				answerdiv.setAttribute("cols", "50");
-				answerdiv.setAttribute("id", "imageinput" +data[question].id);
-				answerdiv.setAttribute("class", "input");
-				formdiv.appendChild(answerdiv);
-			}
-			else{
-				var answerdiv = document.createElement('input');
-				answerdiv.setAttribute("type", "file");
-				answerdiv.setAttribute("accept", "image/*");
-				answerdiv.setAttribute("id", "inputfield" +data[question].id);
-				formdiv.appendChild(answerdiv);
-			}
+			var answerdiv = document.createElement('textarea');
+			answerdiv.setAttribute("rows", "4");
+			answerdiv.setAttribute("cols", "50");
+			answerdiv.setAttribute("id", "imageinput" +data[question].id);
+			answerdiv.setAttribute("class", "input");
+			formdiv.appendChild(answerdiv);
 		
 			var breakdiv2 = document.createElement('br');
 			formdiv.appendChild(breakdiv2);
@@ -150,24 +137,11 @@
 	var username_local = "Test User";
 	var gameid_local = 12;
 	var answerfield = document.getElementById("inputfield" +id);
-	var imagefield = document.getElementById("imageinput" +id);
-	if (answerfield != null){
-		var answer_local = answerfield.value;
-	}
-	else {
-		var answer_local = null;
-	}
-	if (imagefield != null){
-		var image_local = imagefield.value;
-	}
-	else{
-		var image_local = null;
-	}
-	
+
 	$.ajax({
 			url: "http://84.28.82.98:8081/answer-question",
 			type: 'POST',
-			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local, answerimage: image_local }),
+			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local}),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
