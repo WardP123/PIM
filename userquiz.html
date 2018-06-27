@@ -86,7 +86,7 @@
 			var answerdiv = document.createElement('textarea');
 			answerdiv.setAttribute("rows", "4");
 			answerdiv.setAttribute("cols", "50");
-			answerdiv.setAttribute("id", "imageinput" +data[question].id);
+			answerdiv.setAttribute("id", "inputfield" +data[question].id);
 			answerdiv.setAttribute("class", "input");
 			formdiv.appendChild(answerdiv);
 		
@@ -127,8 +127,8 @@
 	function close_question(id){
 		document.getElementById(id).setAttribute("onclick", "expand_question(this.id)");
 		document.getElementById(id).className = "question";
-		document.getElementById("formdiv" + id).style.display = "none";
-		document.getElementById("close" + id).style.display = "none";
+		document.getElementById("formdiv" + id).setAttribute("class", "invisible");
+		document.getElementById("close" + id).setAttribute("class", "invisible");
 	}
 	
 	function process_answer(id){
@@ -136,7 +136,7 @@
 	var quiz_id_local = quizappointmentid_local;
 	var username_local = "Test User";
 	var gameid_local = 12;
-	var answerfield = document.getElementById("inputfield" +id);
+	var answer_local = document.getElementById("inputfield" +id).value;
 
 	$.ajax({
 			url: "http://84.28.82.98:8081/answer-question",
