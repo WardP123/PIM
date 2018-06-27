@@ -131,6 +131,19 @@ h3 {
     cursor: pointer;
 }
 
+button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 160px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+	background-color: #4abdac;
+    cursor: pointer;
+}
+
 #create_question {
     background-image: url('material-icon-2155448_960_720.png');
 }

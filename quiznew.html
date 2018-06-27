@@ -16,6 +16,7 @@
             <h1 id="quiz_title"></h1>
             <h3 id="quiz_time"></h3>
                 <input type="image" alt="Add question" id="button" src="Add.png"><br>
+                <button id="save" onclick="done()">Terug naar homepagina</button>
                 <div id="modal" class="modal">
                     <div class="modal-content">
                         <form id="form_fields">
@@ -71,6 +72,10 @@
             </div>
         </div>
         <script>
+            function done() {
+                window.location.replace("/desktop.html");
+            }
+
             function update_question_popup(id){
                 $.ajax({
                     url: "http://84.28.82.98:8081/update-question",
