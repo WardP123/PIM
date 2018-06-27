@@ -62,6 +62,7 @@
 			maindiv.setAttribute("class", "question");
 			maindiv.setAttribute("id", data[question].id);
 			maindiv.setAttribute("onclick", "expand_question(this.id)");
+			maindiv.setAttribute("style", "cursor: pointer;");
 			
 			var titlediv = document.createElement('div');
 			titlediv.setAttribute("class", "title");
@@ -71,7 +72,7 @@
 			namespan.innerHTML = data[question].question_title;
 			
 			var formdiv = document.createElement('form');
-			formdiv.setAttribute("id", 'formdiv' +data[question].id);
+			formdiv.setAttribute("id", 'formdiv' + data[question].id);
 			formdiv.setAttribute("class", "invisible");
 		
 			var descriptiondiv = document.createElement('div');
@@ -112,35 +113,42 @@
 			submitbutton.setAttribute("onclick", "process_answer(this.id)");
 			formdiv.appendChild(submitbutton);
 			
-			var arrowup = document.createElement('img');
-			arrowup.setAttribute("src", "arrow_up.png");
-			arrowup.setAttribute("class", "invisible");
-			arrowup.setAttribute("id", "arrow" +data[question].id);
-			arrowup.setAttribute("onclick", "close_question(this.parentElement.id)");
-			arrowup.setAttribute("onmouseover", "");
+			// var arrowup = document.createElement('img');
+			// arrowup.setAttribute("src", "arrow_up.png");
+			// arrowup.setAttribute("class", "invisible");
+			// arrowup.setAttribute("id", "arrow" + data[question].id);
+			// arrowup.setAttribute("onclick", "close_question(this.parentElement.id)");
+			// arrowup.setAttribute("onmouseover", "");
+
+			var closediv = document.createElement('span');
+			closediv.setAttribute('class', 'invisible');
+			closediv.setAttribute('id', 'close' + data[question].id);
+			closediv.setAttribute('onclick', 'close_question(this.parentElement.id)');
+			closediv.setAttribute('onmouseover', "");
+			closediv.innerHTML = "&times;";
 			
+			maindiv.appendChild(closediv);
 			titlediv.appendChild(namespan);
 			maindiv.appendChild(titlediv);
 			maindiv.appendChild(formdiv);
-			maindiv.appendChild(arrowup);
 			document.getElementById("questioncontainer").appendChild(maindiv);
 		}
 	}
 	
 	function expand_question(id){
-		document.getElementById(id).setAttribute("class", "openedquestion");
+		// document.getElementById(id).setAttribute("class", "openedquestion");
+		document.getElementById(id).className = "openedquestion";
 		document.getElementById(id).setAttribute("onclick", "");
 		
-		document.getElementById("formdiv" +id).setAttribute("class", "visible");
-		document.getElementById("arrow" +id).setAttribute("class", "arrow");
+		document.getElementById("formdiv" + id).setAttribute("class", "visible");
+		document.getElementById("close" + id).setAttribute("class", "show");
 	}
 	
 	function close_question(id){
-		document.getElementById(id).setAttribute("class", "question");
-		document.getElementById(id).setAttribute("onclick", "expand_question(this.id)");
-		
-		document.getElementById("formdiv" +id).setAttribute("class", "invisible");
-		document.getElementById("arrow" +id).setAttribute("class", "invisible");
+		// document.getElementById(id).setAttribute("onclick", "expand_question(this.id)");
+		document.getElementById(id).className = "question";
+		document.getElementById("formdiv" + id).style.display = "none";
+		document.getElementById("close" + id).style.display = "none";
 	}
 	
 	function process_answer(id){
@@ -172,6 +180,7 @@
 			async: true,
 			success: function(data) {
 				alert("Antwoord ingediend.");
+				close_question(question_id_local);
 			},
 			error: function(data) {
 				alert("Vragen laden mislukt.");
@@ -183,6 +192,9 @@
 </head>
 
 <body onload="LoadQuestions(); LoadQuizTitle();">
+	<div id="header">
+		<img src="klassetourzwart.png"></div>
+	</div>
 	<h1 class="QuizTitle">Welkom bij <span id="quiztitle"></span></h1>
 	<br>
 	<div id="questioncontainer">
