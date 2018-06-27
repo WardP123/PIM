@@ -126,8 +126,8 @@ class WtDbPlugin(object):
                     gameid INTEGER NOT NULL,
                     username CHAR(300) NOT NULL,
                     encpin CHAR(300) NOT NULL,
-                    correctanswers CHAR(300) NOT NULL,
-                    wronganswers CHAR(300) NOT NULL,
+                    correctanswers INTEGER NOT NULL,
+                    wronganswers INTEGER NOT NULL,
                     activesessionCoockie INTEGER,
                     unreadannouncements INTEGER NOT NULL)
             """);
