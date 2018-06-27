@@ -103,8 +103,13 @@
 			questionspan.setAttribute("class", "questionnumber");
 			questionspan.innerHTML = data[question].question_title;
 			
+			var descriptiondiv = document.createElement("div");
+			descriptiondiv.setAttribute("class", "questiondescription");
+			descriptiondiv.innerHTML = data[question].question;
+			
 			seconddiv.appendChild(questionspan);
 			maindiv.appendChild(seconddiv);
+			maindiv.appendChild(descriptiondiv);
 			document.getElementById("questioncontainer").appendChild(maindiv);
 			
 			RetrieveAnswers(data[question].id);
