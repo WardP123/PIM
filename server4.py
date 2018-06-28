@@ -705,6 +705,26 @@ def retrieve_answers(db):
         answers = db.fetchall()
         return json.dumps(answers)
 
+@post('/correct-answer')
+def correct_answer(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
+        user = db.fetchall()
+        correctanswers = user.correctanswers += 1
+        db.execute("UPDATE users SET correctanswers=? WHERE username=?", (correctanswers, item['username'],))
+        return json.dumps(correctanswers)
+
+@post('/wrong-answer')
+def wrong_answer(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
+        user = db.fetchall()
+        wronganswers = user.wronganswers += 1
+        db.execute("UPDATE users SET wronganswers=? WHERE username=?", (wronganswers, item['username'],))
+        return json.dumps(wronganswers)
+
 # MAIN LOOP
 
 if __name__ == "__main__":

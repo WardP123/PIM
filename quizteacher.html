@@ -140,9 +140,17 @@
 			
 			var correctimage = document.createElement("img");
 			correctimage.setAttribute("src", "correct.png");
+			correctimage.setAttribute("class", data[answer].username);
+			correctimage.setAttribute("onclick", "correct_answer(this.className)");
+			correctimage.setAttribute("onmouseover", "");
+			correctimage.setAttribute("style", "cursor: pointer;");
 			
 			var wrongimage = document.createElement("img");
 			wrongimage.setAttribute("src", "wrong.png");
+			wrongimage.setAttribute("class", data[answer].username);
+			wrongimage.setAttribute("onclick", "wrong_answer(this.className)");
+			wrongimage.setAttribute("onmouseover", "");
+			wrongimage.setAttribute("style", "cursor: pointer;");
 			
 			var usernamespan = document.createElement("span");
 			usernamespan.setAttribute("class", "user");
@@ -158,6 +166,42 @@
 			maindiv.appendChild(answerspan);
 			document.getElementById("question" +data[answer].question_id).appendChild(maindiv);
 		}
+	}
+	
+	function correct_answer(username_local){
+		$.ajax({
+			url: "http://84.28.82.98:8081/correct-answer",
+			type: 'POST',
+			data: JSON.stringify({ username: username_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				alert('Antwoord van ' +username_local + ' goed gerekend.');
+				location.reload();
+			},
+			error: function() {
+				alert('Antwoord kan niet nagekeken worden door een servererror.');
+			},
+		});
+	}
+	
+	function wrong_answer(username_local){
+		$.ajax({
+			url: "http://84.28.82.98:8081/wrong-answer",
+			type: 'POST',
+			data: JSON.stringify({ username: username_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				alert('Antwoord van ' +username_local + ' fout gerekend.');
+				location.reload();
+			},
+			error: function() {
+				alert('Antwoord kan niet nagekeken worden door een servererror.');
+			},
+		});
 	}
 </script>
 </head>
