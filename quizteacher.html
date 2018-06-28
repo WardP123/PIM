@@ -61,7 +61,7 @@
 			maintr.appendChild(wrongtd);
 			
 			var totaltd = document.createElement("td");
-			totaltd.innerHTML = data[user].correctanswers + data[user].wronganswers;
+			totaltd.innerHTML = int(data[user].correctanswers) + int(data[user].wronganswers);
 			maintr.appendChild(totaltd);
 			
 			document.getElementById("usertable").appendChild(maintr);
