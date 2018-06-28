@@ -35,7 +35,6 @@
 			async: true,
 			success: function(data) {
 				gameid_local = data[0].gameid;
-				alert(gameid_local);
 				LoadUsers();
 				LoadQuestions();
 			},
@@ -80,7 +79,7 @@
 			maintr.appendChild(wrongtd);
 			
 			var totaltd = document.createElement("td");
-			totaltd.innerHTML = int(data[user].correctanswers) + int(data[user].wronganswers);
+			totaltd.innerHTML = parseInt(data[user].correctanswers) + parseInt(data[user].wronganswers);
 			maintr.appendChild(totaltd);
 			
 			document.getElementById("usertable").appendChild(maintr);
