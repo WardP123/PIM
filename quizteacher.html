@@ -141,14 +141,16 @@
 			var correctimage = document.createElement("img");
 			correctimage.setAttribute("src", "correct.png");
 			correctimage.setAttribute("class", data[answer].username);
-			correctimage.setAttribute("onclick", "correct_answer(this.className)");
+			correctimage.setAttribute("id", "correctimage"+data[answer].id);
+			correctimage.setAttribute("onclick", "correct_answer(this.className, this.id)");
 			correctimage.setAttribute("onmouseover", "");
 			correctimage.setAttribute("style", "cursor: pointer;");
 			
 			var wrongimage = document.createElement("img");
 			wrongimage.setAttribute("src", "wrong.png");
 			wrongimage.setAttribute("class", data[answer].username);
-			wrongimage.setAttribute("onclick", "wrong_answer(this.className)");
+			wrongimage.setAttribute("id", "wrongimage"+data[answer].id);
+			wrongimage.setAttribute("onclick", "wrong_answer(this.className, this.id)");
 			wrongimage.setAttribute("onmouseover", "");
 			wrongimage.setAttribute("style", "cursor: pointer;");
 			
@@ -168,7 +170,7 @@
 		}
 	}
 	
-	function correct_answer(username_local){
+	function correct_answer(username_local, answer_id){
 		$.ajax({
 			url: "http://84.28.82.98:8081/correct-answer",
 			type: 'POST',
@@ -178,6 +180,8 @@
 			async: true,
 			success: function(data) {
 				alert('Antwoord van ' +username_local + ' goed gerekend.');
+				document.getElementById("correctimage" +answer_id).setAttribute("onclick", "");
+				document.getElementById("wrongimage" +answer_id).remove();
 				location.reload();
 			},
 			error: function() {
@@ -186,7 +190,7 @@
 		});
 	}
 	
-	function wrong_answer(username_local){
+	function wrong_answer(username_local, answer_id){
 		$.ajax({
 			url: "http://84.28.82.98:8081/wrong-answer",
 			type: 'POST',
@@ -196,6 +200,8 @@
 			async: true,
 			success: function(data) {
 				alert('Antwoord van ' +username_local + ' fout gerekend.');
+				document.getElementById("correctimage" +answer_id).remove();
+				document.getElementById("wrongimage" +answer_id).setAttribute("onclick", "");
 				location.reload();
 			},
 			error: function() {
