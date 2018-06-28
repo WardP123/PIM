@@ -682,6 +682,9 @@ def retrieve_questions(db):
         quiz = db.fetchall()
         return json.dumps(quiz)
 
+
+
+
 @post('/answer-question')
 def answer_question(db):
     item = request.json
