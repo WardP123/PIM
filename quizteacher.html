@@ -24,7 +24,7 @@
 	var authkey_local = getCookie("accountadmin");
 //	var authkey_local = "173224453209867194815934272294398947581"
 	var quizid_local = getQueryVariable("id");
-	var gameid_local = 16486;
+	var gameid_local = 86;
 	
 	function LoadUsers(){
 	    $.ajax({
@@ -61,7 +61,7 @@
 			maintr.appendChild(wrongtd);
 			
 			var totaltd = document.createElement("td");
-			totaltd.innerHTML = data[user].correctanswers + data[user].wronganswers;
+			totaltd.innerHTML = int(data[user].correctanswers) + int(data[user].wronganswers);
 			maintr.appendChild(totaltd);
 			
 			document.getElementById("usertable").appendChild(maintr);

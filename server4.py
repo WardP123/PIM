@@ -714,7 +714,7 @@ def correct_answer(db):
     if item is not None:
         db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
         user = db.fetchall()
-        correctanswers = user['correctanswers'] + 1
+        correctanswers = int(user['correctanswers']) + 1
         db.execute("UPDATE users SET correctanswers=? WHERE username=?", (correctanswers, item['username'],))
         return json.dumps(correctanswers)
 
@@ -724,7 +724,7 @@ def wrong_answer(db):
     if item is not None:
         db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
         user = db.fetchall()
-        wronganswers = user['wronganswers'] + 1
+        wronganswers = int(user['wronganswers']) + 1
         db.execute("UPDATE users SET wronganswers=? WHERE username=?", (wronganswers, item['username'],))
         return json.dumps(wronganswers)
 
