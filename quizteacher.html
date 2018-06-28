@@ -36,6 +36,8 @@
 			async: true,
 			success: function(data) {
 				gameid_local = data[0].gameid;
+				LoadUsers();
+				LoadQuestions();
 			},
 			error: function() {
 			},
@@ -228,7 +230,7 @@
 </script>
 </head>
 
-<body onload="LoadAdmin(); LoadUsers(); LoadQuestions();">
+<body onload="LoadAdmin();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
