@@ -725,6 +725,14 @@ def wrong_answer(db):
         db.execute("UPDATE users SET wronganswers=? WHERE username=?", (wronganswers, item['username'],))
         return json.dumps(wronganswers)
 
+@post('/retrieve-admin')
+def retrieve_admin(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM admins WHERE authkey=?", (item['authkey'],))
+        admin = db.fetchall()
+        return json.dumps(admin)
+
 # MAIN LOOP
 
 if __name__ == "__main__":

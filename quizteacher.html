@@ -24,7 +24,23 @@
 	var authkey_local = getCookie("accountadmin");
 //	var authkey_local = "173224453209867194815934272294398947581"
 	var quizid_local = getQueryVariable("id");
-	var gameid_local = 86;
+	var gameid_local = 0;
+	
+	function LoadAdmin(){
+	$.ajax({
+			url: "http://84.28.82.98:8081/retrieve-admin",
+			type: 'POST',
+			data: JSON.stringify({ authkey: authkey_local}),
+			contentType: "application/json; charset=utf-8",
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				gameid_local = data[0].gameid;
+			},
+			error: function() {
+			},
+		});
+	}
 	
 	function LoadUsers(){
 	    $.ajax({
@@ -212,7 +228,7 @@
 </script>
 </head>
 
-<body onload="LoadUsers(); LoadQuestions();">
+<body onload="LoadAdmin(); LoadUsers(); LoadQuestions();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
