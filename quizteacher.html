@@ -198,8 +198,8 @@
 			async: true,
 			success: function(data) {
 				alert('Antwoord van ' +username_local + ' goed gerekend.');
-				document.getElementById("correctimage" +answer_id).removeAttribute("onclick");
-				document.getElementById("wrongimage" +answer_id).remove();
+//				document.getElementById("correctimage" +answer_id).removeAttribute("onclick");
+//				document.getElementById("wrongimage" +answer_id).remove();
 				location.reload();
 			},
 			error: function() {
@@ -218,8 +218,8 @@
 			async: true,
 			success: function(data) {
 				alert('Antwoord van ' +username_local + ' fout gerekend.');
-				document.getElementById("correctimage" +answer_id).remove();
-				document.getElementById("wrongimage" +answer_id).removeAttribute("onclick");
+//				document.getElementById("correctimage" +answer_id).remove();
+//				document.getElementById("wrongimage" +answer_id).removeAttribute("onclick");
 				location.reload();
 			},
 			error: function() {
@@ -244,33 +244,9 @@
 				<th> Foute Vragen </th>
 				<th> Totaal </th>
 			</tr>
-			<tr>
-				<td> Matthijs Blaauw</td>
-				<td> 2 </td>
-				<td> 2 </td>
-				<td> 4 </td>
-			</tr>
 		</table>
 		</div>
 		<div class="questionsanswers" id="questioncontainer">
-			<div class="completequestion">
-				<div class="question"> <span class="questionnumber"> Vraag 1: </span> Welke boom is het grootst? </div>
-				<div class="completeanswer"><img src="correct.png"> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-			</div>
-			<div class="completequestion">
-				<div class="question"> <span class="questionnumber"> Vraag 1: </span> Welke boom is het grootst? </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-				<div class="completeanswer"><img src=correct.png> <img src="wrong.png"> <span class="user">Matthijs Blaauw:</span><span class="answer"> Die ijk </span> </div>
-			</div>
 			
 		</div>
 	</div>
