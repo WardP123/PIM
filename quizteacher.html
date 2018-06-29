@@ -209,7 +209,7 @@
 	}
 	
 	function wrong_answer(username_local, answer_id){
-		real_id = answer_id.slice(-1);
+		real_id = answer_id.slice(11,-1);
 		$.ajax({
 			url: "http://84.28.82.98:8081/wrong-answer",
 			type: 'POST',
