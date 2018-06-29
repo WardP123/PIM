@@ -25,6 +25,31 @@
 //	var authkey_local = "335757666511145976622127743423708470664"
 	var quizid_local = getQueryVariable("id");
 	
+	$( document ).ready(function() {
+			if (authkey_local) {
+		$.ajax({
+                url: "http://84.28.82.98:8081/check_authkeyadmin",
+                type: 'POST',
+				data: JSON.stringify({"authkey": authkey_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+						
+					}else{
+						window.location.href = "loginteachers.html";
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+		} else {
+			window.location.href = "loginteachers.html";
+		};
+	});
+	
+	
 	function LoadAdmin(){
 	$.ajax({
 			url: "http://84.28.82.98:8081/retrieve-gameid",

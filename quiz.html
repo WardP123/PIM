@@ -17,7 +17,11 @@
             <input type="button" id="gegevens" value="Ga verder" onclick="submitGegevens()">
         </form>
         <script>
-
+			window.getCookie = function(name) {
+	  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+	  if (match) return match[2];
+	}
+	var authkey_local = getCookie("account");
             function submitGegevens() {
                 window.titel = document.getElementById("quiztitle").value;
 	            var tijd = document.getElementById("quiztime").value;
@@ -52,6 +56,27 @@
                 if (window.id == "") {
                     window.location.replace("desktop.html");
                 }
+				 if (authkey_local) {
+		$.ajax({
+				
+                url: "http://84.28.82.98:8081/check_authkey",
+                type: 'POST',
+				data: JSON.stringify({"authkey": authkey_local}),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+                async: true,
+                success: function(result) {
+					if (result.valid == "yes" ){
+					}else{
+						window.location.href = "loginnew.html";
+					}
+				},
+        		error: function(data) {
+        			}
+             });
+		} else {
+			window.location.href = "loginnew.html";
+		};
             })
 
 
