@@ -16,7 +16,7 @@
 # Include more methods/decorators as you use them
 # See http://bottle.readthedocs.org/en/stable/api.html#bottle.Bottle.route
 
-from bottle import get, post, route, request, delete, error, put, response, static_file, run, os
+from bottle import get, post, route, request, delete, error, put, response
 import json
 import sqlite3
 import random
@@ -24,8 +24,8 @@ import random
     # TODO: add code that checks for errors so you know what went wrong.
     # TODO: set the appropriate HTTP headers and HTTP response codes here.
 
-MAX_GAME_CODE = 99999
-MIN_GAME_CODE = 10000
+MAX_GAME_CODE = 99
+MIN_GAME_CODE = 10
 
 
 # GET
@@ -47,28 +47,7 @@ def make_new_game(db):
 def make_test_group(db, groupid, groupname):
     db.execute("INSERT INTO games (gameid, groupname) VALUES (?, ?)", (groupid, groupname))
 
-@post('/retrieve-questions')
-def retrieve_questions(db):
-    item = request.json
-    if item is not None:
-        db.execute("SELECT * FROM quizzes WHERE quizid=?", (item['quizid'],))
-        quiz = db.fetchall()
-        return json.dumps(quiz)
 
-@post('/answer-question')
-def answer_question(db):
-    item = request.json
-    if item is not None:
-        db.execute("INSERT INTO answers (question_id, quiz_id, username, gameid, answer) VALUES (?, ?, ?, ?, ?)", (item['question_id'], item['quiz_id'], item['username'], item['gameid'], item['answer'],))
-        return json.dumps(item)
-
-@post('/quiz-title')
-def retrieve_title(db):
-    item = request.json
-    if item is not None:
-        db.execute("SELECT * FROM appointments WHERE id=?", (item['quizid'],))
-        quiz = db.fetchall()
-        return json.dumps(quiz)
 
 # @post('/new-game')
 # def make_new_game(db):
@@ -99,80 +78,43 @@ def retrieve_title(db):
 #     currentstatus = response.status
 #     return json.dumps(currentstatus)
 
+@get('/all-gamecodes')
+def get_all_gamecodes(db):
+    db.execute("SELECT * FROM games")
+    all_games = db.fetchall()
+    return json.dumps(all_games)
+
+@get('/all-announcements')
+def get_all_announcements(db):
+    db.execute("SELECT * FROM announcements")
+    all_announcements = db.fetchall()
+    return json.dumps(all_announcements)
+
+@get('/announcement/gameid=<gameid>')
+def get_announcement_by_gameid(db, gameid):
+    db.execute("SELECT * FROM announcements WHERE gameid=?", (gameid,))
+    gameid_announcements = db.fetchall()
+    return json.dumps(gameid_announcements)
+## acutually put
+
+@get('/new-announcement/gameid=<gameid>&title=<announcement>&decription=<description>')
+def new_announcement(db, gameid, announcement, description):
+    db.execute("SELECT * FROM users WHERE gameid=?", (str(gameid),))
+    all_users = db.fetchall()
+    for user in all_users:
+        new_unreadmessages =  (user['unreadannouncements'] + 1)
+        db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, user['id']))
+    db.execute("INSERT INTO announcements (gameid, announcementtitle, announcementdecription) VALUES (?, ?, ?)", (gameid, announcement, description))
+
+## acutually delete
+@get('/DELETE-ALL')
+def delete_all_games(db):
+    db.execute("DELETE FROM games")
 
 @post('/new-appointment')
 def new_appointment(db):
     appointment = request.json
     db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (appointment['gameid'], "appointment", appointment['title'], appointment['description'], appointment['times']))
-
-@post('/new-quiz')
-def new_appointment(db):
-    appointment = request.json
-    db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (appointment['gameid'], "quiz", appointment['title'], appointment['times']))
-
-@get('/getuserdata/authkey=<key>')
-def getuserinfo(db, key):
-    # authentication = request.get_cookie("account",)
-    authentication = key
-    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
-    user = db.fetchall()
-    return json.dumps(user)
-
-@post('/announcements')
-def getannouncements(db):
-    item = request.json;
-    authentication = item['authkey']
-    # authentication = key
-    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
-    user = db.fetchall()
-    if not user:
-        return "ERROR NO LOGIN."
-    db.execute("SELECT * FROM users WHERE gameid=?", (str(user[0]['gameid']),))
-    all_users = db.fetchall()
-    for userx in all_users:
-        new_unreadmessages = 0
-        db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, userx['id']))
-    db.execute("SELECT * FROM announcements WHERE gameid=?", (str(user[0]['gameid']),))
-    announcements = db.fetchall();
-    return json.dumps(announcements)
-
-@post('/getuserdata')
-def getuserinfo(db):
-    item = request.json;
-    authentication = item['authkey']
-    print(authentication)
-    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
-    user = db.fetchall()
-    return json.dumps(user)
-
-@post('/home')
-def home(db):
-    item = request.json;
-    authentication = item['authkey']
-    print(authentication)
-    # authentication = key
-    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
-    user = db.fetchall()
-    if not user:
-        return "ERROR NO LOGIN."
-    db.execute("SELECT * FROM appointments WHERE gameid=?", (str(user[0]['gameid']),))
-    appointments = db.fetchall();
-    return json.dumps(appointments)
-
-
-# @get('/home')
-# def home(db):
-#     print(request.get_cookie("account"))
-#     authentication = request.get_cookie("account")
-#     # authentication = key
-#     print(authentication)
-#     db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
-#     user = db.fetchall()
-#     if not user:
-#         return "ERROR NO LOGIN."
-#     db.execute("SELECT * FROM appointments WHERE gameid=?", (str(user[0]['gameid']),))
-#     appointments = db.fetchall();
-#     return json.dumps(appointments)
 
 @post('/new-quiz')
 def new_quiz(db):
@@ -237,6 +179,69 @@ def delete_quiz(db):
         db.execute("DELETE FROM appointments WHERE id=?", (item['id'],))
         return json.dumps(item)
 
+@get('/getuserdata/authkey=<key>')
+def getuserinfo(db, key):
+    # authentication = request.get_cookie("account",)
+    authentication = key
+    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
+    user = db.fetchall()
+    return json.dumps(user)
+
+@post('/announcements')
+def getannouncements(db):
+    item = request.json;
+    authentication = item['authkey']
+    # authentication = key
+    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
+    user = db.fetchall()
+    if not user:
+        return "ERROR NO LOGIN."
+    db.execute("SELECT * FROM users WHERE gameid=?", (str(user[0]['gameid']),))
+    all_users = db.fetchall()
+    for userx in all_users:
+        new_unreadmessages = 0
+        db.execute("UPDATE users SET unreadannouncements=? WHERE id=?", (new_unreadmessages, userx['id']))
+    db.execute("SELECT * FROM announcements WHERE gameid=?", (str(user[0]['gameid']),))
+    announcements = db.fetchall();
+    return json.dumps(announcements)
+
+@post('/getuserdata')
+def getuserinfo(db):
+    item = request.json;
+    authentication = item['authkey']
+    print(authentication)
+    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
+    user = db.fetchall()
+    return json.dumps(user)
+
+@post('/home')
+def home(db):
+    item = request.json;
+    authentication = item['authkey']
+    print(authentication)
+    # authentication = key
+    db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
+    user = db.fetchall()
+    if not user:
+        return "ERROR NO LOGIN."
+    db.execute("SELECT * FROM appointments WHERE gameid=?", (str(user[0]['gameid']),))
+    appointments = db.fetchall();
+    return json.dumps(appointments)
+
+
+# @get('/home')
+# def home(db):
+#     print(request.get_cookie("account"))
+#     authentication = request.get_cookie("account")
+#     # authentication = key
+#     print(authentication)
+#     db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (str(authentication),))
+#     user = db.fetchall()
+#     if not user:
+#         return "ERROR NO LOGIN."
+#     db.execute("SELECT * FROM appointments WHERE gameid=?", (str(user[0]['gameid']),))
+#     appointments = db.fetchall();
+#     return json.dumps(appointments)
 
 @post('/make_new_game')
 def make_new_game(db):
@@ -327,17 +332,6 @@ def new_appointment(db):
             return 'error no login'
     	db.execute("INSERT INTO appointments (gameid, type, title, description, times) VALUES (?, ?, ?, ?, ?)", (item['gameid'], "appointment", item['title'], item['description'], item['time']))
     	return json.dumps(item['gameid'])
-
-# @post('/new-quiz')
-# def new_quiz(db):
-#     if request.json is not None:
-#         item = request.json
-#         db.execute("SELECT id FROM admins WHERE authkey=?", (str(item['authkey']),))
-#         currentadmin = db.fetchall()
-#         if not currentadmin:
-#             return 'error no login'
-#         db.execute("INSERT INTO appointments (gameid, type, title, times) VALUES (?, ?, ?, ?)", (item['gameid'], "quiz" , item['title'],  item['time']))
-#         return json.dumps(item['gameid'])
 
 @post('/delete-user')
 def delete_user(db):
@@ -559,17 +553,9 @@ def check_name(db):
             return_string = {"exists": "no"}
             print(return_string)
             return json.dumps(return_string)
-        db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
-        games = db.fetchall()
-        game = games[0]
-        if game['lockstatus'] == "unlocked":
-            return_string = {"exists": "yes"}
-            print(return_string)
-            return json.dumps(return_string)
-        else:
-            return_string = {"exists": "locked"}
-            print(return_string)
-            return json.dumps(return_string)
+        return_string = {"exists": "yes"}
+        print(return_string)
+        return json.dumps(return_string)
     return "ERRORORORRrx"
 
 @post('/check_username')
@@ -580,18 +566,14 @@ def check_name(db):
         db.execute("SELECT * FROM games WHERE gameid=?", (item['gameid'],))
     else:
         return "empty"
-    currentgroup = db.fetchall()
-    if not currentgroup:
-        return_string = {"gamenumber_exists": "no", "username_exists": "no", "lockstatus": "unknown"}
-        return json.dumps(return_string)
-    if currentgroup[0]['lockstatus'] == "locked":
-        return_string = {"gamenumber_exists": "yes", "username_exists": "no", "lockstatus": "locked"}
+    if not db.fetchall():
+        return_string = {"gamenumber_exists": "no", "username_exists": "no"}
         return json.dumps(return_string)
     db.execute("SELECT * FROM users WHERE gameid=? AND username=?", (item['gameid'], item['username']))
     if not db.fetchall():
-        return_string = {"gamenumber_exists": "yes", "username_exists": "no", "lockstatus": "unlocked"}
+        return_string = {"gamenumber_exists": "yes", "username_exists": "no"}
         return json.dumps(return_string)
-    return_string = {"gamenumber_exists": "yes", "username_exists": "yes", "lockstatus": "unlocked"}
+    return_string = {"gamenumber_exists": "yes", "username_exists": "yes"}
     return json.dumps(return_string)
 
 @post('/login')
@@ -622,21 +604,11 @@ def login2(db, gameid, username, pin):
         if not db.fetchall():
             authentication = str(random.getrandbits(128))
             response.set_cookie("account", authentication)
-            db.execute("INSERT INTO users (gameid, username, encpin, correctanswers, wronganswers, activesessionCoockie) VALUES (?, ?, ?, ?, ?, ?)", (gameid, username, pin, str(0), str(0), str(authentication)))
+            db.execute("INSERT INTO users (gameid, username, encpin, correctanswers, wronganswers, activesessionCoockie) VALUES (?, ?, ?, ?, ?, ?)", (gameid, username, pin, 0, 0, str(authentication)))
             # db.execute("INSERT INTO activesessions (gameid, userid, activesessionCoockie, status, expires) VALUES (?, SELECT  id FROM users WHERE gameid, username VALUES (?,?), ?, ?, ?)", (gameid, gameid, username, pin, active, "beta"))
             return "LOGIN OKAY"
         return False
 
-
-@route('/upload', method='POST')
-def do_upload():
-    category   = "PIEnTER"
-    upload     = request.files.get('upload')
-    name, ext = os.path.splitext(upload.filename)
-    if ext not in ('.png','.jpg','.jpeg'):
-        return 'File extension not allowed.'
-    upload.save("F:\OneDrive\Universiteit\P6 - PIM - Project Interactive Multimedia\Website") # appends upload.filename automatically
-    return 'OK'
 ## admin logins
 
 @post('/createnewadmin')
@@ -665,21 +637,14 @@ def check_authkeyadmin(db):
     db.execute("SELECT * FROM admins WHERE authkey=?", (str(authentication),))
     user = db.fetchall()
     if user:
-        return_string = {"valid": "yes"}
-        return json.dumps(return_string)
+        data = {}
+        data['valid'] = "yes"
+        data['user'] = user
+        return json.dumps(data)
     else:
         return_string = {"valid": "no"}
         return json.dumps(return_string)
 
-@post('/get_admin_info')
-def check_admin_info(db):
-    item = request.json;
-    if not item:
-        return "empty json"
-    authentication = item['authkey']
-    db.execute("SELECT * FROM admins WHERE authkey=?", (str(authentication),))
-    user = db.fetchall()
-    return json.dumps(user)
 
 @post('/check_loginadmin')
 def check_loginadmin(db):
@@ -695,115 +660,6 @@ def check_loginadmin(db):
 
 
 
-
-## OLLDDDDDDD
-
-
-@get('/phones')
-def get_phones(db):
-    db.execute("SELECT * FROM phones")
-    all_phones = db.fetchall()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(all_phones)
-
-@get('/phones/brand=<brand>')
-def get_phones_brand(db, brand):
-    db.execute("SELECT * FROM phones WHERE brand=?", (brand,))
-    brand_phones = db.fetchall()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(brand_phones)
-
-@get('/phones/screensize=<size>')
-def db_retrieve(db, size):
-    db.execute("SELECT * FROM phones WHERE screensize=?", (size,))
-    screensize_phones = db.fetchone()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(screensize_phones)
-
-@get('/phones/os=<os>')
-def get_phones_brand(db, os):
-    db.execute("SELECT * FROM phones WHERE os=?", (os,))
-    os_phones = db.fetchall()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(os_phones)
-
-@get('/phones/id=<phone_id>')
-def get_phones_id(db, phone_id):
-    db.execute("SELECT FROM phones WHERE id=?", (phone_id,))
-    id_phone = db.fetchone()
-    response.content_type = 'application/json; charset=UTF-8'
-    return json.dumps(id_phone)
-
-
-#DELETE
-
-@delete('/phones/id=<phone_id>')
-def delete_phone(db, phone_id):
-    db.execute("DELETE FROM phones WHERE id=?", (phone_id,))
-    response.status = 204
-
-@delete('/phones')
-def delete_phone_json(db):
-    item = request.json
-    db.execute("DELETE FROM phones WHERE id=?", str(item['id']))
-    response.status = 204
-
-@delete('/delete-all-phones')
-def delete_all_phones(db):
-    db.execute("DELETE FROM phones")
-    response.status = 204
-
-
-#POST
-
-@post('/phones')
-def add_new_phone(db):
-    if request.json is not None:
-        item = request.json
-        db.execute(""" INSERT INTO phones (brand, model, os, image, screensize)
-                VALUES (?, ?, ?, ?, ?)""",
-                (item['brand'], item['model'], item['os'], item['image'],  item['screensize']))
-    else:
-        brand = request.forms.get('brand')
-        model = request.forms.get('model')
-        os = request.forms.get('os')
-        screensize = request.forms.get('screensize')
-        image = request.forms.get('image')
-        db.execute("INSERT INTO phones (brand, model, os, screensize, image) VALUES (?, ?, ?, ?, ?)", (brand, model, os, screensize, image))
-
-# PUT
-@put('/phones')
-def update_phone(db):
-    item = request.json
-    db.execute("""UPDATE phones SET brand=?, model=?, os=?, image=?, screensize=? WHERE id=?""",
-            (item['brand'], item['model'], item['os'], item['image'],  item['screensize']))
-    response.status = 204
-
-@put('/phones/id=<id>&newbrand=<newbrand>')
-def change_brand(db, id, newbrand):
-    db.execute("UPDATE phones SET brand=? WHERE id=?", (newbrand, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newmodel=<newmodel>')
-def change_brand(db, id, newmodel):
-    db.execute("UPDATE phones SET model=? WHERE id=?", (newmodel, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newos=<newos>')
-def change_brand(db, id, newos):
-    db.execute("UPDATE phones SET os=? WHERE id=?", (newos, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newscreensize=<newscreensize:int>')
-def change_brand(db, id, newscreensize):
-    db.execute("UPDATE phones SET screensize=? WHERE id=?", (newscreensize, id,))
-    response.status = 204
-
-@put('/phones/id=<id>&newimage=<newimage>')
-def change_brand(db, id, newimage):
-    db.execute("UPDATE phones SET image=? WHERE id=?", (newimage, id,))
-    response.status = 204
-
 # ERRORS
 
 # @error(404)
@@ -818,6 +674,67 @@ def change_brand(db, id, newimage):
 # def error500(error):
 #     return "Something went wrong on our server, our apologies for your discomfort :( \n Error code: 500"
 
+@post('/retrieve-questions')
+def retrieve_questions(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM quizzes WHERE quizid=?", (item['quizid'],))
+        quiz = db.fetchall()
+        return json.dumps(quiz)
+
+
+
+
+@post('/answer-question')
+def answer_question(db):
+    item = request.json
+    if item is not None:
+        db.execute("INSERT INTO answers (question_id, quiz_id, username, gameid, answer) VALUES (?, ?, ?, ?, ?)", (item['question_id'], item['quiz_id'], item['username'], item['gameid'], item['answer'],))
+        return json.dumps(item)
+
+@post('/quiz-title')
+def retrieve_title(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['quizid'],))
+        quiz = db.fetchall()
+        return json.dumps(quiz)
+
+@post('/retrieve-answers')
+def retrieve_answers(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM answers WHERE question_id=?", (item['questionid'],))
+        answers = db.fetchall()
+        return json.dumps(answers)
+
+@post('/correct-answer')
+def correct_answer(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
+        user = db.fetchall()
+        correctanswers = int(user['correctanswers']) + 1
+        db.execute("UPDATE users SET correctanswers=? WHERE username=?", (correctanswers, item['username'],))
+        return json.dumps(correctanswers)
+
+@post('/wrong-answer')
+def wrong_answer(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
+        user = db.fetchall()
+        wronganswers = int(user['wronganswers']) + 1
+        db.execute("UPDATE users SET wronganswers=? WHERE username=?", (wronganswers, item['username'],))
+        return json.dumps(wronganswers)
+
+@post('/retrieve-gameid')
+def retrieve_admin(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['quizid'],))
+        appointment = db.fetchall()
+        return json.dumps(appointment)
 
 # MAIN LOOP
 

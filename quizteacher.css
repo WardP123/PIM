@@ -92,3 +92,8 @@ td {
 	margin-top: 10px;
 }
 
+.questiondescription{
+	font-size: 25px;
+	text-align: center;
+	color: lightgray;
+}

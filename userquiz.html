@@ -7,6 +7,13 @@
 <link href="userquizcss.css" rel="stylesheet" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+	window.getCookie = function(name) {
+		var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+		if (match) return match[2];
+	}
+	
+	var authkey_local = getCookie("account");
+	
 	function getQueryVariable(variable){
 		var query = window.location.search.substring(1);
 		var vars = query.split("&");
@@ -17,8 +24,25 @@
 		return("NO VALID LINK");
 	}
 	
-	var quizappointmentid_local = getQueryVariable("quizid");
+	function GetUser(){
+		$.ajax({
+			url: "http://84.28.82.98:8081/getuserdata",
+			type: 'POST',
+			data: JSON.stringify({ authkey: authkey_local }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			async: true,
+			success: function(data) {
+				username_local = data[0].username;
+				gameid_local = data[0].gameid;
+			},
+			error: function(data) {
+			}
+		});
+	}
 	
+	var quizappointmentid_local = getQueryVariable("quizid");
+
 	function LoadQuestions(){
 		$.ajax({
 			url: "http://84.28.82.98:8081/retrieve-questions",
@@ -132,8 +156,6 @@
 	function process_answer(id){
 	var question_id_local = id;
 	var quiz_id_local = quizappointmentid_local;
-	var username_local = "Test User";
-	var gameid_local = 12;
 	var answer_local = document.getElementById("inputfield" +id).value;
 
 	$.ajax({
@@ -156,7 +178,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
-<body onload="LoadQuestions(); LoadQuizTitle();">
+<body onload=" GetUser(); LoadQuestions(); LoadQuizTitle();">
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
