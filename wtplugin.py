@@ -74,20 +74,8 @@ class WtDbPlugin(object):
                     (id INTEGER PRIMARY KEY,
                      gameid INTEGER NOT NULL,
                      groupname CHAR(100) NOT NULL,
-                     lockstatus CHAR(20) NOT NULL)
-            """);
-            db.commit()
-        c.execute("SELECT name FROM sqlite_master WHERE type='table' and name='admins'")
-        result = c.fetchone()
-        if not result or u'admins' not in result:
-            c.executescript("""
-            CREATE TABLE IF NOT EXISTS admins 
-                (id INTEGER PRIMARY KEY,
-                gameid INTEGER NOT NULL,
-                groupname CHAR(100) NOT NULL,
-                adminpass CHAR(100) NOT NULL,
-                activesessionCookie INTEGER)
-            """);
+                     lockstatus CHAR(100) NOT NULL)
+            """)
             db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='announcements'")
         result = c.fetchone()
@@ -126,15 +114,15 @@ class WtDbPlugin(object):
                     gameid INTEGER NOT NULL,
                     username CHAR(300) NOT NULL,
                     encpin CHAR(300) NOT NULL,
-                    correctanswers INTEGER NOT NULL,
-                    wronganswers INTEGER NOT NULL,
+                    correctanswers CHAR(300) NOT NULL,
+                    wronganswers CHAR(300) NOT NULL,
                     activesessionCoockie INTEGER,
                     unreadannouncements INTEGER NOT NULL)
             """);
             db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='activesessions'")
         result = c.fetchone()
-        if not result or u'quiz' not in result:
+        if not result or u'activesessions' not in result:
             c.executescript("""
             CREATE TABLE IF NOT EXISTS quiz
                     (id INTEGER PRIMARY KEY,
@@ -158,6 +146,28 @@ class WtDbPlugin(object):
                     times CHAR(300) NOT NULL)
             """);
             db.commit()
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='admins'")
+        result = c.fetchone()
+        if not result or u'admins' not in result:
+            c.executescript("""
+            CREATE TABLE IF NOT EXISTS admins
+                    (id INTEGER PRIMARY KEY,
+                    name CHAR(300) NOT NULL,
+                    email CHAR(300) NOT NULL,
+                    password CHAR(300) NOT NULL,
+                    authkey CHAR(100) NOT NULL)
+            """);
+            db.commit()
+        c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='adminsgroup'")
+        result = c.fetchone()
+        if not result or u'adminsgroup' not in result:
+            c.executescript("""
+            CREATE TABLE IF NOT EXISTS adminsgroup
+                    (id INTEGER PRIMARY KEY,
+                    adminid CHAR(300) NOT NULL,
+                    gameid CHAR(300) NOT NULL)
+            """);
+            db.commit()
         c.execute("SELECT name FROM sqlite_master WHERE type='table' and name ='quizzes'")
         result = c.fetchone()
         if not result or u'quizzes' not in result:
@@ -179,9 +189,10 @@ class WtDbPlugin(object):
                     quiz_id INTEGER NOT NULL,
                     username CHAR(300) NOT NULL,
                     gameid INTEGER NOT NULL,
-                    answer CHAR(300) NOT NULL)
+                    answer CHAR(300))
             """);
             db.commit()
+
 
     def apply(self, callback, context):
         '''Inject a database connection in routes

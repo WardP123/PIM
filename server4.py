@@ -576,6 +576,14 @@ def check_name(db):
     return_string = {"gamenumber_exists": "yes", "username_exists": "yes"}
     return json.dumps(return_string)
 
+@post('/retrieve-gameid')
+def retrieve_admin(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM appointments WHERE id=?", (item['quizid'],))
+        appointment = db.fetchall()
+        return json.dumps(appointment)
+
 @post('/login')
 def login(db):
     if request.json is not None:
@@ -680,10 +688,28 @@ def retrieve_questions(db):
     if item is not None:
         db.execute("SELECT * FROM quizzes WHERE quizid=?", (item['quizid'],))
         quiz = db.fetchall()
+        db.execute("SELECT * FROM users WHERE activesessionCoockie=?", (item['authkey'],))
+        user = db.fetchall()
+        if not user:
+            return "no login"
+        for question in quiz:
+            print(question['id'])
+            db.execute("SELECT * FROM answers WHERE question_id=? AND username=?", (question['id'], user[0]['username']))
+            answerd = db.fetchall()
+            print(answerd)
+            if answerd:
+                question['answerd'] = "yes"
+            else:
+                question['answerd'] = "no"
         return json.dumps(quiz)
 
-
-
+@post('/retrieve-questions-admin')
+def retrieve_questions(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM quizzes WHERE quizid=?", (item['quizid'],))
+        quiz = db.fetchall()
+        return json.dumps(quiz)
 
 @post('/answer-question')
 def answer_question(db):
@@ -712,29 +738,35 @@ def retrieve_answers(db):
 def correct_answer(db):
     item = request.json
     if item is not None:
+        answer_id = (item['answer_id'][12:])
+        db.execute("DELETE FROM answers WHERE id=?", (answer_id,))
+        print((answer_id))
         db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
         user = db.fetchall()
-        correctanswers = int(user.correctanswers) + 1
+        correctanswers = int(int(user[0]['correctanswers']) + 1)
         db.execute("UPDATE users SET correctanswers=? WHERE username=?", (correctanswers, item['username'],))
         return json.dumps(correctanswers)
+
+@post('/retrieve-admin')
+def retrieve_admin(db):
+    item = request.json
+    if item is not None:
+        db.execute("SELECT * FROM admins WHERE authkey=?", (item['authkey'],))
+        admin = db.fetchall()
+        return json.dumps(admin)
+
 
 @post('/wrong-answer')
 def wrong_answer(db):
     item = request.json
     if item is not None:
+        answer_id = (item['answer_id'][10:])
+        db.execute("DELETE FROM answers WHERE id=?", (answer_id,))
         db.execute("SELECT * FROM users WHERE username=?", (item['username'],))
         user = db.fetchall()
-        wronganswers = int(user.wronganswers) + 1
+        wronganswers = int(int(user[0]['wronganswers']) + 1)
         db.execute("UPDATE users SET wronganswers=? WHERE username=?", (wronganswers, item['username'],))
         return json.dumps(wronganswers)
-
-@post('/retrieve-gameid')
-def retrieve_admin(db):
-    item = request.json
-    if item is not None:
-        db.execute("SELECT * FROM appointments WHERE id=?", (item['quizid'],))
-        appointment = db.fetchall()
-        return json.dumps(appointment)
 
 # MAIN LOOP
 
