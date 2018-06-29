@@ -57,7 +57,7 @@
 				process_questions(data);
 			},
 			error: function(data) {
-				alert("Vragen laden mislukt.");
+
 			}
 		});
 	}
@@ -74,7 +74,7 @@
 				document.getElementById("quiztitle").innerHTML = data[0].title;
 			},
 			error: function(data) {
-				alert("Vragen laden mislukt.");
+
 			}
 		});
 	}
@@ -157,7 +157,6 @@
 	}
 	
 	function expand_question(id){
-		alert("run")
 		document.getElementById(id).setAttribute("onclick", "close_question(this.id)");
 		document.getElementById(id).className = "openedquestion";
 		document.getElementById(id).removeAttribute("onclick");
@@ -193,7 +192,6 @@
 				
 			},
 			error: function(data) {
-				alert("Vragen laden mislukt.");
 			}
 		});
 	location.reload()

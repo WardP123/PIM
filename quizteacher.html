@@ -209,10 +209,11 @@
 	}
 	
 	function wrong_answer(username_local, answer_id){
+		real_id = answer_id.slice(-1);
 		$.ajax({
 			url: "http://84.28.82.98:8081/wrong-answer",
 			type: 'POST',
-			data: JSON.stringify({ username: username_local, answer_id: answer_id}),
+			data: JSON.stringify({ username: username_local, answer_id: real_id}),
 			contentType: "application/json; charset=utf-8",
 			dataType: 'json',
 			async: true,
