@@ -23,7 +23,9 @@
 		}
 		return("NO VALID LINK");
 	}
-	
+	function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 	function GetUser(){
 		$.ajax({
 			url: "http://84.28.82.98:8081/getuserdata",
@@ -47,7 +49,7 @@
 		$.ajax({
 			url: "http://84.28.82.98:8081/retrieve-questions",
 			type: 'POST',
-			data: JSON.stringify({ quizid: quizappointmentid_local }),
+			data: JSON.stringify({ quizid: quizappointmentid_local, authkey: authkey_local }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
@@ -146,21 +148,19 @@
 	}
 	
 	function expand_question(id){
+		alert("run")
 		document.getElementById(id).setAttribute("onclick", "close_question(this.id)");
 		document.getElementById(id).className = "openedquestion";
-<<<<<<< HEAD
-=======
 		document.getElementById(id).removeAttribute("onclick");
-		
->>>>>>> f0f234e3ccec1c803e6bfedf7b6cd74e468c2d03
 		document.getElementById("formdiv" + id).setAttribute("class", "visible");
 		document.getElementById("close" + id).setAttribute("class", "show");
 	}
 	
-	function close_question(id){
+	async function close_question(id){
 		document.getElementById(id).className = "question";
 		document.getElementById("formdiv" + id).setAttribute("class", "invisible");
 		document.getElementById("close" + id).setAttribute("class", "invisible");
+		await sleep(100);
 		document.getElementById(id).setAttribute("onclick", "expand_question(this.id)");
 	}
 	
@@ -196,7 +196,7 @@
 	<div id="header">
 		<img src="klassetourzwart.png"></div>
 	</div>
-	<h1 class="QuizTitle">Welkom bij <span id="quiztitle"></span></h1>
+	<h1 class="QuizTitle"><span id="quiztitle"></span></h1>
 	<br>
 	<div id="questioncontainer">
 	</div>

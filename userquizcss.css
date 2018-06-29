@@ -34,6 +34,7 @@ body {
 	padding: 15px 0;
 	color: white;
 	height: 40px;
+	font-weight: 500; 
 	max-height: 10%;
     background: -webkit-linear-gradient(to right, #0f7780, #21656b);
     background: -o-linear-gradient(to right, #0f7780, #21656b);
