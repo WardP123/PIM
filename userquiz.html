@@ -116,19 +116,17 @@
 	}
 	
 	function expand_question(id){
-		// document.getElementById(id).setAttribute("class", "openedquestion");
+		document.getElementById(id).setAttribute("onclick", "close_question(this.id)");
 		document.getElementById(id).className = "openedquestion";
-		document.getElementById(id).setAttribute("onclick", "");
-		
 		document.getElementById("formdiv" + id).setAttribute("class", "visible");
 		document.getElementById("close" + id).setAttribute("class", "show");
 	}
 	
 	function close_question(id){
-		document.getElementById(id).setAttribute("onclick", "expand_question(this.id)");
 		document.getElementById(id).className = "question";
 		document.getElementById("formdiv" + id).setAttribute("class", "invisible");
 		document.getElementById("close" + id).setAttribute("class", "invisible");
+		document.getElementById(id).setAttribute("onclick", "expand_question(this.id)");
 	}
 	
 	function process_answer(id){
