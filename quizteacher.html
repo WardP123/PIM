@@ -88,7 +88,7 @@
 	
 	function LoadQuestions(){
 		$.ajax({
-			url: "http://84.28.82.98:8081/retrieve-questions",
+			url: "http://84.28.82.98:8081/retrieve-questions-admin",
 			type: 'POST',
 			data: JSON.stringify({ quizid: quizid_local}),
 			contentType: "application/json; charset=utf-8",
