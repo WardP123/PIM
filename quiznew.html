@@ -65,7 +65,7 @@
         </div>
         <script>
             function done() {
-                window.location.replace("/desktop.html");
+                window.location.replace("/groupsoverview.html");
             }
 
             function update_question_popup(id){
@@ -209,7 +209,6 @@
             }
 
             function updateTitle() {
-                alert(window.id);
                 $.get("http://84.28.82.98:8081/retrieve-quiz-title/id=" + window.id, function(data) {
                     updateData(data);
                 })
@@ -257,7 +256,7 @@
             $(document).ready(function(){
                 window.id = getQueryVariable("id");
                 if (window.id == "") {
-                    window.location.replace("http://84.28.82.98:8081/quiz.html");
+                    window.location.replace("/quiz.html");
                 }
                 updateQuestions();
                 updateTitle();

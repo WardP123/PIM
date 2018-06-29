@@ -1,7 +1,5 @@
 body{
-	background: -webkit-linear-gradient(to right, #4abdac, #4abddd);
-    background: -o-linear-gradient(to right, #4abdac, #4abddd);
-    background: linear-gradient(to right, #4abdac, #4abddd);
+	background-color: #abd6da;
 	font-family: Bahnschrift, "Helvetica Neue", Helvetica, Arial, "sans-serif";
 }
 .titleimg {
