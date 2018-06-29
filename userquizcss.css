@@ -104,3 +104,7 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
+.checkmark {
+	float: right;
+}

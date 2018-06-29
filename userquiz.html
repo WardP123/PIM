@@ -95,6 +95,11 @@
 			var namespan = document.createElement('span');
 			namespan.innerHTML = data[question].question_title;
 			
+			var checkmark = document.createElement('img');
+			checkmark.setAttribute("src", "checkmark.png");
+			checkmark.setAttribute("class", "invisible");
+			checkmark.setAttribute("id", "checkmark" +data[question].id);
+			
 			var formdiv = document.createElement('form');
 			formdiv.setAttribute("id", 'formdiv' + data[question].id);
 			formdiv.setAttribute("class", "invisible");
@@ -133,6 +138,7 @@
 			
 			maindiv.appendChild(closediv);
 			titlediv.appendChild(namespan);
+			titlediv.appendChild(checkmark);
 			maindiv.appendChild(titlediv);
 			maindiv.appendChild(formdiv);
 			document.getElementById("questioncontainer").appendChild(maindiv);
@@ -142,7 +148,7 @@
 	function expand_question(id){
 		// document.getElementById(id).setAttribute("class", "openedquestion");
 		document.getElementById(id).className = "openedquestion";
-		document.getElementById(id).setAttribute("onclick", "");
+		document.getElementById(id).removeAttribute("onclick");
 		
 		document.getElementById("formdiv" + id).setAttribute("class", "visible");
 		document.getElementById("close" + id).setAttribute("class", "show");
@@ -170,6 +176,9 @@
 			success: function(data) {
 				alert("Antwoord ingediend.");
 				close_question(question_id_local);
+				document.getElementById("checkmark" +question_id_local).setAttribute("class", "checkmark");
+				document.getElementById(question_id_local).removeAttribute("onclick");
+				
 			},
 			error: function(data) {
 				alert("Vragen laden mislukt.");
