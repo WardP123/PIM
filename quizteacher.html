@@ -198,7 +198,7 @@
 			async: true,
 			success: function(data) {
 				alert('Antwoord van ' +username_local + ' goed gerekend.');
-				document.getElementById("correctimage" +answer_id).setAttribute("onclick", "");
+				document.getElementById("correctimage" +answer_id).removeAttribute("onclick");
 				document.getElementById("wrongimage" +answer_id).remove();
 				location.reload();
 			},
@@ -219,7 +219,7 @@
 			success: function(data) {
 				alert('Antwoord van ' +username_local + ' fout gerekend.');
 				document.getElementById("correctimage" +answer_id).remove();
-				document.getElementById("wrongimage" +answer_id).setAttribute("onclick", "");
+				document.getElementById("wrongimage" +answer_id).removeAttribute("onclick");
 				location.reload();
 			},
 			error: function() {
