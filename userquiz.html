@@ -78,6 +78,9 @@
 			}
 		});
 	}
+	function answer_alert() {
+		alert("Deze vraag is al ingeleverd")
+	}
 	
 	function process_questions(data){
 		var question_counter = 0;
@@ -87,8 +90,12 @@
 			var maindiv = document.createElement('div');
 			maindiv.setAttribute("class", "question");
 			maindiv.setAttribute("id", data[question].id);
-			maindiv.setAttribute("onclick", "expand_question(this.id)");
-			maindiv.setAttribute("style", "cursor: pointer;");
+			if(data[question].answerd == "no") {
+				maindiv.setAttribute("onclick", "expand_question(this.id)");
+				maindiv.setAttribute("style", "cursor: pointer;");
+			} else {
+				maindiv.setAttribute("onclick", "answer_alert()")
+			}
 			
 			var titlediv = document.createElement('div');
 			titlediv.setAttribute("class", "title");
@@ -144,6 +151,8 @@
 			maindiv.appendChild(titlediv);
 			maindiv.appendChild(formdiv);
 			document.getElementById("questioncontainer").appendChild(maindiv);
+			
+			
 		}
 	}
 	
