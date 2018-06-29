@@ -180,7 +180,7 @@
 	$.ajax({
 			url: "http://84.28.82.98:8081/answer-question",
 			type: 'POST',
-			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local}),
+			data: JSON.stringify({ question_id: question_id_local, quiz_id: quiz_id_local, username: username_local, gameid: gameid_local, answer: answer_local, answerd: "yes"}),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			async: true,
